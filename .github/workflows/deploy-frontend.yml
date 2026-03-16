@@ -11,7 +11,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
-      DEPLOY_PATH: ${{ vars.CLICKMANAGER_ADMIN_DEPLOY_PATH || '/opt/clickmanager-admin' }}
+      DEPLOY_PATH: ${{ vars.CLICKMANAGER_ADMIN_DEPLOY_PATH || '/opt/clickmanager' }}
       COMPOSE_FILE: docker-compose.prod.yml
       SERVICE_NAME: admin-frontend
 
@@ -23,6 +23,30 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd "${{ env.DEPLOY_PATH }}"
-            docker compose -f "${{ env.COMPOSE_FILE }}" pull "${{ env.SERVICE_NAME }}"
-            docker compose -f "${{ env.COMPOSE_FILE }}" up -d "${{ env.SERVICE_NAME }}"
+            set -e
+
+            if [ -d "${{ env.DEPLOY_PATH }}" ]; then
+              cd "${{ env.DEPLOY_PATH }}"
+            elif [ -d "/opt/clickmanager" ]; then
+              cd "/opt/clickmanager"
+            else
+              echo "Diretorio de deploy nao encontrado."
+              exit 1
+            fi
+
+            if docker compose version >/dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            elif command -v docker-compose >/dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              echo "docker compose/docker-compose nao encontrado no servidor."
+              exit 1
+            fi
+
+            if [ ! -f "${{ env.COMPOSE_FILE }}" ]; then
+              echo "Arquivo ${{ env.COMPOSE_FILE }} nao encontrado em $(pwd)."
+              exit 1
+            fi
+
+            $COMPOSE_CMD -f "${{ env.COMPOSE_FILE }}" pull "${{ env.SERVICE_NAME }}"
+            $COMPOSE_CMD -f "${{ env.COMPOSE_FILE }}" up -d "${{ env.SERVICE_NAME }}"
