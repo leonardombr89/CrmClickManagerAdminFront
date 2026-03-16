@@ -1,22 +1,20 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { MaterialModule } from 'src/app/material.module';
-import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
 import { PageCardComponent } from 'src/app/components/page-card/page-card.component';
 import { SectionCardComponent } from 'src/app/components/section-card/section-card.component';
 import { StatusBadgeComponent } from 'src/app/components/status-badge/status-badge.component';
 import {
-  ChamadoSuporteDetalhe,
-  ChamadoSuporteListaItem,
-  ChamadoSuportePrioridade,
-  ChamadoSuporteStatus
+  AdminChamadoDetalhe,
+  AdminChamadoResumo,
+  PrioridadeChamadoSuporte,
+  StatusChamadoSuporte
 } from './models/chamado-suporte.model';
-import { ChamadoSuporteDialogComponent } from './components/chamado-suporte-dialog.component';
 import { SuporteService } from './services/suporte.service';
 
 @Component({
@@ -25,6 +23,7 @@ import { SuporteService } from './services/suporte.service';
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     ReactiveFormsModule,
     DatePipe,
     MaterialModule,
@@ -38,22 +37,44 @@ import { SuporteService } from './services/suporte.service';
 export class SuporteComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly statusOptions: Array<StatusChamadoSuporte | 'TODOS'> = [
+    'TODOS',
+    'ABERTO',
+    'EM_ANALISE',
+    'AGUARDANDO_CLIENTE',
+    'RESPONDIDO',
+    'RESOLVIDO',
+    'FECHADO'
+  ];
+
+  readonly statusActions: StatusChamadoSuporte[] = [
+    'EM_ANALISE',
+    'AGUARDANDO_CLIENTE',
+    'RESPONDIDO',
+    'RESOLVIDO',
+    'FECHADO'
+  ];
+
   carregandoLista = false;
   carregandoDetalhe = false;
   salvandoResposta = false;
-  chamados: ChamadoSuporteListaItem[] = [];
-  chamadosFiltrados: ChamadoSuporteListaItem[] = [];
-  chamadoSelecionado: ChamadoSuporteDetalhe | null = null;
-  statusFiltro = 'TODOS';
-  busca = '';
+  atualizandoStatus: StatusChamadoSuporte | null = null;
+  chamados: AdminChamadoResumo[] = [];
+  chamadoSelecionado: AdminChamadoDetalhe | null = null;
+  statusFiltro: StatusChamadoSuporte | 'TODOS' = 'ABERTO';
+  empresaIdFiltro = '';
+  pagina = 0;
+  tamanho = 20;
+  totalItens = 0;
+  totalPaginas = 0;
 
   readonly respostaForm = this.fb.group({
-    mensagem: ['', [Validators.required, Validators.maxLength(3000)]]
+    mensagem: ['', [Validators.required, Validators.maxLength(3000)]],
+    interna: [false, { nonNullable: true }]
   });
 
   constructor(
     private readonly service: SuporteService,
-    private readonly dialog: MatDialog,
     private readonly toastr: ToastrService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -67,89 +88,87 @@ export class SuporteComponent implements OnInit {
     });
   }
 
-  abrirNovoChamado(): void {
-    const dialogRef = this.dialog.open(ChamadoSuporteDialogComponent, {
-      width: '720px',
-      maxWidth: '95vw',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe((chamado?: ChamadoSuporteDetalhe | null) => {
-      if (!chamado?.id) return;
-      this.chamadoSelecionado = chamado;
-      this.router.navigate(['/page/suporte', chamado.id], { replaceUrl: true });
-      this.carregarLista(false);
-    });
+  aplicarFiltros(): void {
+    this.pagina = 0;
+    this.carregarLista(true, this.chamadoSelecionado?.id ?? null);
   }
 
-  aplicarFiltroBusca(event: Event): void {
-    this.busca = String((event.target as HTMLInputElement)?.value || '');
-    this.aplicarFiltros();
+  limparFiltros(): void {
+    this.statusFiltro = 'ABERTO';
+    this.empresaIdFiltro = '';
+    this.pagina = 0;
+    this.carregarLista(true, this.chamadoSelecionado?.id ?? null);
   }
 
-  aplicarFiltroStatus(): void {
-    this.aplicarFiltros();
+  alterarPagina(event: PageEvent): void {
+    this.pagina = event.pageIndex;
+    this.tamanho = event.pageSize;
+    this.carregarLista(false, this.chamadoSelecionado?.id ?? null);
   }
 
-  selecionarChamado(item: ChamadoSuporteListaItem): void {
-    if (!item?.id) return;
+  selecionarChamado(item: AdminChamadoResumo): void {
+    if (!item?.id) {
+      return;
+    }
+
     this.carregarDetalhe(item.id, true);
   }
 
   responderChamado(): void {
-    if (!this.chamadoSelecionado?.id || this.naoPodeResponder || this.salvandoResposta) return;
+    if (!this.chamadoSelecionado?.id || this.naoPodeResponder || this.salvandoResposta) {
+      return;
+    }
+
     if (this.respostaForm.invalid) {
       this.respostaForm.markAllAsTouched();
       return;
     }
 
-    const mensagem = String(this.respostaForm.value.mensagem || '').trim();
-    if (!mensagem) return;
+    const mensagem = String(this.respostaForm.getRawValue().mensagem || '').trim();
+    if (!mensagem) {
+      return;
+    }
 
     this.salvandoResposta = true;
-    this.service.responder$(this.chamadoSelecionado.id, { mensagem }).subscribe({
+    this.service.responder$(this.chamadoSelecionado.id, {
+      mensagem,
+      interna: Boolean(this.respostaForm.getRawValue().interna)
+    }).subscribe({
       next: (detalhe) => {
         this.salvandoResposta = false;
         this.chamadoSelecionado = detalhe;
-        this.respostaForm.reset();
-        this.atualizarItemNaLista(detalhe);
-        this.toastr.success('Mensagem enviada com sucesso.');
+        this.respostaForm.patchValue({ mensagem: '' });
+        this.recarregarListaAposMutacao(detalhe);
+        this.toastr.success('Resposta enviada com sucesso.');
       },
       error: (err) => {
         this.salvandoResposta = false;
-        this.toastr.error(err?.userMessage || 'Não foi possível enviar a mensagem.');
+        this.toastr.error(err?.userMessage || 'Não foi possível enviar a resposta.');
       }
     });
   }
 
-  fecharChamado(): void {
-    if (!this.chamadoSelecionado?.id || this.chamadoSelecionado.status === 'FECHADO') return;
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '440px',
-      data: {
-        title: 'Fechar chamado',
-        message: 'Deseja encerrar este chamado? Depois disso não será possível enviar novas mensagens.',
-        confirmText: 'Fechar chamado',
-        confirmColor: 'primary'
-      }
-    });
+  atualizarStatus(status: StatusChamadoSuporte): void {
+    if (!this.chamadoSelecionado?.id || this.atualizandoStatus || this.chamadoSelecionado.status === 'FECHADO') {
+      return;
+    }
 
-    dialogRef.afterClosed().subscribe((ok) => {
-      if (!ok || !this.chamadoSelecionado?.id) return;
-      this.service.fechar$(this.chamadoSelecionado.id).subscribe({
-        next: (detalhe) => {
-          this.chamadoSelecionado = detalhe;
-          this.atualizarItemNaLista(detalhe);
-          this.toastr.success('Chamado fechado com sucesso.');
-        },
-        error: (err) => {
-          this.toastr.error(err?.userMessage || 'Não foi possível fechar o chamado.');
-        }
-      });
+    this.atualizandoStatus = status;
+    this.service.atualizarStatus$(this.chamadoSelecionado.id, status).subscribe({
+      next: (detalhe) => {
+        this.atualizandoStatus = null;
+        this.chamadoSelecionado = detalhe;
+        this.recarregarListaAposMutacao(detalhe);
+        this.toastr.success(`Status atualizado para ${this.statusLabel(status)}.`);
+      },
+      error: (err) => {
+        this.atualizandoStatus = null;
+        this.toastr.error(err?.userMessage || 'Não foi possível atualizar o status.');
+      }
     });
   }
 
-  prioridadeLabel(prioridade: ChamadoSuportePrioridade): string {
+  prioridadeLabel(prioridade: PrioridadeChamadoSuporte): string {
     return {
       BAIXA: 'Baixa',
       MEDIA: 'Média',
@@ -169,12 +188,19 @@ export class SuporteComponent implements OnInit {
     }[String(categoria || '').toUpperCase()] || categoria;
   }
 
-  prioridadeClass(prioridade: ChamadoSuportePrioridade): string {
+  statusLabel(status: string): string {
+    return String(status || '').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  prioridadeClass(prioridade: PrioridadeChamadoSuporte): string {
     return `priority-${String(prioridade || 'MEDIA').toLowerCase()}`;
   }
 
   dataRelativa(iso?: string | null): string {
-    if (!iso) return 'Agora';
+    if (!iso) {
+      return 'Agora';
+    }
+
     const date = new Date(iso);
     const diffMs = Date.now() - date.getTime();
     const min = Math.floor(diffMs / 60000);
@@ -187,27 +213,36 @@ export class SuporteComponent implements OnInit {
     return new DatePipe('pt-BR').transform(date, 'dd/MM/yyyy HH:mm') || '';
   }
 
-  autorMensagemClass(tipo: string): string {
-    return String(tipo || 'CLIENTE').toUpperCase() === 'CLIENTE' ? 'msg-cliente' : 'msg-suporte';
+  autorMensagemClass(tipo: string, interna: boolean): string {
+    if (interna) {
+      return 'msg-interna';
+    }
+    return String(tipo || 'CLIENTE').toUpperCase() === 'CLIENTE' ? 'msg-cliente' : 'msg-admin';
   }
 
   get naoPodeResponder(): boolean {
     return !this.chamadoSelecionado || this.chamadoSelecionado.status === 'FECHADO';
   }
 
-  get totalAbertos(): number {
-    return this.chamados.filter((item) => item.status !== 'FECHADO').length;
+  get resumoContador(): string {
+    return `${this.totalItens} chamado(s) encontrado(s)`;
   }
 
-  private carregarLista(resolverSelecao = false, chamadoId: number | null = null): void {
+  carregarLista(resolverSelecao = false, chamadoId: number | null = null): void {
     this.carregandoLista = true;
-    this.service.listar$(0, 50).subscribe({
+    this.service.listar$({
+      pagina: this.pagina,
+      tamanho: this.tamanho,
+      status: this.statusFiltro === 'TODOS' ? null : this.statusFiltro,
+      empresaId: this.parseEmpresaId()
+    }).subscribe({
       next: (res) => {
         this.carregandoLista = false;
-        this.chamados = [...(res.itens || [])].sort(
-          (a, b) => new Date(b.atualizadoEm).getTime() - new Date(a.atualizadoEm).getTime()
-        );
-        this.aplicarFiltros();
+        this.chamados = res.itens || [];
+        this.pagina = res.pagina;
+        this.tamanho = res.tamanho;
+        this.totalItens = res.totalItens;
+        this.totalPaginas = res.totalPaginas;
         if (resolverSelecao) {
           this.resolverSelecaoInicial(chamadoId);
         }
@@ -219,26 +254,8 @@ export class SuporteComponent implements OnInit {
     });
   }
 
-  private aplicarFiltros(): void {
-    const termo = this.busca.trim().toLowerCase();
-    const status = this.statusFiltro;
-    this.chamadosFiltrados = this.chamados.filter((item) => {
-      const atendeStatus = status === 'TODOS' ? true : item.status === status;
-      const atendeBusca = !termo
-        ? true
-        : `${item.assunto} ${item.categoria} ${item.prioridade}`.toLowerCase().includes(termo);
-      return atendeStatus && atendeBusca;
-    });
-  }
-
   private resolverSelecaoInicial(chamadoId: number | null): void {
     if (chamadoId) {
-      const encontrado = this.chamados.find((item) => item.id === chamadoId);
-      if (encontrado) {
-        this.carregarDetalhe(encontrado.id, false);
-        return;
-      }
-
       this.carregarDetalhe(chamadoId, false);
       return;
     }
@@ -257,39 +274,34 @@ export class SuporteComponent implements OnInit {
       next: (detalhe) => {
         this.chamadoSelecionado = detalhe;
         this.carregandoDetalhe = false;
-        this.respostaForm.reset();
-        this.atualizarItemNaLista(detalhe);
-
+        this.respostaForm.patchValue({ mensagem: '' });
         if (navegar) {
-          this.router.navigate(['/page/suporte', detalhe.id], { replaceUrl: true });
+          void this.router.navigate(['/admin/chamados', id]);
         }
       },
       error: (err) => {
         this.carregandoDetalhe = false;
-        this.toastr.error(err?.userMessage || 'Não foi possível carregar o chamado.');
+        this.toastr.error(err?.userMessage || 'Não foi possível carregar o detalhe do chamado.');
       }
     });
   }
 
-  private atualizarItemNaLista(detalhe: ChamadoSuporteDetalhe): void {
-    const atualizado: ChamadoSuporteListaItem = {
-      id: detalhe.id,
-      assunto: detalhe.assunto,
-      categoria: detalhe.categoria,
-      prioridade: detalhe.prioridade,
-      status: detalhe.status,
-      criadoEm: detalhe.criadoEm,
-      atualizadoEm: detalhe.atualizadoEm,
-      fechadoEm: detalhe.fechadoEm
-    };
+  private recarregarListaAposMutacao(detalhe: AdminChamadoDetalhe): void {
+    this.atualizarItemNaLista(detalhe);
+    this.carregarLista(false, detalhe.id);
+  }
 
-    const existe = this.chamados.some((item) => item.id === detalhe.id);
-    this.chamados = existe
-      ? this.chamados.map((item) => (item.id === detalhe.id ? atualizado : item))
-      : [atualizado, ...this.chamados];
-    this.chamados = [...this.chamados].sort(
-      (a, b) => new Date(b.atualizadoEm).getTime() - new Date(a.atualizadoEm).getTime()
-    );
-    this.aplicarFiltros();
+  private atualizarItemNaLista(detalhe: AdminChamadoDetalhe): void {
+    this.chamados = this.chamados.map((item) => item.id === detalhe.id ? detalhe : item);
+  }
+
+  private parseEmpresaId(): number | null {
+    const value = this.empresaIdFiltro.trim();
+    if (!value) {
+      return null;
+    }
+
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
   }
 }

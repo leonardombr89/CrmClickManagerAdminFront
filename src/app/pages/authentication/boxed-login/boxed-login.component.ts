@@ -7,7 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { BrandingComponent } from '../../../layouts/full/vertical/sidebar/branding.component';
 import { AuthService } from '../../../services/auth.service';
@@ -27,15 +27,15 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppBoxedLoginComponent {
   options = this.settings.getOptions();
+  carregando = false;
 
   constructor(
     private settings: CoreService,
-    private router: Router,
     private authService: AuthService,
     private toastr: ToastrService) {}
 
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    uname: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
     lembrar: new FormControl(false)
   });
@@ -45,16 +45,22 @@ export class AppBoxedLoginComponent {
   }
 
   submit() {
+    if (this.form.invalid || this.carregando) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     const { uname, password, lembrar } = this.form.value;
-  
+    this.carregando = true;
+
     this.authService.login(uname!, password!, lembrar!).subscribe({
       next: () => {
-        this.router.navigate(['/dashboards/dashboard1']);
+        this.carregando = false;
       },
       error: () => {
-        this.toastr.error('Usuário ou senha inválidos');
+        this.carregando = false;
+        this.toastr.error('Usuário ou senha admin inválidos.');
       }
     });
   }
-  
 }

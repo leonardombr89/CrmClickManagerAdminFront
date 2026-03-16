@@ -31,9 +31,9 @@ services:
     networks:
       - clickmanager-network
 
-  frontend:
-    image: ghcr.io/leonardombr89/clickmanager-frontend:latest
-    container_name: clickmanager-frontend
+  admin-frontend:
+    image: ghcr.io/leonardombr89/clickmanager-admin-frontend:latest
+    container_name: clickmanager-admin-frontend
     restart: always
     depends_on:
       - backend
@@ -52,7 +52,7 @@ services:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
-      - frontend
+      - admin-frontend
     networks:
       - clickmanager-network
 

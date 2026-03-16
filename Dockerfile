@@ -21,8 +21,8 @@ FROM nginx:alpine
 # remove qualquer arquivo padrão do nginx
 RUN rm -rf /usr/share/nginx/html/*
 
-# copie o build para /app dentro do Nginx (baseHref/deployUrl = /app/)
-COPY --from=build /app/dist/Spike/browser /usr/share/nginx/html/app
+# copie o build Angular para a raiz pública do Nginx
+COPY --from=build /app/dist/CrmClickManagerAdminFront/browser /usr/share/nginx/html
 
 # Copia config SPA customizada
 COPY nginx.conf /etc/nginx/conf.d/default.conf
