@@ -46,8 +46,8 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/",
-              "deployUrl": "/",
+              "baseHref": "/painel-admin/",
+              "deployUrl": "/painel-admin/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

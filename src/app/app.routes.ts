@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'admin/chamados',
+    redirectTo: 'chamados',
   },
   {
     path: '',
@@ -17,29 +17,29 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'admin/chamados',
+        redirectTo: 'chamados',
       },
       {
-        path: 'admin/chamados',
+        path: 'chamados',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
         data: {
           title: 'Chamados de suporte',
           urls: [
-            { title: 'Admin', url: '/admin/chamados' },
+            { title: 'Admin', url: '/chamados' },
             { title: 'Chamados' }
           ]
         }
       },
       {
-        path: 'admin/chamados/:id',
+        path: 'chamados/:id',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
         data: {
           title: 'Detalhe do chamado',
           urls: [
-            { title: 'Admin', url: '/admin/chamados' },
-            { title: 'Chamados', url: '/admin/chamados' },
+            { title: 'Admin', url: '/chamados' },
+            { title: 'Chamados', url: '/chamados' },
             { title: 'Detalhe' }
           ]
         }

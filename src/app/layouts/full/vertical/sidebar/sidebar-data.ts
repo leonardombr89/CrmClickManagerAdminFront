@@ -8,6 +8,6 @@ export const navItems: NavItem[] = [
     displayName: 'Chamados',
     iconName: 'lifebuoy',
     bgcolor: 'primary',
-    route: '/admin/chamados',
+    route: '/chamados',
   }
 ];

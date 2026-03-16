@@ -28,7 +28,7 @@ export class AuthService {
 
     return this.authApi.login(username, password).pipe(
       tap((tokens) => this.persistirTokens(tokens, username)),
-      tap(() => void this.router.navigateByUrl('/admin/chamados')),
+      tap(() => void this.router.navigateByUrl('/chamados')),
       map(() => {
         const usuario = this.criarUsuarioAdmin();
         this.usuarioSubject.next(usuario);
