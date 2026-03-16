@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ClickManagerAdmin": {
+    "CrmClickManagerAdminFront": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -22,7 +22,7 @@
               "bezier-easing"
             ],
             "outputPath": {
-              "base": "dist/ClickManagerAdmin"
+              "base": "dist/CrmClickManagerAdminFront"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -84,10 +84,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "ClickManagerAdmin:build:production"
+              "buildTarget": "CrmClickManagerAdminFront:build:production"
             },
             "development": {
-              "buildTarget": "ClickManagerAdmin:build:development"
+              "buildTarget": "CrmClickManagerAdminFront:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,7 +95,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ClickManagerAdmin:build"
+            "buildTarget": "CrmClickManagerAdminFront:build"
           }
         },
         "test": {
