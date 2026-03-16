@@ -46,8 +46,8 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/app/",
-              "deployUrl": "/app/",
+              "baseHref": "/",
+              "deployUrl": "/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -80,7 +80,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "prebundle": false
+            "prebundle": false,
+            "port": 4300
           },
           "configurations": {
             "production": {

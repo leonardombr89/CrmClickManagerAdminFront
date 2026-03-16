@@ -9,17 +9,11 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  title = 'Sistema de Gestão para gráficas ClickManager';
+  title = 'ClickManager Admin';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
-      this.authService.carregarUsuarioCompleto().subscribe({
-        error: () => {
-          // ignora falhas em contexto público (ex.: landingpage sem token)
-        },
-      });
-    }
+    this.authService.carregarUsuarioCompleto().subscribe();
   }
 }

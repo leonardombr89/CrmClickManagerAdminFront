@@ -41,23 +41,28 @@
 
 .support-layout {
   display: grid;
-  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 390px) minmax(0, 1fr);
   gap: 16px;
-  min-height: 620px;
+  min-height: 640px;
 }
 
 .support-sidebar,
 .support-detail {
   border: 1px solid #e5ebf3;
-  border-radius: 16px;
+  border-radius: 18px;
   background: #fff;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
 }
 
 .support-sidebar {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
+}
+
+.support-detail {
+  padding: 20px;
 }
 
 .sidebar-top {
@@ -67,8 +72,22 @@
   gap: 12px;
 }
 
-.compact-field {
-  margin: 0;
+.filter-actions,
+.ticket-meta,
+.detail-badges,
+.reply-actions,
+.status-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sidebar-resume {
+  padding: 12px 16px 0;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
 }
 
 .sidebar-list {
@@ -109,36 +128,35 @@
 }
 
 .ticket-item-top {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+.ticket-id,
+.ticket-updated,
+.ticket-footer,
+.message-type {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ticket-company {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.ticket-user {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 8px;
 }
 
 .ticket-subject {
   font-size: 15px;
   font-weight: 700;
   color: #0f172a;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ticket-updated,
-.ticket-footer {
-  font-size: 12px;
-  color: #64748b;
-}
-
-.ticket-meta,
-.detail-badges,
-.reply-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.ticket-meta {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .priority-chip {
@@ -177,10 +195,6 @@
   border-color: #fca5a5;
 }
 
-.support-detail {
-  padding: 18px;
-}
-
 .detail-card {
   display: grid;
   gap: 18px;
@@ -213,10 +227,17 @@
 .detail-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px 16px;
   margin-top: 10px;
   color: #64748b;
   font-size: 13px;
+}
+
+.status-actions {
+  padding: 14px;
+  border: 1px solid #e5ebf3;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8fbff 0%, #fdfefe 100%);
 }
 
 .timeline {
@@ -236,9 +257,14 @@
   border-color: #bfdbfe;
 }
 
-.message-card.msg-suporte {
+.message-card.msg-admin {
   background: #f8fafc;
   border-color: #dbe4ee;
+}
+
+.message-card.msg-interna {
+  background: #fff7ed;
+  border-color: #fdba74;
 }
 
 .message-head {
@@ -249,14 +275,9 @@
   margin-bottom: 6px;
 }
 
-.message-head strong {
+.message-head strong,
+.closed-box strong {
   color: #0f172a;
-}
-
-.message-head span,
-.message-type {
-  color: #64748b;
-  font-size: 12px;
 }
 
 .message-body {
@@ -266,13 +287,27 @@
   white-space: pre-line;
 }
 
+.internal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  margin-left: 8px;
+  border-radius: 999px;
+  background: #fed7aa;
+  color: #9a3412;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .reply-box {
   border-top: 1px solid #eef2f7;
   padding-top: 16px;
+  display: grid;
+  gap: 14px;
 }
 
 .reply-box h4 {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 18px;
   color: #0f172a;
 }
@@ -300,18 +335,16 @@
   color: #2563eb;
 }
 
-.closed-box strong {
-  display: block;
-  color: #0f172a;
-  margin-bottom: 4px;
+mat-paginator {
+  border-top: 1px solid #eef2f7;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1160px) {
   .support-layout {
     grid-template-columns: 1fr;
   }
 
   .support-sidebar {
-    max-height: 420px;
+    max-height: 520px;
   }
 }

@@ -1,27 +1,25 @@
 <app-page-card
-  titulo="Suporte"
-  subtitulo="Abra chamados e acompanhe o histórico de atendimento"
+  titulo="Chamados de suporte"
+  subtitulo="Atendimento administrativo do ClickManager"
   [mostrarDivisor]="true"
 >
   <app-section-card [divider]="false">
     <div class="toolbar">
       <div class="toolbar-summary">
         <div class="summary-pill">
-          <span class="summary-number">{{ chamados.length }}</span>
-          <span class="summary-label">chamado(s)</span>
+          <span class="summary-number">{{ totalItens }}</span>
+          <span class="summary-label">total filtrado</span>
         </div>
         <div class="summary-pill active">
-          <span class="summary-number">{{ totalAbertos }}</span>
-          <span class="summary-label">em andamento</span>
+          <span class="summary-number">{{ chamados.length }}</span>
+          <span class="summary-label">na página atual</span>
         </div>
       </div>
 
-      <div class="toolbar-actions">
-        <button mat-flat-button color="primary" (click)="abrirNovoChamado()">
-          <mat-icon>add</mat-icon>
-          Novo chamado
-        </button>
-      </div>
+      <button mat-stroked-button color="primary" (click)="carregarLista(true, chamadoSelecionado?.id ?? null)">
+        <mat-icon>refresh</mat-icon>
+        Atualizar
+      </button>
     </div>
   </app-section-card>
 
@@ -30,30 +28,34 @@
       <aside class="support-sidebar">
         <div class="sidebar-top">
           <mat-form-field appearance="outline" class="w-100 compact-field">
-            <mat-label>Buscar chamados</mat-label>
-            <input matInput type="text" (keyup)="aplicarFiltroBusca($event)" />
-            <mat-icon matSuffix>search</mat-icon>
+            <mat-label>Status</mat-label>
+            <mat-select [(value)]="statusFiltro">
+              @for(status of statusOptions; track status) {
+              <mat-option [value]="status">
+                {{ status === 'TODOS' ? 'Todos' : statusLabel(status) }}
+              </mat-option>
+              }
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100 compact-field">
-            <mat-label>Status</mat-label>
-            <mat-select [(value)]="statusFiltro" (selectionChange)="aplicarFiltroStatus()">
-              <mat-option value="TODOS">Todos</mat-option>
-              <mat-option value="ABERTO">Aberto</mat-option>
-              <mat-option value="EM_ANALISE">Em análise</mat-option>
-              <mat-option value="AGUARDANDO_CLIENTE">Aguardando cliente</mat-option>
-              <mat-option value="RESPONDIDO">Respondido</mat-option>
-              <mat-option value="RESOLVIDO">Resolvido</mat-option>
-              <mat-option value="FECHADO">Fechado</mat-option>
-            </mat-select>
+            <mat-label>Empresa ID</mat-label>
+            <input matInput type="number" [(ngModel)]="empresaIdFiltro" />
           </mat-form-field>
+
+          <div class="filter-actions">
+            <button mat-flat-button color="primary" (click)="aplicarFiltros()">Filtrar</button>
+            <button mat-stroked-button color="primary" (click)="limparFiltros()">Limpar</button>
+          </div>
         </div>
+
+        <div class="sidebar-resume">{{ resumoContador }}</div>
 
         <div class="sidebar-list">
           @if(carregandoLista) {
           <div class="empty-state">Carregando chamados...</div>
-          } @else if(chamadosFiltrados.length > 0) {
-          @for(item of chamadosFiltrados; track item.id) {
+          } @else if(chamados.length > 0) {
+          @for(item of chamados; track item.id) {
           <button
             type="button"
             class="ticket-item"
@@ -61,9 +63,13 @@
             (click)="selecionarChamado(item)"
           >
             <div class="ticket-item-top">
-              <span class="ticket-subject">{{ item.assunto }}</span>
+              <span class="ticket-id">#{{ item.id }}</span>
               <span class="ticket-updated">{{ dataRelativa(item.atualizadoEm) }}</span>
             </div>
+
+            <div class="ticket-company">{{ item.empresaNome }}</div>
+            <div class="ticket-user">{{ item.usuarioSolicitanteNome }}</div>
+            <div class="ticket-subject">{{ item.assunto }}</div>
 
             <div class="ticket-meta">
               <app-status-badge [status]="item.status"></app-status-badge>
@@ -74,16 +80,22 @@
 
             <div class="ticket-footer">
               <span>{{ categoriaLabel(item.categoria) }}</span>
-              <span>#{{ item.id }}</span>
+              <span>Empresa {{ item.empresaId }}</span>
             </div>
           </button>
           }
           } @else {
-          <div class="empty-state">
-            Nenhum chamado encontrado. Abra um novo chamado para falar com o suporte.
-          </div>
+          <div class="empty-state">Nenhum chamado encontrado para os filtros atuais.</div>
           }
         </div>
+
+        <mat-paginator
+          [length]="totalItens"
+          [pageIndex]="pagina"
+          [pageSize]="tamanho"
+          [pageSizeOptions]="[10, 20, 50]"
+          (page)="alterarPagina($event)"
+        ></mat-paginator>
       </aside>
 
       <section class="support-detail">
@@ -96,10 +108,14 @@
               <span class="detail-label">Chamado #{{ chamadoSelecionado.id }}</span>
               <h3>{{ chamadoSelecionado.assunto }}</h3>
               <div class="detail-meta">
-                <span>{{ categoriaLabel(chamadoSelecionado.categoria) }}</span>
-                <span>•</span>
-                <span>Criado em {{ chamadoSelecionado.criadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
-                <span *ngIf="chamadoSelecionado.fechadoEm">• Fechado em {{ chamadoSelecionado.fechadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span><strong>Empresa:</strong> {{ chamadoSelecionado.empresaNome }} (#{{ chamadoSelecionado.empresaId }})</span>
+                <span><strong>Solicitante:</strong> {{ chamadoSelecionado.usuarioSolicitanteNome }}</span>
+                <span><strong>Categoria:</strong> {{ categoriaLabel(chamadoSelecionado.categoria) }}</span>
+                <span><strong>Criado em:</strong> {{ chamadoSelecionado.criadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span><strong>Atualizado em:</strong> {{ chamadoSelecionado.atualizadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
+                @if(chamadoSelecionado.fechadoEm) {
+                <span><strong>Fechado em:</strong> {{ chamadoSelecionado.fechadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
+                }
               </div>
             </div>
 
@@ -111,14 +127,32 @@
             </div>
           </div>
 
+          <div class="status-actions">
+            @for(status of statusActions; track status) {
+            <button
+              mat-stroked-button
+              color="primary"
+              [disabled]="atualizandoStatus !== null || chamadoSelecionado.status === 'FECHADO' || chamadoSelecionado.status === status"
+              (click)="atualizarStatus(status)"
+            >
+              {{ atualizandoStatus === status ? 'Atualizando...' : statusLabel(status) }}
+            </button>
+            }
+          </div>
+
           <div class="timeline">
             @for(msg of chamadoSelecionado.mensagens; track msg.id) {
-            <div class="message-card" [ngClass]="autorMensagemClass(msg.autorTipo)">
+            <div class="message-card" [ngClass]="autorMensagemClass(msg.autorTipo, msg.interna)">
               <div class="message-head">
-                <strong>{{ msg.autorNome || 'Usuário' }}</strong>
+                <strong>{{ msg.autorNome || 'Admin' }}</strong>
                 <span>{{ msg.criadaEm | date:'dd/MM/yyyy HH:mm' }}</span>
               </div>
-              <div class="message-type">{{ msg.autorTipo === 'CLIENTE' ? 'Você' : 'Suporte' }}</div>
+              <div class="message-type">
+                {{ msg.autorTipo === 'CLIENTE' ? 'Cliente' : 'Admin sistema' }}
+                @if(msg.interna) {
+                <span class="internal-badge">Interna</span>
+                }
+              </div>
               <div class="message-body">{{ msg.mensagem }}</div>
             </div>
             }
@@ -129,14 +163,15 @@
             <h4>Responder chamado</h4>
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Mensagem</mat-label>
-              <textarea matInput rows="4" maxlength="3000" [formControl]="respostaForm.controls.mensagem"></textarea>
+              <textarea matInput rows="5" maxlength="3000" [formControl]="respostaForm.controls.mensagem"></textarea>
               <mat-hint align="end">{{ respostaForm.controls.mensagem.value?.length || 0 }}/3000</mat-hint>
             </mat-form-field>
 
+            <mat-slide-toggle color="primary" [formControl]="respostaForm.controls.interna">
+              Mensagem interna visível apenas para admins
+            </mat-slide-toggle>
+
             <div class="reply-actions">
-              <button mat-stroked-button color="primary" (click)="fecharChamado()">
-                Fechar chamado
-              </button>
               <button
                 mat-flat-button
                 color="primary"
@@ -151,16 +186,14 @@
           <div class="closed-box">
             <mat-icon>task_alt</mat-icon>
             <div>
-              <strong>Chamado encerrado</strong>
-              <span>Este chamado foi fechado e não aceita novas mensagens.</span>
+              <strong>Chamado fechado</strong>
+              <span>O chamado foi encerrado. Novas respostas foram desabilitadas no painel.</span>
             </div>
           </div>
           }
         </div>
         } @else {
-        <div class="empty-state">
-          Selecione um chamado da lista para ver o histórico ou abra um novo atendimento.
-        </div>
+        <div class="empty-state">Selecione um chamado para visualizar o histórico completo.</div>
         }
       </section>
     </div>

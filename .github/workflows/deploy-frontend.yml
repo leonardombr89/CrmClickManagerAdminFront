@@ -1,8 +1,8 @@
-name: Deploy Frontend (Lightsail)
+name: Deploy Admin Frontend (Lightsail)
 
 on:
   workflow_run:
-    workflows: ["Build and publish frontend Docker image"]
+    workflows: ["Build and publish admin frontend Docker image"]
     types:
       - completed
 
@@ -10,6 +10,10 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_PATH: ${{ vars.CLICKMANAGER_ADMIN_DEPLOY_PATH || '/opt/clickmanager-admin' }}
+      COMPOSE_FILE: docker-compose.prod.yml
+      SERVICE_NAME: admin-frontend
 
     steps:
       - name: Deploy via SSH to Lightsail
@@ -19,6 +23,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /opt/clickmanager
-            docker-compose -f docker-compose.prod.yml pull frontend
-            docker-compose -f docker-compose.prod.yml up -d frontend
+            cd "${{ env.DEPLOY_PATH }}"
+            docker compose -f "${{ env.COMPOSE_FILE }}" pull "${{ env.SERVICE_NAME }}"
+            docker compose -f "${{ env.COMPOSE_FILE }}" up -d "${{ env.SERVICE_NAME }}"
