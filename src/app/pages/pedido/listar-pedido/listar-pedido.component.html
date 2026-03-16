@@ -1,0 +1,84 @@
+<app-page-card titulo="Pedidos" botaoTexto="Novo Pedido" botaoIcone="add" [botaoRota]="['/page/pedido/criar']"
+  permissao="PEDIDOS_CADASTRAR" [mostrarDivisor]="true">
+
+  <app-section-card [divider]="false">
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="Todos">
+        <div class="tab-pane">
+          <app-filtro-pesquisa-card
+            titulo="Pesquisar"
+            placeholder="Ex: cliente ou número do pedido"
+            [statusOptions]="statusOptions"
+            [statusSelecionado]="statusSelecionado"
+            (pesquisar)="onPesquisar($event)"
+            (statusChange)="onStatusChange($event)">
+          </app-filtro-pesquisa-card>
+
+          <app-section-card [divider]="false">
+            <app-pedido-tabela
+              [data]="dataSource"
+              [total]="totalPedidos"
+              [pageSize]="tamanhoPagina"
+              [sortActive]="sortActive"
+              [sortDirection]="sortDirection"
+              (sortChange)="onSort($event)"
+              (pageChange)="onPaginaAlterada($event)">
+            </app-pedido-tabela>
+          </app-section-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Orçamentos">
+        <div class="tab-pane">
+          <app-filtro-pesquisa-card
+            titulo="Pesquisar"
+            placeholder="Ex: cliente ou número do pedido"
+            [statusOptions]="[]"
+            [mostrarStatus]="false"
+            (pesquisar)="onPesquisar($event)">
+          </app-filtro-pesquisa-card>
+
+          <app-section-card [divider]="false">
+            <app-pedido-tabela
+              [data]="dataSource"
+              [total]="totalPedidos"
+              [pageSize]="tamanhoPagina"
+              [sortActive]="sortActive"
+              [sortDirection]="sortDirection"
+              [mostrarNumero]="false"
+              [mostrarOrcamento]="true"
+              (sortChange)="onSort($event)"
+              (pageChange)="onPaginaAlterada($event)">
+            </app-pedido-tabela>
+          </app-section-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Rascunhos">
+        <div class="tab-pane">
+          <app-filtro-pesquisa-card
+            titulo="Pesquisar"
+            placeholder="Ex: cliente ou número do pedido"
+            [statusOptions]="[]"
+            [mostrarStatus]="false"
+            (pesquisar)="onPesquisar($event)">
+          </app-filtro-pesquisa-card>
+
+          <app-section-card [divider]="false">
+            <app-pedido-tabela
+              [data]="dataSource"
+              [total]="totalPedidos"
+              [pageSize]="tamanhoPagina"
+              [sortActive]="sortActive"
+              [sortDirection]="sortDirection"
+              [mostrarStatus]="false"
+              (sortChange)="onSort($event)"
+              (pageChange)="onPaginaAlterada($event)">
+            </app-pedido-tabela>
+          </app-section-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </app-section-card>
+
+</app-page-card>

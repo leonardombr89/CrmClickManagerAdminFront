@@ -1,0 +1,56 @@
+<mat-card class="cardWithShadow">
+
+    <!-- Cabeçalho padrão -->
+    <app-card-header titulo="Cores" botaoTexto="Nova Cor" botaoIcone="add" botaoCor="primary"
+        [botaoRota]="['/page/cadastro-tecnico/cores/nova']" permissao="GERENCIAR_PRODUTOS" [mostrarDivisor]="true">
+    </app-card-header>
+
+    <mat-card-content>
+
+        <!-- Pesquisa -->
+        <app-input-pesquisa placeholder="Ex: nome da cor" (valorAlterado)="onPesquisar($event)">
+        </app-input-pesquisa>
+
+        <!-- Tabela de cores -->
+        <div class="table-responsive">
+            <table mat-table [dataSource]="cores" class="mat-elevation-z1 no-wrap m-t-0 v-middle w-100">
+
+                <!-- Nome -->
+                <ng-container matColumnDef="nome">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nome</th>
+                    <td mat-cell *matCellDef="let cor" class="f-s-14">{{ cor.nome }}</td>
+                </ng-container>
+
+                <!-- Descrição -->
+                <ng-container matColumnDef="descricao">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Descrição</th>
+                    <td mat-cell *matCellDef="let cor" class="f-s-14">{{ cor.descricao }}</td>
+                </ng-container>
+
+                <!-- Ações -->
+                <ng-container matColumnDef="acoes">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Ações</th>
+                    <td mat-cell *matCellDef="let cor" class="action-link">
+                        <a (click)="editar(cor)" class="m-r-10 cursor-pointer">
+                            <i-tabler name="edit" class="icon-18"></i-tabler>
+                        </a>
+
+                        <a (click)="excluir(cor)" class="cursor-pointer">
+                            <i-tabler name="trash" class="icon-18"></i-tabler>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr>
+                <tr mat-row *matRowDef="let row; columns: colunasExibidas"></tr>
+
+            </table>
+
+            <mat-paginator [length]="totalCores" [pageSize]="tamanhoPagina" (page)="onPaginaAlterada($event)"
+                showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,139 @@
+<app-page-card
+  [titulo]="(pedido?.status === 'ORCAMENTO' ? pedido?.numeroOrcamento : pedido?.numero) || '—'"
+  botaoTexto="Voltar"
+  botaoIcone="arrow_back"
+  botaoCor="primary"
+  [botaoRota]="['/page/pedido']"
+  [mostrarDivisor]="true"
+>
+    @if (pedido) {
+
+    <div class="top-grid">
+      <app-pedido-fluxo-controles
+        [titulo]="'Fluxo do pedido'"
+        [renderCard]="true"
+        [divider]="true"
+        [inativo]="inativoStatus"
+        [isOrcamento]="pedido?.status === 'ORCAMENTO'"
+        [statusAtual]="pedido?.status || ''"
+        [restaPagar]="restaPagar"
+        [totalPago]="totalPago"
+        [temPagamentos]="(pedido?.pagamentos?.length || 0) > 0"
+        [isReadOnly]="!permissoes.status"
+        [orcamentoVencido]="orcamentoVencido"
+        [trocandoStatus]="trocandoStatus"
+        [carregandoStatus]="carregandoStatus"
+        [statusControl]="statusControl"
+        [statusOptions]="statusOptions"
+        [transicoes]="transicoesUI"
+        [hints]="flowHints"
+        (confirmarPedido)="confirmarPedido()"
+        (irParaPagamentos)="scrollParaPagamentosEExpandir()"
+        (iniciarProducao)="mudarStatusDireto('EM_PRODUCAO')"
+        (marcarPronto)="mudarStatusDireto('PRONTO')"
+        (marcarEntregue)="mudarStatusDireto('ENTREGUE')"
+        (solicitarProducaoSemPagamento)="confirmarProducaoSemPagamento()"
+        (editarStatus)="iniciarTrocaStatus()"
+        (cancelarStatus)="cancelarTrocaStatus()"
+        (salvarStatus)="salvarStatus()"
+        (aprovarOrcamento)="confirmarAprovarOrcamento()"
+        (cancelarPedido)="confirmarCancelarPedido()"
+        (finalizarPedido)="confirmarFinalizarPedido()">
+      </app-pedido-fluxo-controles>
+
+      <app-resumo-financeiro-card
+        [total]="pedido?.total ?? 0"
+        [subtotal]="pedido?.subTotal ?? 0"
+        [pago]="pedido?.valorTotalPago ?? 0"
+        [frete]="pedido?.frete ?? 0"
+        [restaPagar]="pedido?.restaPagar ?? 0"
+        [desconto]="pedido?.desconto ?? 0"
+        [divider]="true"
+        [inativo]="inativoResumo">
+      </app-resumo-financeiro-card>
+    </div>
+
+    <div class="detalhes-grid">
+        <div class="main-column">
+            <app-pedido-info-card
+                titulo="Dados do pedido"
+                [renderCard]="true"
+                [pedido]="pedido"
+                [inativo]="inativoStatus">
+            </app-pedido-info-card>
+
+            <app-cliente-selector-card
+                [cliente]="pedido?.cliente || null"
+                [control]="clienteControl"
+                [displayWith]="mostrarCliente"
+                [buscarFn]="buscarClientes"
+                [editando]="trocandoCliente || !pedido?.cliente"
+                [salvando]="salvandoCliente"
+                [inativo]="inativoCliente"
+                (editarCliente)="trocarCliente()"
+                (cancelarEdicao)="trocandoCliente = false"
+                (salvarCliente)="salvarClienteDoControle()"
+                (criarCliente)="onCriarCliente()">
+            </app-cliente-selector-card>
+
+            <app-itens-pedido-section
+                [itens]="pedido?.itens ?? []"
+                [subtotal]="pedido?.subTotal ?? 0"
+                [permitirAlterarQuantidade]="(pedido?.status || '').toUpperCase() === 'RASCUNHO'"
+                [inativo]="inativoItens"
+                [mostrarAcoes]="['RASCUNHO','PENDENTE','ORCAMENTO'].includes((pedido?.status || '').toUpperCase())"
+                (buscarProdutos)="onBuscarProdutos()"
+                (descreverItens)="onDescreverItens()"
+                (removerItem)="removerItemPedido($event)">
+            </app-itens-pedido-section>
+
+            <app-observacoes-card
+                [control]="observacoesControl"
+                [textoSalvo]="pedido?.observacoes || ''"
+                [salvando]="salvandoObs"
+                [salvo]="obsOk"
+                [inativo]="inativoObservacoes"
+                (salvar)="salvarObservacoes()">
+            </app-observacoes-card>
+        </div>
+
+        <div class="side-column">
+            <app-section-card titulo="Ações de impressão" [divider]="true">
+                <div class="print-actions vertical">
+                    <button mat-flat-button color="primary" type="button" (click)="imprimirPedidoCompleto()">
+                        <mat-icon class="m-r-4">description</mat-icon>
+                        Pedido completo
+                    </button>
+                    <button mat-stroked-button color="primary" type="button" (click)="imprimirPedidoDuasVias()">
+                        <mat-icon class="m-r-4">description</mat-icon>
+                        Duas vias
+                    </button>
+                    <button mat-stroked-button color="accent" type="button" (click)="imprimirEtiqueta()">
+                        <mat-icon class="m-r-4">label</mat-icon>
+                        Etiqueta
+                    </button>
+                    <button mat-flat-button class="btn-whatsapp" type="button" (click)="abrirWhatsApp()">
+                        <mat-icon class="m-r-4">chat</mat-icon>
+                        WhatsApp
+                    </button>
+                </div>
+            </app-section-card>
+
+      <div id="pagamentos-section">
+        <app-pagamentos-section
+                [pagamentoNovo]="pagamentoForm"
+                [pagamentosLista]="pedido?.pagamentos || []"
+                [formasPagamento]="formasPagamento"
+                [pago]="totalPago"
+                [restante]="restaPagar"
+                [expanded]="expandirPagamentos"
+                [mostrarAcoes]="true"
+                [inativo]="inativoPagamentos"
+                (addPagamento)="adicionarPagamento()"
+                (removerPagamento)="removerPagamento($event)"
+              ></app-pagamentos-section>
+      </div>
+        </div>
+    </div>
+    }
+</app-page-card>

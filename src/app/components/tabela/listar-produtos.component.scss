@@ -1,0 +1,66 @@
+/* Quebra normal nas células */
+.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+  white-space: normal;
+}
+
+/* A coluna de ações mantém alinhamento para linhas altas/baixas */
+.col-acoes {
+  width: 120px;
+  vertical-align: middle !important;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.acoes-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 40px;
+}
+
+/* Variações compactas e tooltip amigável */
+.variacoes-cell .variacao-linha { line-height: 1.35; }
+.variacoes-tooltip { white-space: pre; max-width: 560px; }
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+}
+
+.status-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mat-chip-listbox {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .header-bar {
+    padding: 12px;
+  }
+
+  .table-responsive {
+    margin: 0 -8px;
+    padding: 0 8px;
+  }
+
+  table {
+    min-width: 520px;
+  }
+
+  .status-filter {
+    margin-bottom: 8px;
+  }
+}

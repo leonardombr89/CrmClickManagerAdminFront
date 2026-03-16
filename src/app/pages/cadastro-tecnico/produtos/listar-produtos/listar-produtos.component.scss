@@ -1,0 +1,4 @@
+/* Deixe todas as células quebrarem linha normalmente */
+.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+  white-space: normal;
+}

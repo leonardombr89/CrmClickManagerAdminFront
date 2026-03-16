@@ -1,0 +1,55 @@
+<app-section-card titulo="Endereço" [divider]="true">
+  <div class="row m-t-16" [formGroup]="enderecoForm">
+    <div class="col-lg-6">
+      <app-input-cep
+        [control]="getControl('cep')"
+        label="CEP"
+        (enderecoEncontrado)="onEnderecoEncontrado($event)"
+      ></app-input-cep>
+
+      <app-input-texto-restrito
+        [control]="getControl('complemento')"
+        label="Complemento"
+        placeholder="Sala, bloco..."
+      ></app-input-texto-restrito>
+
+      <app-input-texto-restrito
+        [control]="getControl('cidade')"
+        label="Cidade"
+        placeholder="Informe a cidade"
+      ></app-input-texto-restrito>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-sm-8">
+          <app-input-texto-restrito
+            [control]="getControl('logradouro')"
+            label="Logradouro"
+            placeholder="Rua, avenida..."
+          ></app-input-texto-restrito>
+        </div>
+
+        <div class="col-sm-4">
+          <app-input-texto-restrito
+            [control]="getControl('numero')"
+            label="Número"
+            placeholder="Informe o número"
+          ></app-input-texto-restrito>
+        </div>
+      </div>
+
+      <app-input-texto-restrito
+        [control]="getControl('bairro')"
+        label="Bairro"
+        placeholder="Informe o bairro"
+      ></app-input-texto-restrito>
+
+      <app-input-texto-restrito
+        [control]="getControl('estado')"
+        label="Estado"
+        placeholder="UF"
+      ></app-input-texto-restrito>
+    </div>
+  </div>
+</app-section-card>

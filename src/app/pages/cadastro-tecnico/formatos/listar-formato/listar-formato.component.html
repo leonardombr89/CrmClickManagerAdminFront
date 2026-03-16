@@ -1,0 +1,67 @@
+<mat-card class="cardWithShadow">
+
+  <!-- Cabeçalho padrão -->
+  <app-card-header titulo="Formatos" botaoTexto="Novo Formato" botaoIcone="add"
+    [botaoRota]="['/page/cadastro-tecnico/formatos/criar']" botaoCor="primary" permissao="GERENCIAR_PRODUTOS"
+    [mostrarDivisor]="true">
+  </app-card-header>
+
+  <mat-card-content>
+
+    <!-- Pesquisa -->
+    <app-input-pesquisa placeholder="Ex: nome do formato" (valorAlterado)="onPesquisar($event)">
+    </app-input-pesquisa>
+
+    <!-- Tabela de formatos -->
+    <div class="table-responsive">
+      <table mat-table [dataSource]="formatos" class="mat-elevation-z1 no-wrap m-t-0 v-middle w-100">
+
+        <!-- Nome -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nome</th>
+          <td mat-cell *matCellDef="let f" class="f-s-14">
+            {{ f.nome }}
+          </td>
+        </ng-container>
+
+        <!-- Tamanho -->
+        <ng-container matColumnDef="tamanho">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Tamanho</th>
+          <td mat-cell *matCellDef="let f" class="f-s-14">
+            {{ f.larguraCm }}cm x {{ f.alturaCm }}cm
+          </td>
+        </ng-container>
+
+        <!-- Área útil -->
+        <ng-container matColumnDef="areaUtil">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Área Útil</th>
+          <td mat-cell *matCellDef="let f" class="f-s-14">
+            {{ f.larguraUtilCm }}cm x {{ f.alturaUtilCm }}cm
+          </td>
+        </ng-container>
+
+        <!-- Ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Ações</th>
+          <td mat-cell *matCellDef="let f" class="action-link">
+            <a (click)="editar(f)" class="m-r-10 cursor-pointer">
+              <i-tabler name="edit" class="icon-18"></i-tabler>
+            </a>
+            <a (click)="excluir(f)" class="cursor-pointer">
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunasExibidas"></tr>
+      </table>
+
+      <mat-paginator [length]="totalFormatos" [pageSize]="tamanhoPagina" (page)="onPaginaAlterada($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>

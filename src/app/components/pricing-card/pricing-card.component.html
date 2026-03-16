@@ -1,0 +1,61 @@
+<mat-card
+  class="cardWithShadow pricing-card selectable h-100"
+  [class.active]="ativo"
+  [class.featured]="isDestaque"
+  (click)="onEscolher()"
+>
+  <mat-card-content class="p-y-24 position-relative">
+
+    <span
+      class="popular-badge text-uppercase bg-light-warning text-warning p-x-8 p-y-4 f-s-12 f-w-600 rounded"
+      *ngIf="isDestaque || popular"
+    >
+      {{ destaqueLabel || 'Popular' }}
+    </span>
+
+    <span class="d-block text-uppercase f-s-12 m-b-16">
+      {{ plano?.nome || 'Plano' }}
+    </span>
+
+    <div class="d-flex justify-content-center m-b-16" *ngIf="imgSrc">
+      <img [src]="imgSrc" alt="badge" width="90" />
+    </div>
+
+    <ng-container *ngIf="!isFree && valorExibicao !== null; else freeLabel">
+      <div class="d-flex align-items-baseline justify-content-center m-b-24">
+        <h2 class="plan-title m-b-0">
+          {{ valorExibicao | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </h2>
+        <span class="f-s-16 per-month">/{{ mostrarAnual ? 'ano' : (plano?.periodicidade?.toLowerCase() || 'mensal') }}</span>
+      </div>
+    </ng-container>    
+    
+    <ng-template #freeLabel>
+      <h2 class="plan-title m-b-24">Free</h2>
+    </ng-template>
+
+    <div class="vantagem-highlight m-b-16" *ngIf="vantagem as destaque">
+      <div class="vantagem-label">Vantagem</div>
+      <div class="vantagem-text">{{ destaque }}</div>
+    </div>
+
+    <div class="m-b-12">
+      @for (beneficio of beneficios; track beneficio) {
+      <div class="d-flex align-items-center p-y-8">
+        <i-tabler name="check" class="icon-16 m-r-12 text-primary d-flex"></i-tabler>
+        <span class="f-s-14 f-w-500">{{ beneficio }}</span>
+      </div>
+      }
+      @if (beneficios.length === 0) {
+      <div class="d-flex align-items-center p-y-8 op-5">
+        <i-tabler name="x" class="icon-16 m-r-12 d-flex"></i-tabler>
+        <span class="f-s-14 f-w-500">Benefícios não informados</span>
+      </div>
+      }
+    </div>
+
+    <button mat-flat-button color="primary" class="w-100 m-t-8" [ngClass]="{ 'btn-selected': ativo }">
+      {{ selecionarTexto }}
+    </button>
+  </mat-card-content>
+</mat-card>

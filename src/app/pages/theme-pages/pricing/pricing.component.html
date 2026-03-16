@@ -1,0 +1,37 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h4 class="f-s-30 f-w-600 text-center lh-lg m-b-16">
+      Planos do ClickManager
+    </h4>
+    <p class="text-center text-muted m-0 f-s-14">
+      Escolha o plano e siga para o pagamento. Tudo pronto para usar SmartCalc e perfis flexíveis.
+    </p>
+  </div>
+</div>
+
+<div class="row m-t-32 p-t-16">
+  @for(plano of planos; track plano.id) {
+  <div class="col-sm-6 col-lg-4 m-b-16">
+    <mat-card class="cardWithShadow h-100 selectable" (click)="escolherPlano(plano)">
+      <mat-card-content class="p-y-24">
+        <span class="d-block text-uppercase f-s-12 m-b-16">
+          {{ plano.nome }}
+        </span>
+        <h2 class="mat-headline-6 plan-title m-b-12">
+          {{ preco(plano) | currency:(plano.moeda || 'BRL'):'symbol-narrow':'1.2-2' }}
+          <span class="f-s-14 text-muted">/{{ plano.periodicidade?.toLowerCase() }}</span>
+        </h2>
+        <p class="m-0 text-muted f-s-13 m-b-12">{{ plano.descricao }}</p>
+        <ul class="m-0 p-l-16 f-s-13">
+          @for(beneficio of getBeneficios(plano); track beneficio) {
+          <li>{{ beneficio }}</li>
+          }
+        </ul>
+        <button mat-flat-button color="primary" class="w-100 m-t-16" (click)="escolherPlano(plano)">
+          Escolher plano
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  }
+</div>
