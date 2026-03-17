@@ -1,27 +1,405 @@
-<div class="row">
-  <div class="col-lg-6">
-    <app-congratulate-card></app-congratulate-card>
+@if (carregandoDashboard && !dashboard) {
+<section class="dashboard-feedback">
+  <mat-progress-spinner mode="indeterminate" diameter="42"></mat-progress-spinner>
+  <div>
+    <strong>Carregando visão executiva</strong>
+    <p>Buscando o resumo do admin para montar o dashboard.</p>
   </div>
-  <div class="col-lg-6">
-    <div class="row">
-      <div class="col-lg-12">
-        <app-receita-resumo></app-receita-resumo>
+</section>
+} @else if (!dashboard) {
+<section class="dashboard-feedback error">
+  <i-tabler name="server-off" class="icon-24"></i-tabler>
+  <div>
+    <strong>Não foi possível carregar o dashboard</strong>
+    <p>{{ erroCarregamento || 'Verifique o endpoint /api/admin/dashboard/resumo e tente novamente.' }}</p>
+  </div>
+  <button mat-flat-button color="primary" (click)="carregarDashboard()">
+    Tentar novamente
+  </button>
+</section>
+} @else {
+<div class="dashboard-shell">
+  <section class="hero-panel">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-eyebrow">
+          <i-tabler name="sparkles" class="icon-16"></i-tabler>
+          Dashboard Admin
+        </span>
+        <h1>{{ saudacao() }}</h1>
+        <p>
+          Esta visão agora é alimentada pelo back e concentra crescimento da base, ativação, saúde da operação
+          e suporte no período de {{ periodoReferencia }}.
+        </p>
+
+        <div class="hero-actions">
+          <button mat-flat-button color="primary" [routerLink]="['/chamados']">
+            Ver chamados
+          </button>
+          <button mat-stroked-button color="primary" (click)="carregarDashboard()" [disabled]="carregandoDashboard">
+            Atualizar visão
+          </button>
+        </div>
       </div>
-      <!--<div class="col-lg-6">
-        <app-latest-deals></app-latest-deals>
-      </div> -->
-      <!--<div class="col-lg-6">
-        <app-customers></app-customers>
-      </div> -->
+
+      <div class="hero-summary">
+        <div class="signal-card">
+          <div class="signal-card-header">
+            <div>
+              <strong>Saúde da operação</strong>
+              <span class="d-block">{{ saudeResumo }}</span>
+            </div>
+            <span class="signal-chip" [ngClass]="{ warning: saudeStatusLabel !== 'Verde' }">{{ saudeStatusLabel }}</span>
+          </div>
+
+          <div class="signal-metric">
+            <div>
+              <strong>{{ dashboard.visaoGeral.clientesAtivos }}</strong>
+              <small class="d-block">clientes ativos</small>
+            </div>
+            <div>
+              <strong>{{ dashboard.visaoGeral.pendenciasCriticas }}</strong>
+              <small class="d-block">pendências críticas</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-card-header">
+            <div>
+              <strong>Crescimento do período</strong>
+              <span class="d-block">{{ dashboard.visaoGeral.novosClientesMes }} novo(s) cliente(s) e {{ dashboard.crescimentoInsights.clientesEmOnboarding }} em onboarding.</span>
+            </div>
+            <span class="signal-chip">{{ variacaoCrescimentoLabel }}</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <!--<div class="col-lg-8">
-    <app-top-projects></app-top-projects>
-  </div>
-  <div class="col-lg-4">
-    <app-visit-usa></app-visit-usa>
-  </div> -->
-  <!-- <div class="col-12">
-    <app-latest-reviews></app-latest-reviews>
-  </div> -->
+  </section>
+
+  <section class="metric-grid">
+    @for (metrica of metricas; track metrica.label) {
+    <article class="metric-card">
+      <div class="metric-head">
+        <div class="metric-label">{{ metrica.label }}</div>
+        <span class="metric-icon" [ngClass]="'tone-' + metrica.tone">
+          <i-tabler [name]="metrica.icon" class="icon-22"></i-tabler>
+        </span>
+      </div>
+      <h2 class="metric-value">{{ metrica.value }}</h2>
+      <span class="metric-delta">{{ metrica.delta }}</span>
+      <p class="metric-helper">{{ metrica.helper }}</p>
+    </article>
+    }
+  </section>
+
+  <section class="content-grid growth-grid">
+    <div class="dashboard-card growth-card">
+      <div class="dashboard-card-header growth-header">
+        <div>
+          <h3>Crescimento de clientes</h3>
+          <p>Curva cronológica da base ativa com receita recorrente no mesmo eixo de leitura.</p>
+        </div>
+        <span class="growth-chip">{{ variacaoCrescimentoLabel }}</span>
+      </div>
+
+      <div class="growth-chart">
+        @for (item of crescimentoClientes; track item.mes + item.total) {
+        <article class="growth-column">
+          <small class="growth-total">{{ item.total }} ativos</small>
+          <div class="growth-bar-track">
+            <div class="growth-bar" [style.height.%]="item.altura"></div>
+          </div>
+          <strong>{{ item.mes }}</strong>
+          <span>+{{ item.novos }} novos</span>
+          <small>{{ item.receita }}</small>
+        </article>
+        }
+      </div>
+
+      <div class="growth-footer">
+        <div>
+          <strong>{{ dashboard.visaoGeral.totalClientes }} clientes</strong>
+          <span>base total monitorada pelo admin</span>
+        </div>
+        <div>
+          <strong>{{ dashboard.crescimentoInsights.clientesEmOnboarding }} onboarding</strong>
+          <span>contas em ativação que sustentam a próxima curva</span>
+        </div>
+        <div>
+          <strong>{{ dashboard.crescimentoInsights.clientesEmRisco }} em risco</strong>
+          <span>clientes que pedem ação para não afetar retenção</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Leituras do crescimento</h3>
+          <p>Resumo executivo para separar aquisição, ativação e risco de churn.</p>
+        </div>
+      </div>
+
+      <div class="growth-focus-list">
+        @for (item of focosCrescimento; track item.titulo) {
+        <article class="growth-focus-item">
+          <div class="growth-focus-top">
+            <h4>{{ item.titulo }}</h4>
+            <span class="growth-focus-badge" [ngClass]="crescimentoClass(item.tone)">{{ item.tendencia }}</span>
+          </div>
+          <strong class="growth-focus-value">{{ item.valor }}</strong>
+          <p>{{ item.resumo }}</p>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Panorama dos módulos</h3>
+          <p>Leitura rápida do estágio atual do produto e do que já sustenta a operação.</p>
+        </div>
+      </div>
+
+      <div class="module-list">
+        @for (modulo of modulos; track modulo.nome) {
+        <article class="module-item">
+          <div class="module-top">
+            <h4 class="module-title">{{ modulo.nome }}</h4>
+            <span class="status-badge" [ngClass]="moduloClass(modulo.status)">{{ modulo.status }}</span>
+          </div>
+
+          <p>{{ modulo.resumo }}</p>
+
+          <div class="progress-track">
+            <div class="progress-value" [style.width.%]="modulo.coberturaPercentual"></div>
+          </div>
+
+          <div class="module-footer">
+            <small>{{ modulo.coberturaPercentual }}% de cobertura operacional</small>
+            @if (modulo.rota) {
+            <a mat-button color="primary" [routerLink]="[modulo.rota]">Abrir módulo</a>
+            }
+          </div>
+        </article>
+        }
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Atividades recentes</h3>
+          <p>Eventos vindos do back para mostrar o ritmo real da operação.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/atividades']">
+          Ver mais
+        </a>
+      </div>
+
+      <div class="activity-list">
+        @for (atividade of atividades; track atividade.titulo + atividade.ocorreuEm) {
+        <article class="activity-item">
+          <span class="activity-dot"></span>
+          <div class="activity-content">
+            <div class="activity-head">
+              <strong>{{ atividade.titulo }}</strong>
+              <span class="activity-tag">{{ atividade.tag }}</span>
+            </div>
+            <p>{{ atividade.detalhe }}</p>
+            <small>{{ atividade.momento }}</small>
+          </div>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Leads da landing</h3>
+          <p>Resumo comercial das mensagens recebidas pela landing e newsletter.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/leads']">
+          Ver mais
+        </a>
+      </div>
+
+      @if (carregandoLeads) {
+      <div class="embedded-state">
+        <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        <span>Carregando leads...</span>
+      </div>
+      } @else {
+      <div class="lead-metric-grid">
+        @for (metrica of metricasLeads; track metrica.label) {
+        <article class="lead-metric-card" [ngClass]="leadMetricClass(metrica.tone)">
+          <span>{{ metrica.label }}</span>
+          <strong>{{ metrica.value }}</strong>
+          <small>{{ metrica.helper }}</small>
+        </article>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Leads recentes</h3>
+          <p>Entradas mais recentes do módulo comercial para priorização rápida.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/leads']">
+          Ver mais
+        </a>
+      </div>
+
+      @if (carregandoLeads) {
+      <div class="embedded-state">
+        <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        <span>Carregando leads recentes...</span>
+      </div>
+      } @else {
+      <div class="lead-list-dashboard">
+        @for (lead of leadsRecentes; track lead.id) {
+        <article class="lead-dashboard-item">
+          <div class="lead-dashboard-top">
+            <div>
+              <h4>{{ lead.nome }}</h4>
+              <p>{{ lead.empresa || lead.email }}</p>
+            </div>
+            <span class="status-badge" [ngClass]="leadStatusClass(lead.status)">
+              {{ leadStatusLabel(lead.status) }}
+            </span>
+          </div>
+
+          <div class="lead-dashboard-meta">
+            <span>{{ origemLeadLabel(lead.origem) }}</span>
+            <span>{{ lead.responsavelNome || 'Sem responsável' }}</span>
+            <span>{{ dataRelativa(lead.atualizadoEm) }}</span>
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Clientes em observação</h3>
+          <p>Contas que pedem ação manual para proteger crescimento, adoção ou retenção.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/empresas']">
+          Ver mais
+        </a>
+      </div>
+
+      <div class="watch-list">
+        @for (item of observacaoOperacional; track item.empresaId + item.empresaNome) {
+        <article class="watch-item">
+          <div class="watch-top">
+            <h4 class="watch-title">{{ item.empresaNome }}</h4>
+            <span class="watch-status">{{ item.status }}</span>
+          </div>
+          <p>{{ item.contexto }}</p>
+          <div class="watch-footer">
+            <small>{{ item.acaoSugerida }}</small>
+            <button mat-stroked-button color="primary">Registrar follow-up</button>
+          </div>
+        </article>
+        }
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Suporte em contexto</h3>
+          <p>{{ resumoSuporte }}</p>
+        </div>
+      </div>
+
+      <div class="support-list">
+        @for (chamado of filaSuporte; track chamado.chamadoId) {
+        <article class="support-item">
+          <div class="support-top">
+            <h4 class="support-title">{{ chamado.assunto }}</h4>
+            <span class="priority-badge" [ngClass]="prioridadeClass(chamado.prioridade)">
+              {{ chamado.prioridade }}
+            </span>
+          </div>
+          <p>{{ chamado.empresaNome }}</p>
+          <div class="support-footer">
+            <div class="support-meta">
+              <i-tabler name="clock-hour-4" class="icon-16"></i-tabler>
+              <small>{{ chamado.idade }}</small>
+            </div>
+            <a mat-button color="primary" [routerLink]="['/chamados', chamado.chamadoId]">Abrir fila</a>
+          </div>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-card">
+    <div class="dashboard-card-header">
+      <div>
+        <h3>Ações rápidas da operação</h3>
+        <p>Atalhos para navegar entre a visão executiva e a fila de suporte do admin.</p>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a class="quick-action" [routerLink]="['/dashboard']">
+        <i-tabler name="layout-dashboard" class="icon-22"></i-tabler>
+        <div>
+          <strong>Resumo executivo</strong>
+          <span>Atualizar leitura geral da plataforma, crescimento e sinais de risco.</span>
+        </div>
+      </a>
+
+      <a class="quick-action" [routerLink]="['/chamados']">
+        <i-tabler name="lifebuoy" class="icon-22"></i-tabler>
+        <div>
+          <strong>Fila de chamados</strong>
+          <span>Entrar na central de suporte e atacar pendências do admin.</span>
+        </div>
+      </a>
+
+      <a class="quick-action" [routerLink]="['/chamados']">
+        <i-tabler name="message-circle" class="icon-22"></i-tabler>
+        <div>
+          <strong>Responder backlog</strong>
+          <span>Reduzir chamados sem resposta e proteger a experiência da base ativa.</span>
+        </div>
+      </a>
+
+      <a class="quick-action" [routerLink]="['/atividades']">
+        <i-tabler name="timeline" class="icon-22"></i-tabler>
+        <div>
+          <strong>Feed de atividades</strong>
+          <span>Abrir a timeline persistida de eventos operacionais do admin.</span>
+        </div>
+      </a>
+
+      <a class="quick-action" [routerLink]="['/leads']">
+        <i-tabler name="mail" class="icon-22"></i-tabler>
+        <div>
+          <strong>Leads da landing</strong>
+          <span>Abrir a fila comercial para qualificar mensagens recebidas pela landing page.</span>
+        </div>
+      </a>
+    </div>
+  </section>
 </div>
+}

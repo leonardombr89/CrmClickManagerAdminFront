@@ -32,6 +32,6 @@ export class AppSideLoginComponent {
   }
 
   submit() {
-    this.router.navigate(['/dashboards/dashboard1']);
+    this.router.navigate(['/dashboard']);
   }
 }

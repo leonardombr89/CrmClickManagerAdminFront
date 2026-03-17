@@ -9,10 +9,15 @@ export const DashboardsRoutes: Routes = [
     path: '',
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard1',
+      },
+      {
         path: 'dashboard1',
         component: AppDashboard1Component,
         data: {
-          title: 'Dashboard 1',
+          title: 'Dashboard Executivo',
         },
       },
       {

@@ -41,13 +41,13 @@
               "node_modules/angular-calendar/css/angular-calendar.css",
               "node_modules/highlight.js/styles/atom-one-dark.min.css"
             ],
+            "baseHref": "/painel-admin/",
+            "deployUrl": "/painel-admin/",
             "scripts": [],
             "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
-              "baseHref": "/",
-              "deployUrl": "/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -81,7 +81,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "prebundle": false,
-            "port": 4300
+            "port": 4300,
+            "servePath": "/painel-admin/"
           },
           "configurations": {
             "production": {

@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'admin/chamados',
+    redirectTo: 'dashboard',
   },
   {
     path: '',
@@ -17,29 +17,77 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'admin/chamados',
+        redirectTo: 'dashboard',
       },
       {
-        path: 'admin/chamados',
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboards/dashboard1/dashboard1.component').then((m) => m.AppDashboard1Component),
+        data: {
+          title: 'Dashboard',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Dashboard' }
+          ]
+        }
+      },
+      {
+        path: 'chamados',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
         data: {
           title: 'Chamados de suporte',
           urls: [
-            { title: 'Admin', url: '/admin/chamados' },
+            { title: 'Admin', url: '/dashboard' },
             { title: 'Chamados' }
           ]
         }
       },
       {
-        path: 'admin/chamados/:id',
+        path: 'atividades',
+        loadComponent: () =>
+          import('./pages/atividades/atividades-admin.component').then((m) => m.AtividadesAdminComponent),
+        data: {
+          title: 'Atividades do admin',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Atividades' }
+          ]
+        }
+      },
+      {
+        path: 'empresas',
+        loadComponent: () =>
+          import('./pages/empresas/empresas-admin.component').then((m) => m.EmpresasAdminComponent),
+        data: {
+          title: 'Empresas',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Empresas' }
+          ]
+        }
+      },
+      {
+        path: 'leads',
+        loadComponent: () =>
+          import('./pages/leads/leads-admin.component').then((m) => m.LeadsAdminComponent),
+        data: {
+          title: 'Leads da landing',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Leads' }
+          ]
+        }
+      },
+      {
+        path: 'chamados/:id',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
         data: {
           title: 'Detalhe do chamado',
           urls: [
-            { title: 'Admin', url: '/admin/chamados' },
-            { title: 'Chamados', url: '/admin/chamados' },
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Chamados', url: '/chamados' },
             { title: 'Detalhe' }
           ]
         }

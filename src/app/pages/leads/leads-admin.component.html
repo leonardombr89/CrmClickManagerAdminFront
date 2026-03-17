@@ -1,0 +1,265 @@
+<div class="leads-shell">
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Newsletter e landing</span>
+      <h1>Leads recebidos</h1>
+      <p>
+        Painel admin integrado ao módulo de leads para triagem, qualificação comercial,
+        atualização de status e observações internas.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <button mat-flat-button color="primary" (click)="aplicarFiltros()" [disabled]="carregandoLista">
+        Atualizar dados
+      </button>
+      <button mat-stroked-button color="primary" (click)="limparFiltros()">
+        Limpar filtros
+      </button>
+    </div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card">
+      <span>Novos</span>
+      <strong>{{ resumo.novos }}</strong>
+      <small>entradas aguardando triagem</small>
+    </article>
+
+    <article class="summary-card contact">
+      <span>Em contato</span>
+      <strong>{{ resumo.emContato }}</strong>
+      <small>em abordagem comercial</small>
+    </article>
+
+    <article class="summary-card qualified">
+      <span>Qualificados</span>
+      <strong>{{ resumo.qualificados }}</strong>
+      <small>bons candidatos para proposta</small>
+    </article>
+
+    <article class="summary-card converted">
+      <span>Convertidos</span>
+      <strong>{{ resumo.convertidos }}</strong>
+      <small>já viraram cliente</small>
+    </article>
+  </section>
+
+  <section class="filters-card">
+    <div class="filters-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar lead</mat-label>
+        <input matInput [(ngModel)]="busca" placeholder="Nome, e-mail, empresa ou interesse" (keyup.enter)="aplicarFiltros()" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFiltro">
+          @for (option of statusOptions; track option) {
+          <mat-option [value]="option">
+            {{ option === 'TODOS' ? 'Todos' : statusLabel(option) }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Origem</mat-label>
+        <mat-select [(ngModel)]="origemFiltro">
+          @for (option of origemOptions; track option) {
+          <mat-option [value]="option">
+            {{ option === 'TODOS' ? 'Todas' : origemLabel(option) }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="list-card">
+      <div class="section-header">
+        <div>
+          <h3>Mensagens recebidas</h3>
+          <p>{{ resumoResultados }}</p>
+        </div>
+      </div>
+
+      @if (carregandoLista) {
+      <div class="state-card">
+        <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+        <span>Carregando leads...</span>
+      </div>
+      } @else if (!leads.length) {
+      <div class="state-card">
+        <i-tabler name="mail-off" class="icon-24"></i-tabler>
+        <span>Nenhum lead encontrado para os filtros atuais.</span>
+      </div>
+      } @else {
+      <div class="lead-list">
+        @for (lead of leads; track lead.id) {
+        <button
+          type="button"
+          class="lead-item"
+          [class.selected]="leadSelecionado?.id === lead.id"
+          (click)="selecionarLead(lead)"
+        >
+          <div class="lead-item-top">
+            <div>
+              <strong>{{ lead.nome }}</strong>
+              <span>{{ lead.email }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="statusClass(lead.status)">
+              {{ statusLabel(lead.status) }}
+            </span>
+          </div>
+
+          <div class="lead-item-meta">
+            <span>{{ origemLabel(lead.origem) }}</span>
+            <span>{{ lead.empresa || 'Sem empresa informada' }}</span>
+            <span>{{ lead.responsavelNome || 'Sem responsável' }}</span>
+          </div>
+
+          <div class="lead-item-footer">
+            <small>{{ dataRelativa(lead.atualizadoEm) }}</small>
+            <small>{{ lead.interesse || 'Sem interesse informado' }}</small>
+          </div>
+        </button>
+        }
+      </div>
+
+      <div class="paginator-wrap">
+        <mat-paginator
+          [length]="totalItens"
+          [pageIndex]="pagina"
+          [pageSize]="tamanho"
+          [pageSizeOptions]="[10, 20, 50]"
+          (page)="alterarPagina($event)"
+          showFirstLastButtons
+        />
+      </div>
+      }
+    </div>
+
+    <div class="detail-card">
+      @if (carregandoDetalhe) {
+      <div class="state-card detail-state">
+        <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+        <span>Carregando detalhes do lead...</span>
+      </div>
+      } @else if (leadSelecionado) {
+      <div class="detail-header">
+        <div>
+          <span class="detail-id">Lead #{{ leadSelecionado.id }}</span>
+          <h2>{{ leadSelecionado.nome }}</h2>
+          <p>{{ leadSelecionado.empresa || 'Lead sem empresa informada' }}</p>
+        </div>
+        <span class="status-badge" [ngClass]="statusClass(leadSelecionado.status)">
+          {{ statusLabel(leadSelecionado.status) }}
+        </span>
+      </div>
+
+      <div class="detail-grid">
+        <article class="detail-stat">
+          <span>Origem</span>
+          <strong>{{ origemLabel(leadSelecionado.origem) }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>Responsável</span>
+          <strong>{{ leadSelecionado.responsavelNome || 'Livre' }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>Criado em</span>
+          <strong>{{ dataRelativa(leadSelecionado.criadoEm) }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>Atualizado</span>
+          <strong>{{ dataRelativa(leadSelecionado.atualizadoEm) }}</strong>
+        </article>
+      </div>
+
+      <div class="detail-section">
+        <h3>Contato</h3>
+        <div class="detail-lines">
+          <span>{{ leadSelecionado.email }}</span>
+          <span>{{ leadSelecionado.telefone || 'Sem telefone' }}</span>
+          <span>{{ leadSelecionado.empresa || 'Sem empresa' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Status comercial</h3>
+        <div class="status-editor">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="statusEdicao">
+              @for (option of statusOptions; track option) {
+                @if (option !== 'TODOS') {
+                <mat-option [value]="option">{{ statusLabel(option) }}</mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-flat-button color="primary" (click)="atualizarStatus()" [disabled]="atualizandoStatus || !statusEdicao">
+            Atualizar status
+          </button>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Interesse declarado</h3>
+        <article class="message-card">
+          <strong>{{ leadSelecionado.interesse || 'Sem interesse informado' }}</strong>
+          <p>{{ leadSelecionado.mensagem || 'Sem mensagem registrada para este lead.' }}</p>
+        </article>
+      </div>
+
+      <div class="detail-section">
+        <h3>Tags</h3>
+        <div class="chip-list">
+          @if (leadSelecionado.tags.length) {
+            @for (tag of leadSelecionado.tags; track tag) {
+            <span class="chip">{{ tag }}</span>
+            }
+          } @else {
+            <span class="chip chip-muted">Sem tags</span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Observações internas</h3>
+        <div class="notes-list">
+          @if (leadSelecionado.observacoes.length) {
+            @for (observacao of leadSelecionado.observacoes; track observacao) {
+            <article class="note-item">{{ observacao }}</article>
+            }
+          } @else {
+            <article class="note-item">Nenhuma observação registrada ainda.</article>
+          }
+        </div>
+
+        <div class="note-editor">
+          <mat-form-field appearance="outline">
+            <mat-label>Nova observação</mat-label>
+            <textarea matInput rows="3" [(ngModel)]="novaObservacao"></textarea>
+          </mat-form-field>
+
+          <button mat-flat-button color="primary" (click)="adicionarObservacao()" [disabled]="salvandoObservacao || !novaObservacao.trim()">
+            Adicionar observação
+          </button>
+        </div>
+      </div>
+      } @else {
+      <div class="empty-state">
+        <i-tabler name="mail" class="icon-28"></i-tabler>
+        <div>
+          <strong>Selecione um lead</strong>
+          <p>Escolha uma mensagem da lista para ver os detalhes comerciais.</p>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+</div>

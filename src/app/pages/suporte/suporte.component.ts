@@ -276,7 +276,7 @@ export class SuporteComponent implements OnInit {
         this.carregandoDetalhe = false;
         this.respostaForm.patchValue({ mensagem: '' });
         if (navegar) {
-          void this.router.navigate(['/admin/chamados', id]);
+          void this.router.navigate(['/chamados', id]);
         }
       },
       error: (err) => {
