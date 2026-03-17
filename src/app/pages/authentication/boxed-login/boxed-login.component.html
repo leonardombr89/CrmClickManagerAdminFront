@@ -7,7 +7,10 @@
             <app-branding></app-branding>
           </div>
 
-          <div class="or-border m-t-30">Entre com</div>
+          <div class="text-center m-t-24">
+            <h3 class="m-b-8">ClickManager Admin</h3>
+            <p class="text-muted m-0">Acesso restrito ao painel administrativo de chamados.</p>
+          </div>
 
           <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Usuário</mat-label>
@@ -17,8 +20,6 @@
               <mat-hint class="m-b-16 error-msg">
                 @if(f['uname'].errors && f['uname'].errors['required']) {
                 <div class="text-error">Usuário é obrigatório.</div>
-                } @if(f['uname'].errors && f['uname'].errors['minlength']) {
-                <div class="text-error">Usuário deve ter no mínimo 6 caracteres.</div>
                 }
               </mat-hint>
               }
@@ -38,22 +39,12 @@
 
             <div class="d-flex align-items-center m-b-12">
               <mat-checkbox color="primary" formControlName="lembrar">Lembrar deste dispositivo</mat-checkbox>
-              <a [routerLink]="['/authentication/recuperar-senha']"
-                class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">
-                Esqueceu a senha?</a>
             </div>
 
-            <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid">
-              Entrar
+            <button mat-flat-button color="primary" class="w-100" [disabled]="carregando || !form.valid">
+              {{ carregando ? 'Entrando...' : 'Entrar no admin' }}
             </button>
           </form>
-
-          <span class="d-block f-w-500 text-center m-t-24 f-s-14">
-            Novo por aqui?
-            <a [routerLink]="['/authentication/registro-gestor']"
-              class="text-decoration-none text-primary f-w-500 f-s-14">
-              Criar uma conta</a>
-          </span>
         </mat-card-content>
       </mat-card>
     </div>

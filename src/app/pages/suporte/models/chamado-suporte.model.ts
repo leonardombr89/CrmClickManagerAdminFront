@@ -1,4 +1,4 @@
-export type ChamadoSuporteStatus =
+export type StatusChamadoSuporte =
   | 'ABERTO'
   | 'EM_ANALISE'
   | 'AGUARDANDO_CLIENTE'
@@ -6,7 +6,7 @@ export type ChamadoSuporteStatus =
   | 'RESOLVIDO'
   | 'FECHADO';
 
-export type ChamadoSuporteCategoria =
+export type CategoriaChamadoSuporte =
   | 'DUVIDA'
   | 'ERRO'
   | 'FINANCEIRO'
@@ -14,50 +14,61 @@ export type ChamadoSuporteCategoria =
   | 'ACESSO'
   | 'OUTRO';
 
-export type ChamadoSuportePrioridade = 'BAIXA' | 'MEDIA' | 'ALTA' | 'URGENTE';
+export type PrioridadeChamadoSuporte =
+  | 'BAIXA'
+  | 'MEDIA'
+  | 'ALTA'
+  | 'URGENTE';
 
-export interface MensagemChamadoSuporte {
-  id: number;
-  autorUsuarioId: number | null;
-  autorNome: string;
-  autorTipo: 'CLIENTE' | 'SUPORTE' | string;
-  mensagem: string;
-  interna: boolean;
-  criadaEm: string;
-}
+export type AutorMensagemChamadoSuporte =
+  | 'CLIENTE'
+  | 'ADMIN_SISTEMA';
 
-export interface ChamadoSuporteListaItem {
+export interface AdminChamadoResumo {
   id: number;
+  empresaId: number;
+  empresaNome: string;
+  usuarioSolicitanteId: number;
+  usuarioSolicitanteNome: string;
   assunto: string;
-  categoria: ChamadoSuporteCategoria;
-  prioridade: ChamadoSuportePrioridade;
-  status: ChamadoSuporteStatus;
+  categoria: CategoriaChamadoSuporte;
+  prioridade: PrioridadeChamadoSuporte;
+  status: StatusChamadoSuporte;
   criadoEm: string;
   atualizadoEm: string;
   fechadoEm: string | null;
 }
 
-export interface ChamadoSuporteDetalhe extends ChamadoSuporteListaItem {
-  usuarioSolicitanteId: number;
-  usuarioSolicitanteNome: string;
-  mensagens: MensagemChamadoSuporte[];
+export interface AdminMensagemChamado {
+  id: number;
+  autorUsuarioId: number | null;
+  autorNome: string;
+  autorTipo: AutorMensagemChamadoSuporte;
+  mensagem: string;
+  interna: boolean;
+  criadaEm: string;
 }
 
-export interface ChamadoSuportePaginadoResponse {
+export interface AdminChamadoDetalhe extends AdminChamadoResumo {
+  mensagens: AdminMensagemChamado[];
+}
+
+export interface AdminListaChamadosResponse {
   pagina: number;
   tamanho: number;
   totalItens: number;
   totalPaginas: number;
-  itens: ChamadoSuporteListaItem[];
+  itens: AdminChamadoResumo[];
 }
 
-export interface CriarChamadoSuporteRequest {
-  assunto: string;
-  categoria: ChamadoSuporteCategoria;
-  prioridade: ChamadoSuportePrioridade;
-  mensagem: string;
+export interface AdminListaChamadosFiltros {
+  empresaId?: number | null;
+  status?: StatusChamadoSuporte | null;
+  pagina?: number;
+  tamanho?: number;
 }
 
-export interface ResponderChamadoSuporteRequest {
+export interface AdminResponderChamadoRequest {
   mensagem: string;
+  interna: boolean;
 }

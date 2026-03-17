@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthTokenStorageService {
-  private readonly ACCESS_TOKEN_KEY = 'auth_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+  private readonly ACCESS_TOKEN_KEY = 'admin_access_token';
+  private readonly REFRESH_TOKEN_KEY = 'admin_refresh_token';
+  private readonly USERNAME_KEY = 'admin_username';
   private storage: Storage = sessionStorage;
 
   constructor() {
@@ -21,13 +22,24 @@ export class AuthTokenStorageService {
     this.storage = sessionStorage;
   }
 
-  salvarTokens(accessToken: string, refreshToken: string): void {
+  salvarTokens(accessToken: string, refreshToken?: string | null, username?: string | null): void {
     this.storage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
-    this.storage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
+    if (refreshToken) {
+      this.storage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
+    } else {
+      this.storage.removeItem(this.REFRESH_TOKEN_KEY);
+    }
+    if (username) {
+      this.storage.setItem(this.USERNAME_KEY, username);
+    }
   }
 
   atualizarAccessToken(token: string): void {
     this.storage.setItem(this.ACCESS_TOKEN_KEY, token);
+  }
+
+  salvarUsername(username: string): void {
+    this.storage.setItem(this.USERNAME_KEY, username);
   }
 
   getAccessToken(): string | null {
@@ -36,6 +48,10 @@ export class AuthTokenStorageService {
 
   getRefreshToken(): string | null {
     return this.storage.getItem(this.REFRESH_TOKEN_KEY) || localStorage.getItem(this.REFRESH_TOKEN_KEY) || sessionStorage.getItem(this.REFRESH_TOKEN_KEY);
+  }
+
+  getUsername(): string | null {
+    return this.storage.getItem(this.USERNAME_KEY) || localStorage.getItem(this.USERNAME_KEY) || sessionStorage.getItem(this.USERNAME_KEY);
   }
 
   getToken(): string | null {
@@ -47,6 +63,8 @@ export class AuthTokenStorageService {
     sessionStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     sessionStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    localStorage.removeItem(this.USERNAME_KEY);
+    sessionStorage.removeItem(this.USERNAME_KEY);
   }
 
   // Mantém compatibilidade com o nome antigo.

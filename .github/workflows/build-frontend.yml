@@ -1,16 +1,19 @@
-name: Build and publish frontend Docker image
+name: Build and publish admin frontend Docker image
 
 on:
   push:
     branches:
       - main
     paths:
+      - ".github/workflows/build-frontend.yml"
+      - ".github/workflows/deploy-frontend.yml"
       - "src/**"
       - "angular.json"
       - "package.json"
       - "package-lock.json"
       - "Dockerfile"
       - "nginx.conf"
+      - "docker-compose.prod.yml"
 
 permissions:
   contents: read
@@ -51,4 +54,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/clickmanager-frontend:latest
+          tags: ghcr.io/${{ github.repository_owner }}/clickmanager-admin-frontend:latest
