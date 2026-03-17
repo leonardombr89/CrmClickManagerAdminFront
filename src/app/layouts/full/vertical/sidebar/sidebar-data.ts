@@ -33,5 +33,17 @@ export const navItems: NavItem[] = [
     iconName: 'mail',
     bgcolor: 'primary',
     route: '/leads',
+  },
+  {
+    displayName: 'Planos',
+    iconName: 'credit-card',
+    bgcolor: 'primary',
+    route: '/planos',
+  },
+  {
+    displayName: 'Cupons',
+    iconName: 'ticket',
+    bgcolor: 'primary',
+    route: '/cupons',
   }
 ];

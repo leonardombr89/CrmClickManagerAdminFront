@@ -80,6 +80,30 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'planos',
+        loadComponent: () =>
+          import('./pages/planos/planos-admin.component').then((m) => m.PlanosAdminComponent),
+        data: {
+          title: 'Planos da plataforma',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Planos' }
+          ]
+        }
+      },
+      {
+        path: 'cupons',
+        loadComponent: () =>
+          import('./pages/cobranca-beneficios/cobranca-beneficios-admin.component').then((m) => m.CobrancaBeneficiosAdminComponent),
+        data: {
+          title: 'Cupons e benefícios',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Cupons' }
+          ]
+        }
+      },
+      {
         path: 'chamados/:id',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
