@@ -21,7 +21,7 @@ FROM nginx:alpine
 # remove qualquer arquivo padrão do nginx
 RUN rm -rf /usr/share/nginx/html/*
 
-# copie o build Angular para o prefixo /painel-admin
+# copie o build Angular para a rota pública do admin
 COPY --from=build /app/dist/CrmClickManagerAdminFront/browser /usr/share/nginx/html/painel-admin
 
 # Copia config SPA customizada

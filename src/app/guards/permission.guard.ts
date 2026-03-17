@@ -17,6 +17,5 @@ export const permissionGuard: CanActivateFn = (route) => {
   if (hasPermission) return true;
 
   toastr.warning('Você não possui permissão para acessar esta configuração.');
-  return router.createUrlTree(['/dashboards/dashboard1']);
+  return router.createUrlTree(['/dashboard']);
 };
-
