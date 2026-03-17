@@ -1,0 +1,156 @@
+<div class="atividades-shell">
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Timeline operacional</span>
+      <h1>Atividades do admin</h1>
+      <p>
+        Feed persistido de eventos do ClickManager para acompanhar onboarding, suporte, deploy,
+        comercial e operação em uma única linha do tempo.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <button mat-flat-button color="primary" (click)="carregarAtividades()" [disabled]="carregando">
+        Atualizar feed
+      </button>
+      <button mat-stroked-button color="primary" (click)="limparFiltros()">
+        Limpar filtros
+      </button>
+    </div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card">
+      <span>Total filtrado</span>
+      <strong>{{ eventosFiltrados.length }}</strong>
+      <small>eventos no feed atual</small>
+    </article>
+    <article class="summary-card critical">
+      <span>Críticos</span>
+      <strong>{{ totalCriticos }}</strong>
+      <small>pedem reação rápida</small>
+    </article>
+    <article class="summary-card warning">
+      <span>Não visualizados</span>
+      <strong>{{ totalNaoVisualizadas }}</strong>
+      <small>eventos ainda pendentes</small>
+    </article>
+    <article class="summary-card info">
+      <span>Suporte</span>
+      <strong>{{ totalSuporte }}</strong>
+      <small>itens ligados à operação</small>
+    </article>
+  </section>
+
+  <section class="filters-card">
+    <div class="filters-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <mat-select [(ngModel)]="tipoFiltro">
+          @for (option of tipoOptions; track option) {
+          <mat-option [value]="option">{{ option === 'TODOS' ? 'Todos' : tipoLabel(option) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Módulo</mat-label>
+        <mat-select [(ngModel)]="moduloFiltro">
+          @for (option of moduloOptions; track option) {
+          <mat-option [value]="option">{{ option === 'TODOS' ? 'Todos' : moduloLabel(option) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Criticidade</mat-label>
+        <mat-select [(ngModel)]="criticidadeFiltro">
+          @for (option of criticidadeOptions; track option) {
+          <mat-option [value]="option">{{ option === 'TODOS' ? 'Todas' : criticidadeLabel(option) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Limite</mat-label>
+        <mat-select [(ngModel)]="limite">
+          <mat-option [value]="20">20</mat-option>
+          <mat-option [value]="50">50</mat-option>
+          <mat-option [value]="100">100</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-slide-toggle [(ngModel)]="somenteNaoVisualizadas">
+      Mostrar apenas não visualizadas
+    </mat-slide-toggle>
+  </section>
+
+  @if (carregando) {
+  <section class="feedback-card">
+    <mat-progress-spinner mode="indeterminate" diameter="42"></mat-progress-spinner>
+    <div>
+      <strong>Carregando atividades</strong>
+      <p>Buscando o feed persistido do admin.</p>
+    </div>
+  </section>
+  } @else if (erro) {
+  <section class="feedback-card error">
+    <i-tabler name="server-off" class="icon-24"></i-tabler>
+    <div>
+      <strong>Falha ao carregar atividades</strong>
+      <p>{{ erro }}</p>
+    </div>
+  </section>
+  } @else if (!eventosFiltrados.length) {
+  <section class="feedback-card">
+    <i-tabler name="inbox" class="icon-24"></i-tabler>
+    <div>
+      <strong>Nenhum evento encontrado</strong>
+      <p>O feed está vazio para os filtros atuais.</p>
+    </div>
+  </section>
+  } @else {
+  <section class="timeline-list">
+    @for (evento of eventosFiltrados; track evento.id) {
+    <article class="timeline-item" [class.timeline-item-unread]="!evento.visualizada">
+      <div class="timeline-icon" [ngClass]="criticidadeClass(evento.criticidade)">
+        <i-tabler [name]="tipoIcon(evento.tipo)" class="icon-20"></i-tabler>
+      </div>
+
+      <div class="timeline-body">
+        <div class="timeline-head">
+          <div>
+            <div class="badges">
+              <span class="badge badge-modulo" [ngClass]="moduloClass(evento.modulo)">{{ moduloLabel(evento.modulo) }}</span>
+              <span class="badge" [ngClass]="criticidadeClass(evento.criticidade)">{{ criticidadeLabel(evento.criticidade) }}</span>
+              @if (!evento.visualizada) {
+              <span class="badge badge-unread">Nova</span>
+              }
+            </div>
+            <h3>{{ evento.titulo }}</h3>
+          </div>
+          <small>{{ dataRelativa(evento.ocorreuEm) }}</small>
+        </div>
+
+        <p>{{ evento.detalhe }}</p>
+
+        <div class="timeline-meta">
+          <span>{{ tipoLabel(evento.tipo) }}</span>
+          @if (evento.empresaNome) {
+          <span>{{ evento.empresaNome }}</span>
+          }
+          @if (evento.usuarioNome) {
+          <span>{{ evento.usuarioNome }}</span>
+          }
+        </div>
+
+        @if (rotaEvento(evento); as rota) {
+        <a mat-button color="primary" [routerLink]="rota">Abrir origem</a>
+        }
+      </div>
+    </article>
+    }
+  </section>
+  }
+</div>

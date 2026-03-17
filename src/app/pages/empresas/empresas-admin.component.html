@@ -1,0 +1,236 @@
+<div class="empresas-shell">
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Base de clientes</span>
+      <h1>Empresas do ClickManager</h1>
+      <p>
+        Visão operacional da base cadastrada, com status vindo do back, uso recente, onboarding
+        e detalhe completo da empresa selecionada.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <button mat-flat-button color="primary" (click)="aplicarFiltros()" [disabled]="carregandoLista">
+        Atualizar dados
+      </button>
+      <button mat-stroked-button color="primary" (click)="limparFiltros()">
+        Limpar filtros
+      </button>
+    </div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card">
+      <span>Total</span>
+      <strong>{{ resumo.total }}</strong>
+      <small>empresas monitoradas</small>
+    </article>
+
+    <article class="summary-card active">
+      <span>Ativas</span>
+      <strong>{{ resumo.ativas }}</strong>
+      <small>contas em operação</small>
+    </article>
+
+    <article class="summary-card onboarding">
+      <span>Onboarding</span>
+      <strong>{{ resumo.onboarding }}</strong>
+      <small>em ativação assistida</small>
+    </article>
+
+    <article class="summary-card risk">
+      <span>Baixa atividade</span>
+      <strong>{{ resumo.baixaAtividade }}</strong>
+      <small>pedem follow-up</small>
+    </article>
+  </section>
+
+  <section class="filters-card">
+    <div class="filters-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar empresa</mat-label>
+        <input matInput [(ngModel)]="busca" placeholder="Nome da empresa" (keyup.enter)="aplicarFiltros()" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFiltro">
+          @for (option of statusOptions; track option) {
+          <mat-option [value]="option">
+            {{ option === 'TODAS' ? 'Todas' : statusLabel(option) }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="list-card">
+      <div class="section-header">
+        <div>
+          <h3>Empresas cadastradas</h3>
+          <p>{{ resumoResultados }}</p>
+        </div>
+      </div>
+
+      @if (carregandoLista) {
+      <div class="state-card">
+        <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+        <span>Carregando empresas...</span>
+      </div>
+      } @else if (!empresas.length) {
+      <div class="state-card">
+        <i-tabler name="building-off" class="icon-24"></i-tabler>
+        <span>Nenhuma empresa encontrada para os filtros atuais.</span>
+      </div>
+      } @else {
+      <div class="empresa-list">
+        @for (empresa of empresas; track empresa.id) {
+        <button
+          type="button"
+          class="empresa-item"
+          [class.selected]="empresaSelecionada?.id === empresa.id"
+          (click)="selecionarEmpresa(empresa)"
+        >
+          <div class="empresa-item-top">
+            <div>
+              <strong>{{ empresa.nome }}</strong>
+              <span>{{ empresa.segmento }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="statusClass(empresa.status)">
+              {{ statusLabel(empresa.status) }}
+            </span>
+          </div>
+
+          <div class="empresa-item-meta">
+            <span>{{ empresa.cidade }}</span>
+            <span>{{ empresa.plano }}</span>
+            <span>{{ empresa.usuarios }} usuário(s)</span>
+          </div>
+
+          <div class="empresa-item-footer">
+            <small>{{ dataRelativa(empresa.ultimaAtividadeEm) }}</small>
+            <small>{{ formatarMoeda(empresa.mrr) }}</small>
+          </div>
+        </button>
+        }
+      </div>
+
+      <div class="paginator-wrap">
+        <mat-paginator
+          [length]="totalItens"
+          [pageIndex]="pagina"
+          [pageSize]="tamanho"
+          [pageSizeOptions]="[10, 20, 50]"
+          (page)="alterarPagina($event)"
+          showFirstLastButtons
+        />
+      </div>
+      }
+    </div>
+
+    <div class="detail-card">
+      @if (carregandoDetalhe) {
+      <div class="state-card detail-state">
+        <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+        <span>Carregando detalhes da empresa...</span>
+      </div>
+      } @else if (empresaSelecionada) {
+      <div class="detail-header">
+        <div>
+          <span class="detail-id">Empresa #{{ empresaSelecionada.id }}</span>
+          <h2>{{ empresaSelecionada.nome }}</h2>
+          <p>{{ empresaSelecionada.segmento }} • {{ empresaSelecionada.cidade }}</p>
+        </div>
+        <span class="status-badge" [ngClass]="statusClass(empresaSelecionada.status)">
+          {{ statusLabel(empresaSelecionada.status) }}
+        </span>
+      </div>
+
+      <div class="detail-grid">
+        <article class="detail-stat">
+          <span>Plano</span>
+          <strong>{{ empresaSelecionada.plano }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>Usuários</span>
+          <strong>{{ empresaSelecionada.usuarios }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>MRR</span>
+          <strong>{{ formatarMoeda(empresaSelecionada.mrr) }}</strong>
+        </article>
+        <article class="detail-stat">
+          <span>Onboarding</span>
+          <strong>{{ empresaSelecionada.onboardingPercentual }}%</strong>
+        </article>
+      </div>
+
+      <div class="detail-section">
+        <h3>Contato principal</h3>
+        <div class="detail-lines">
+          <span>{{ empresaSelecionada.responsavelNome || 'Não informado' }}</span>
+          <span>{{ empresaSelecionada.responsavelEmail || empresaSelecionada.email || 'Sem e-mail' }}</span>
+          <span>{{ empresaSelecionada.responsavelTelefone || empresaSelecionada.telefone || 'Sem telefone' }}</span>
+          <span>Última atividade: {{ dataRelativa(empresaSelecionada.ultimaAtividadeEm) }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Dados cadastrais</h3>
+        <div class="detail-lines">
+          <span>CNPJ: {{ empresaSelecionada.cnpj || 'Não informado' }}</span>
+          <span>E-mail geral: {{ empresaSelecionada.email || 'Não informado' }}</span>
+          <span>Telefone geral: {{ empresaSelecionada.telefone || 'Não informado' }}</span>
+          <span>Criada em: {{ empresaSelecionada.dataCriacao ? (empresaSelecionada.dataCriacao | date:'dd/MM/yyyy') : 'Não informado' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Endereço</h3>
+        <div class="detail-lines">
+          <span>{{ enderecoCompleto() }}</span>
+          @if (empresaSelecionada.endereco?.cep) {
+          <span>CEP: {{ empresaSelecionada.endereco?.cep }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Módulos em uso</h3>
+        <div class="chip-list">
+          @if (empresaSelecionada.modulos.length) {
+            @for (modulo of empresaSelecionada.modulos; track modulo) {
+            <span class="chip">{{ modulo }}</span>
+            }
+          } @else {
+            <span class="chip chip-muted">Nenhum módulo informado</span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Observações</h3>
+        <div class="notes-list">
+          @if (empresaSelecionada.observacoes.length) {
+            @for (observacao of empresaSelecionada.observacoes; track observacao) {
+            <article class="note-item">{{ observacao }}</article>
+            }
+          } @else {
+            <article class="note-item">Nenhuma observação retornada pelo back para esta empresa.</article>
+          }
+        </div>
+      </div>
+      } @else {
+      <div class="empty-state">
+        <i-tabler name="building" class="icon-28"></i-tabler>
+        <div>
+          <strong>Selecione uma empresa</strong>
+          <p>Escolha um item na lista para ver os detalhes operacionais.</p>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+</div>
