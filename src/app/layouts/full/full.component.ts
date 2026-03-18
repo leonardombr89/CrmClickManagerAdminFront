@@ -17,6 +17,7 @@ import { HeaderComponent } from './vertical/header/header.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { navItems } from './vertical/sidebar/sidebar-data';
 import { NavItem } from './vertical/sidebar/nav-item/nav-item';
+import { AdminDisplayModeService } from 'src/app/services/admin-display-mode.service';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -38,7 +39,7 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
     AppBreadcrumbComponent
   ],
   templateUrl: './full.component.html',
-  styleUrls: [],
+  styleUrls: ['./full.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class FullComponent {
@@ -61,12 +62,17 @@ export class FullComponent {
     return this.isMobileScreen;
   }
 
+  get modoPainelAtivo(): boolean {
+    return this.displayModeService.painelAtivo && this.router.url.startsWith('/dashboard');
+  }
+
   constructor(
     private settings: CoreService,
     private mediaMatcher: MediaMatcher,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
-    private navService: NavService
+    private navService: NavService,
+    private displayModeService: AdminDisplayModeService
   ) {
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver

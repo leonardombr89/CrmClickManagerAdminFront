@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
+import { AdminDisplayModeService } from 'src/app/services/admin-display-mode.service';
 import {
   AdminLeadsResumoResponse,
   AdminLeadResumo
@@ -82,7 +83,8 @@ export class AppDashboard1Component implements OnInit {
     private readonly authService: AuthService,
     private readonly dashboardService: AdminDashboardService,
     private readonly leadsService: AdminLeadsService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly displayModeService: AdminDisplayModeService
   ) {}
 
   ngOnInit(): void {
@@ -137,6 +139,18 @@ export class AppDashboard1Component implements OnInit {
 
   get periodoReferencia(): string {
     return this.dashboard?.periodo.referencia || 'período atual';
+  }
+
+  get modoPainelAtivo(): boolean {
+    return this.displayModeService.painelAtivo;
+  }
+
+  sairModoPainel(): void {
+    this.displayModeService.setPainelAtivo(false);
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => undefined);
+    }
   }
 
   get metricas(): DashboardMetric[] {

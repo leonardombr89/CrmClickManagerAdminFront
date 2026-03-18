@@ -16,6 +16,24 @@
 
   <span class="flex-1-auto"></span>
 
+  <button
+    mat-icon-button
+    matTooltip="Atualizar painel"
+    aria-label="Atualizar painel"
+    (click)="recarregarPagina()"
+  >
+    <i-tabler name="refresh" class="icon-20 d-flex"></i-tabler>
+  </button>
+
+  <button
+    mat-icon-button
+    [matTooltip]="emTelaCheia ? 'Sair da tela cheia' : 'Abrir em tela cheia'"
+    [attr.aria-label]="emTelaCheia ? 'Sair da tela cheia' : 'Abrir em tela cheia'"
+    (click)="alternarTelaCheia()"
+  >
+    <i-tabler [name]="emTelaCheia ? 'arrows-minimize' : 'arrows-maximize'" class="icon-20 d-flex"></i-tabler>
+  </button>
+
   <button mat-stroked-button color="primary" [matMenuTriggerFor]="profileMenu">
     <i-tabler name="user-circle" class="icon-18 m-r-8"></i-tabler>
     {{ usuarioNome }}

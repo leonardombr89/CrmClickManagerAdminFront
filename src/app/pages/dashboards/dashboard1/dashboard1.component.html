@@ -19,6 +19,95 @@
 </section>
 } @else {
 <div class="dashboard-shell">
+  @if (modoPainelAtivo) {
+  <div class="tv-panel-controls">
+    <button mat-flat-button color="primary" (click)="carregarDashboard()">
+      Atualizar painel
+    </button>
+    <button mat-stroked-button color="primary" (click)="sairModoPainel()">
+      Voltar ao admin
+    </button>
+  </div>
+
+  <section class="metric-grid metric-grid-tv">
+    @for (metrica of metricas; track metrica.label) {
+    <article class="metric-card">
+      <div class="metric-head">
+        <div class="metric-label">{{ metrica.label }}</div>
+        <span class="metric-icon" [ngClass]="'tone-' + metrica.tone">
+          <i-tabler [name]="metrica.icon" class="icon-22"></i-tabler>
+        </span>
+      </div>
+      <h2 class="metric-value">{{ metrica.value }}</h2>
+      <span class="metric-delta">{{ metrica.delta }}</span>
+      <p class="metric-helper">{{ metrica.helper }}</p>
+    </article>
+    }
+  </section>
+
+  <section class="content-grid growth-grid content-grid-tv">
+    <div class="dashboard-card growth-card growth-card-tv">
+      <div class="dashboard-card-header growth-header">
+        <div>
+          <h3>Crescimento de clientes</h3>
+          <p>Curva cronológica da base ativa com receita recorrente no mesmo eixo de leitura.</p>
+        </div>
+        <span class="growth-chip">{{ variacaoCrescimentoLabel }}</span>
+      </div>
+
+      <div class="growth-chart">
+        @for (item of crescimentoClientes; track item.mes + item.total) {
+        <article class="growth-column">
+          <small class="growth-total">{{ item.total }} ativos</small>
+          <div class="growth-bar-track">
+            <div class="growth-bar" [style.height.%]="item.altura"></div>
+          </div>
+          <strong>{{ item.mes }}</strong>
+          <span>+{{ item.novos }} novos</span>
+          <small>{{ item.receita }}</small>
+        </article>
+        }
+      </div>
+
+      <div class="growth-footer">
+        <div>
+          <strong>{{ dashboard.visaoGeral.totalClientes }} clientes</strong>
+          <span>base total monitorada pelo admin</span>
+        </div>
+        <div>
+          <strong>{{ dashboard.crescimentoInsights.clientesEmOnboarding }} onboarding</strong>
+          <span>contas em ativação que sustentam a próxima curva</span>
+        </div>
+        <div>
+          <strong>{{ dashboard.crescimentoInsights.clientesEmRisco }} em risco</strong>
+          <span>clientes que pedem ação para não afetar retenção</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card growth-focus-card-tv">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Leituras do crescimento</h3>
+          <p>Resumo executivo para separar aquisição, ativação e risco de churn.</p>
+        </div>
+      </div>
+
+      <div class="growth-focus-list growth-focus-list-tv">
+        @for (item of focosCrescimento; track item.titulo) {
+        <article class="growth-focus-item">
+          <div class="growth-focus-top">
+            <h4>{{ item.titulo }}</h4>
+            <span class="growth-focus-badge" [ngClass]="crescimentoClass(item.tone)">{{ item.tendencia }}</span>
+          </div>
+          <strong class="growth-focus-value">{{ item.valor }}</strong>
+          <p>{{ item.resumo }}</p>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+  } @else {
   <section class="hero-panel">
     <div class="hero-grid">
       <div>
@@ -401,5 +490,6 @@
       </a>
     </div>
   </section>
+  }
 </div>
 }
