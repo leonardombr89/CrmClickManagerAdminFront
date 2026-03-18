@@ -312,6 +312,35 @@
     <div class="dashboard-card">
       <div class="dashboard-card-header">
         <div>
+          <h3>Pagamentos da plataforma</h3>
+          <p>Resumo financeiro dos recebimentos, pendências e devoluções do período.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/pagamentos']">
+          Ver mais
+        </a>
+      </div>
+
+      @if (carregandoPagamentos) {
+      <div class="embedded-state">
+        <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        <span>Carregando pagamentos...</span>
+      </div>
+      } @else {
+      <div class="payment-metric-grid">
+        @for (metrica of metricasPagamentos; track metrica.label) {
+        <article class="payment-metric-card" [ngClass]="paymentMetricClass(metrica.tone)">
+          <span>{{ metrica.label }}</span>
+          <strong>{{ metrica.value }}</strong>
+          <small>{{ metrica.helper }}</small>
+        </article>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
           <h3>Leads da landing</h3>
           <p>Resumo comercial das mensagens recebidas pela landing e newsletter.</p>
         </div>

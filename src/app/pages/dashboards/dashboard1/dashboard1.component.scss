@@ -488,7 +488,19 @@
   gap: 12px;
 }
 
+.payment-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .lead-metric-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.payment-metric-card {
   padding: 16px;
   border-radius: 18px;
   border: 1px solid #e2e8f0;
@@ -500,12 +512,30 @@
   display: block;
 }
 
+.payment-metric-card span,
+.payment-metric-card strong,
+.payment-metric-card small {
+  display: block;
+}
+
 .lead-metric-card span,
 .lead-metric-card small {
   color: #64748b;
 }
 
+.payment-metric-card span,
+.payment-metric-card small {
+  color: #64748b;
+}
+
 .lead-metric-card strong {
+  margin: 10px 0 6px;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.payment-metric-card strong {
   margin: 10px 0 6px;
   color: #0f172a;
   font-size: 28px;
@@ -526,6 +556,22 @@
 
 .lead-converted {
   background: #ecfeff;
+}
+
+.payment-received {
+  background: #eefbf4;
+}
+
+.payment-pending {
+  background: #fff8eb;
+}
+
+.payment-approved {
+  background: #edf6ff;
+}
+
+.payment-refunded {
+  background: #fff1f1;
 }
 
 .lead-list-dashboard {
@@ -792,6 +838,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .payment-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .growth-chart {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -826,6 +876,10 @@
   }
 
   .lead-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-metric-grid {
     grid-template-columns: 1fr;
   }
 

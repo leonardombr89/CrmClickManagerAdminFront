@@ -45,5 +45,11 @@ export const navItems: NavItem[] = [
     iconName: 'ticket',
     bgcolor: 'primary',
     route: '/cupons',
+  },
+  {
+    displayName: 'Pagamentos',
+    iconName: 'receipt-2',
+    bgcolor: 'primary',
+    route: '/pagamentos',
   }
 ];

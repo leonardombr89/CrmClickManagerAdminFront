@@ -12,6 +12,8 @@ import {
   AdminLeadResumo
 } from '../../leads/models/admin-lead.model';
 import { AdminLeadsService } from '../../leads/services/admin-leads.service';
+import { AdminPagamentosResumoResponse } from '../../pagamentos/models/admin-pagamento.model';
+import { AdminPagamentosService } from '../../pagamentos/services/admin-pagamentos.service';
 import { AuthService } from 'src/app/services/auth.service';
 import {
   AdminDashboardAtividadeRecente,
@@ -59,6 +61,13 @@ type DashboardLeadMetric = {
   tone: 'neutral' | 'contact' | 'qualified' | 'converted';
 };
 
+type DashboardPaymentMetric = {
+  label: string;
+  value: string;
+  helper: string;
+  tone: 'received' | 'pending' | 'approved' | 'refunded';
+};
+
 @Component({
   selector: 'app-dashboard1',
   standalone: true,
@@ -69,6 +78,7 @@ type DashboardLeadMetric = {
 export class AppDashboard1Component implements OnInit {
   carregandoDashboard = false;
   carregandoLeads = false;
+  carregandoPagamentos = false;
   erroCarregamento = '';
   dashboard: AdminDashboardResumoResponse | null = null;
   leadsResumo: AdminLeadsResumoResponse = {
@@ -77,12 +87,24 @@ export class AppDashboard1Component implements OnInit {
     qualificados: 0,
     convertidos: 0
   };
+  pagamentosResumo: AdminPagamentosResumoResponse = {
+    totalRecebido: 0,
+    totalEstornado: 0,
+    pendentes: 0,
+    aprovados: 0,
+    recusados: 0,
+    cancelados: 0,
+    estornados: 0,
+    chargebacks: 0,
+    ultimoRecebimentoEm: null
+  };
   leadsRecentes: AdminLeadResumo[] = [];
 
   constructor(
     private readonly authService: AuthService,
     private readonly dashboardService: AdminDashboardService,
     private readonly leadsService: AdminLeadsService,
+    private readonly pagamentosService: AdminPagamentosService,
     private readonly toastr: ToastrService,
     private readonly displayModeService: AdminDisplayModeService
   ) {}
@@ -90,6 +112,7 @@ export class AppDashboard1Component implements OnInit {
   ngOnInit(): void {
     this.carregarDashboard();
     this.carregarLeads();
+    this.carregarPagamentos();
   }
 
   carregarDashboard(): void {
@@ -124,6 +147,21 @@ export class AppDashboard1Component implements OnInit {
         },
         error: (err) => {
           this.toastr.warning(err?.userMessage || 'Não foi possível carregar o resumo de leads.');
+        }
+      });
+  }
+
+  carregarPagamentos(): void {
+    this.carregandoPagamentos = true;
+
+    this.pagamentosService.buscarResumo$()
+      .pipe(finalize(() => (this.carregandoPagamentos = false)))
+      .subscribe({
+        next: (resumo) => {
+          this.pagamentosResumo = resumo;
+        },
+        error: (err) => {
+          this.toastr.warning(err?.userMessage || 'Não foi possível carregar o resumo de pagamentos.');
         }
       });
   }
@@ -334,6 +372,37 @@ export class AppDashboard1Component implements OnInit {
     ];
   }
 
+  get metricasPagamentos(): DashboardPaymentMetric[] {
+    return [
+      {
+        label: 'Total recebido',
+        value: this.formatarMoedaFinanceira(this.pagamentosResumo.totalRecebido),
+        helper: `${this.pagamentosResumo.aprovados} pagamento(s) aprovado(s)`,
+        tone: 'received'
+      },
+      {
+        label: 'Pendentes',
+        value: String(this.pagamentosResumo.pendentes),
+        helper: 'aguardando confirmação',
+        tone: 'pending'
+      },
+      {
+        label: 'Aprovados',
+        value: String(this.pagamentosResumo.aprovados),
+        helper: this.pagamentosResumo.ultimoRecebimentoEm
+          ? `último recebimento ${this.dataRelativa(this.pagamentosResumo.ultimoRecebimentoEm)}`
+          : 'sem recebimento recente',
+        tone: 'approved'
+      },
+      {
+        label: 'Estornados',
+        value: this.formatarMoedaFinanceira(this.pagamentosResumo.totalEstornado),
+        helper: `${this.pagamentosResumo.estornados} estorno(s) registrado(s)`,
+        tone: 'refunded'
+      }
+    ];
+  }
+
   moduloClass(status: string): string {
     const normalized = status.toUpperCase();
     if (normalized.includes('OPERACIONAL')) return 'status-operacional';
@@ -377,6 +446,10 @@ export class AppDashboard1Component implements OnInit {
 
   leadStatusClass(status: string): string {
     return `status-${String(status || '').toLowerCase()}`;
+  }
+
+  paymentMetricClass(tone: DashboardPaymentMetric['tone']): string {
+    return `payment-${tone}`;
   }
 
   private atividadeLabel(tipo: string): string {
@@ -427,6 +500,13 @@ export class AppDashboard1Component implements OnInit {
       style: 'currency',
       currency: 'BRL',
       maximumFractionDigits: 0
+    }).format(valor || 0);
+  }
+
+  private formatarMoedaFinanceira(valor: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
     }).format(valor || 0);
   }
 }

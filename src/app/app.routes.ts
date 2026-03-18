@@ -104,6 +104,18 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'pagamentos',
+        loadComponent: () =>
+          import('./pages/pagamentos/pagamentos-admin.component').then((m) => m.PagamentosAdminComponent),
+        data: {
+          title: 'Pagamentos',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Pagamentos' }
+          ]
+        }
+      },
+      {
         path: 'chamados/:id',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),
