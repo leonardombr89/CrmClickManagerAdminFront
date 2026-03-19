@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-header',
   imports: [RouterModule, CommonModule, TablerIconsModule, MaterialModule],
   templateUrl: './header.component.html',
+  styleUrl: './header.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
