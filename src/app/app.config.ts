@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  isDevMode,
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core';
@@ -16,6 +17,7 @@ import {
 } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideClientHydration } from '@angular/platform-browser';
+import { provideServiceWorker } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -96,6 +98,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withInterceptorsFromDi()),
     provideClientHydration(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     provideNgxMask(),
     provideAnimationsAsync(),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
