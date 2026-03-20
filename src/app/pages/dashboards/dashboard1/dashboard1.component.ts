@@ -74,7 +74,13 @@ type DashboardLandingMetric = {
   label: string;
   value: string;
   helper: string;
-  tone: 'traffic' | 'audience' | 'lead' | 'conversion';
+  tone: 'traffic' | 'interest' | 'lead' | 'conversion';
+};
+
+type DashboardLandingFunnelRead = {
+  label: string;
+  value: string;
+  helper: string;
 };
 
 @Component({
@@ -113,6 +119,12 @@ export class AppDashboard1Component implements OnInit {
     visitantesUnicos: 0,
     totalLeads: 0,
     taxaConversaoPercentual: 0,
+    visitantesLanding: 0,
+    visitantesFormulario: 0,
+    formulariosConcluidos: 0,
+    taxaVisitaParaFormularioPercentual: 0,
+    taxaConclusaoFormularioPercentual: 0,
+    taxaConclusaoSobreLandingPercentual: 0,
     desktop: 0,
     mobile: 0,
     tablet: 0,
@@ -447,28 +459,48 @@ export class AppDashboard1Component implements OnInit {
   get metricasLanding(): DashboardLandingMetric[] {
     return [
       {
-        label: 'Acessos',
-        value: this.formatarInteiro(this.landingResumo.totalAcessos),
-        helper: 'eventos capturados na landing',
+        label: 'Landing',
+        value: this.formatarInteiro(this.landingResumo.visitantesLanding),
+        helper: 'visitantes que chegaram na página',
         tone: 'traffic'
       },
       {
-        label: 'Visitantes únicos',
-        value: this.formatarInteiro(this.landingResumo.visitantesUnicos),
-        helper: 'alcance consolidado do período',
-        tone: 'audience'
+        label: 'Formulário',
+        value: this.formatarInteiro(this.landingResumo.visitantesFormulario),
+        helper: 'aberturas do formulário',
+        tone: 'interest'
       },
       {
-        label: 'Leads gerados',
-        value: this.formatarInteiro(this.landingResumo.totalLeads),
-        helper: 'mensagens convertidas no funil',
+        label: 'Cadastros',
+        value: this.formatarInteiro(this.landingResumo.formulariosConcluidos),
+        helper: 'conclusões do cadastro',
         tone: 'lead'
       },
       {
-        label: 'Conversão',
-        value: `${this.landingResumo.taxaConversaoPercentual.toFixed(2)}%`,
-        helper: 'visita para lead',
+        label: 'Conversão final',
+        value: `${this.landingResumo.taxaConclusaoSobreLandingPercentual.toFixed(2)}%`,
+        helper: 'landing para cadastro concluído',
         tone: 'conversion'
+      }
+    ];
+  }
+
+  get leiturasFunilLanding(): DashboardLandingFunnelRead[] {
+    return [
+      {
+        label: 'Visita > formulário',
+        value: `${this.landingResumo.taxaVisitaParaFormularioPercentual.toFixed(2)}%`,
+        helper: 'quanto do tráfego demonstra intenção'
+      },
+      {
+        label: 'Formulário > conclusão',
+        value: `${this.landingResumo.taxaConclusaoFormularioPercentual.toFixed(2)}%`,
+        helper: 'eficiência da etapa final'
+      },
+      {
+        label: 'Mobile no funil',
+        value: this.formatarInteiro(this.landingResumo.mobile),
+        helper: 'acessos móveis capturados no período'
       }
     ];
   }

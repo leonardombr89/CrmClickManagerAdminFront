@@ -9,6 +9,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
 import {
   AdminLandingAcessoDeviceType,
+  AdminLandingAcessoEtapaFunil,
   AdminLandingAcessoItemResponse,
   AdminLandingAcessosResumoResponse,
   AdminLandingQuantidadeItem,
@@ -21,6 +22,12 @@ type LandingResumoCard = {
   value: string;
   helper: string;
   tone: 'primary' | 'success' | 'warning' | 'info';
+};
+
+type LandingFunilStep = {
+  label: string;
+  value: string;
+  helper: string;
 };
 
 @Component({
@@ -39,12 +46,19 @@ export class LandingAcessosAdminComponent implements OnInit {
     'BOT',
     'OUTRO'
   ];
+  readonly etapaOptions: Array<AdminLandingAcessoEtapaFunil | 'TODAS'> = [
+    'TODAS',
+    'LANDING_VISUALIZADA',
+    'FORMULARIO_VISUALIZADO',
+    'FORMULARIO_CONCLUIDO'
+  ];
 
   carregandoResumo = false;
   carregandoLista = false;
 
   busca = '';
   deviceTypeFiltro: AdminLandingAcessoDeviceType | 'TODOS' = 'TODOS';
+  etapaFunilFiltro: AdminLandingAcessoEtapaFunil | 'TODAS' = 'TODAS';
   pagina = 0;
   tamanho = 20;
   totalItens = 0;
@@ -55,6 +69,12 @@ export class LandingAcessosAdminComponent implements OnInit {
     visitantesUnicos: 0,
     totalLeads: 0,
     taxaConversaoPercentual: 0,
+    visitantesLanding: 0,
+    visitantesFormulario: 0,
+    formulariosConcluidos: 0,
+    taxaVisitaParaFormularioPercentual: 0,
+    taxaConclusaoFormularioPercentual: 0,
+    taxaConclusaoSobreLandingPercentual: 0,
     desktop: 0,
     mobile: 0,
     tablet: 0,
@@ -85,6 +105,7 @@ export class LandingAcessosAdminComponent implements OnInit {
   limparFiltros(): void {
     this.busca = '';
     this.deviceTypeFiltro = 'TODOS';
+    this.etapaFunilFiltro = 'TODAS';
     this.pagina = 0;
     this.carregarLista();
   }
@@ -99,27 +120,59 @@ export class LandingAcessosAdminComponent implements OnInit {
     return [
       {
         label: 'Total de acessos',
-        value: this.formatarNumero(this.resumo.totalAcessos),
-        helper: 'eventos capturados da landing',
+        value: this.formatarNumero(this.resumo.visitantesLanding),
+        helper: 'visitas que chegaram na landing',
         tone: 'primary'
       },
       {
-        label: 'Visitantes únicos',
-        value: this.formatarNumero(this.resumo.visitantesUnicos),
-        helper: 'alcance consolidado da página',
+        label: 'Formulário visualizado',
+        value: this.formatarNumero(this.resumo.visitantesFormulario),
+        helper: 'usuários que demonstraram intenção',
         tone: 'info'
       },
       {
-        label: 'Leads gerados',
-        value: this.formatarNumero(this.resumo.totalLeads),
-        helper: 'entradas comerciais vinculadas',
+        label: 'Cadastros concluídos',
+        value: this.formatarNumero(this.resumo.formulariosConcluidos),
+        helper: 'leads efetivamente capturados',
         tone: 'success'
       },
       {
-        label: 'Conversão',
-        value: `${this.resumo.taxaConversaoPercentual.toFixed(2)}%`,
-        helper: 'visita para lead no período atual',
+        label: 'Visita > formulário',
+        value: `${this.resumo.taxaVisitaParaFormularioPercentual.toFixed(2)}%`,
+        helper: 'avanço da landing para intenção',
         tone: 'warning'
+      },
+      {
+        label: 'Formulário > conclusão',
+        value: `${this.resumo.taxaConclusaoFormularioPercentual.toFixed(2)}%`,
+        helper: 'eficiência do formulário',
+        tone: 'warning'
+      },
+      {
+        label: 'Landing > conclusão',
+        value: `${this.resumo.taxaConclusaoSobreLandingPercentual.toFixed(2)}%`,
+        helper: 'conversão final do funil',
+        tone: 'warning'
+      }
+    ];
+  }
+
+  get etapasFunil(): LandingFunilStep[] {
+    return [
+      {
+        label: 'Landing visualizada',
+        value: this.formatarNumero(this.resumo.visitantesLanding),
+        helper: 'tráfego total qualificado'
+      },
+      {
+        label: 'Formulário visualizado',
+        value: this.formatarNumero(this.resumo.visitantesFormulario),
+        helper: 'visitantes com intenção declarada'
+      },
+      {
+        label: 'Formulário concluído',
+        value: this.formatarNumero(this.resumo.formulariosConcluidos),
+        helper: 'leads realmente capturados'
       }
     ];
   }
@@ -148,6 +201,18 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   get resumoResultados(): string {
     return `${this.totalItens} acesso(s) encontrado(s)`;
+  }
+
+  etapaFunilLabel(etapa: AdminLandingAcessoEtapaFunil): string {
+    return {
+      LANDING_VISUALIZADA: 'Landing visualizada',
+      FORMULARIO_VISUALIZADO: 'Formulário visualizado',
+      FORMULARIO_CONCLUIDO: 'Formulário concluído'
+    }[etapa];
+  }
+
+  etapaFunilClass(etapa: AdminLandingAcessoEtapaFunil): string {
+    return `funnel-${etapa.toLowerCase()}`;
   }
 
   deviceLabel(deviceType: AdminLandingAcessoDeviceType): string {
@@ -212,6 +277,7 @@ export class LandingAcessosAdminComponent implements OnInit {
     this.landingAcessosService.listar$({
       busca: this.busca || null,
       deviceType: this.deviceTypeFiltro === 'TODOS' ? null : this.deviceTypeFiltro,
+      etapaFunil: this.etapaFunilFiltro === 'TODAS' ? null : this.etapaFunilFiltro,
       pagina: this.pagina,
       tamanho: this.tamanho
     })

@@ -75,7 +75,7 @@
 }
 
 .summary-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .summary-card {
@@ -155,6 +155,36 @@
   gap: 12px;
 }
 
+.funnel-step-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.funnel-step-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #fbfdff;
+}
+
+.funnel-step-card span,
+.funnel-step-card strong,
+.funnel-step-card small {
+  display: block;
+}
+
+.funnel-step-card span,
+.funnel-step-card small {
+  color: #64748b;
+}
+
+.funnel-step-card strong {
+  margin: 10px 0 6px;
+  color: #0f172a;
+  font-size: 26px;
+}
+
 .device-card {
   padding: 16px;
   border-radius: 18px;
@@ -218,7 +248,7 @@
 
 .filters-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(220px, 0.8fr);
+  grid-template-columns: minmax(0, 1.8fr) minmax(220px, 0.8fr) minmax(220px, 0.8fr);
   gap: 14px;
   min-width: 0;
 }
@@ -271,7 +301,8 @@
 }
 
 .device-badge,
-.bot-badge {
+.bot-badge,
+.funnel-badge {
   display: inline-flex;
   align-items: center;
   padding: 6px 10px;
@@ -310,9 +341,28 @@
   color: #475569;
 }
 
+.funnel-badge {
+  white-space: nowrap;
+}
+
 .bot-badge.bot {
   background: #fee2e2;
   color: #b91c1c;
+}
+
+.funnel-landing_visualizada {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.funnel-formulario_visualizado {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.funnel-formulario_concluido {
+  background: #eefbf4;
+  color: #15803d;
 }
 
 .paginator-wrap {
@@ -325,6 +375,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .funnel-step-grid,
   .device-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -344,6 +395,7 @@
 @media (max-width: 640px) {
   .summary-grid,
   .insights-grid,
+  .funnel-step-grid,
   .device-grid,
   .filters-grid {
     grid-template-columns: 1fr;

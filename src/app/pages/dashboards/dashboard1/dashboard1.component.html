@@ -413,8 +413,8 @@
     <div class="dashboard-card">
       <div class="dashboard-card-header">
         <div>
-          <h3>Acessos da landing</h3>
-          <p>Visão rápida do tráfego, alcance e conversão da página comercial.</p>
+          <h3>Funil da landing</h3>
+          <p>Leitura do caminho entre visita, abertura do formulário e cadastro concluído.</p>
         </div>
         <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/landing-acessos']">
           Ver mais
@@ -442,8 +442,8 @@
     <div class="dashboard-card">
       <div class="dashboard-card-header">
         <div>
-          <h3>Leitura da audiência</h3>
-          <p>Mix por dispositivo e origens que mais trouxeram tráfego.</p>
+          <h3>Leituras do funil</h3>
+          <p>Taxas de avanço e sinais rápidos para entender onde o fluxo quebra.</p>
         </div>
       </div>
 
@@ -453,6 +453,18 @@
         <span>Consolidando audiência...</span>
       </div>
       } @else {
+      <div class="landing-origin-list landing-origin-list-spaced">
+        @for (item of leiturasFunilLanding; track item.label) {
+        <div class="landing-origin-item">
+          <div class="landing-origin-top">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+          </div>
+          <small>{{ item.helper }}</small>
+        </div>
+        }
+      </div>
+
       <div class="landing-device-list">
         @for (item of landingDispositivos; track item.label) {
         <article class="landing-device-item">

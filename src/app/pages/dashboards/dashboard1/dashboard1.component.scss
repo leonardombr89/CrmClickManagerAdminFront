@@ -605,7 +605,7 @@
   background: #eef2ff;
 }
 
-.landing-audience {
+.landing-interest {
   background: #eff6ff;
 }
 
@@ -642,6 +642,10 @@
 .landing-origin-list {
   display: grid;
   gap: 12px;
+}
+
+.landing-origin-list-spaced {
+  margin-bottom: 18px;
 }
 
 .landing-device-list {
@@ -686,6 +690,12 @@
 
 .landing-origin-top strong {
   color: #0f172a;
+}
+
+.landing-origin-item small {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
 }
 
 .lead-dashboard-item {

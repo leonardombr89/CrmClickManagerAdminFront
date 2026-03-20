@@ -5,6 +5,11 @@ export type AdminLandingAcessoDeviceType =
   | 'BOT'
   | 'OUTRO';
 
+export type AdminLandingAcessoEtapaFunil =
+  | 'LANDING_VISUALIZADA'
+  | 'FORMULARIO_VISUALIZADO'
+  | 'FORMULARIO_CONCLUIDO';
+
 export interface AdminLandingQuantidadeItem {
   nome: string;
   quantidade: number;
@@ -15,6 +20,12 @@ export interface AdminLandingAcessosResumoResponse {
   visitantesUnicos: number;
   totalLeads: number;
   taxaConversaoPercentual: number;
+  visitantesLanding: number;
+  visitantesFormulario: number;
+  formulariosConcluidos: number;
+  taxaVisitaParaFormularioPercentual: number;
+  taxaConclusaoFormularioPercentual: number;
+  taxaConclusaoSobreLandingPercentual: number;
   desktop: number;
   mobile: number;
   tablet: number;
@@ -29,10 +40,12 @@ export interface AdminLandingAcessoItemResponse {
   id: number;
   pagina: string;
   path: string;
+  sessionId: string | null;
   referrer: string | null;
   utmSource: string | null;
   utmMedium: string | null;
   utmCampaign: string | null;
+  etapaFunil: AdminLandingAcessoEtapaFunil;
   deviceType: AdminLandingAcessoDeviceType;
   sistemaOperacional: string | null;
   navegador: string | null;
@@ -51,6 +64,7 @@ export interface AdminListaLandingAcessosResponse {
 export interface AdminListaLandingAcessosFiltros {
   busca?: string | null;
   deviceType?: AdminLandingAcessoDeviceType | null;
+  etapaFunil?: AdminLandingAcessoEtapaFunil | null;
   pagina?: number;
   tamanho?: number;
 }

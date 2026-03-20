@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import {
   AdminLandingAcessoDeviceType,
+  AdminLandingAcessoEtapaFunil,
   AdminLandingAcessoItemResponse,
   AdminLandingAcessosResumoResponse,
   AdminLandingQuantidadeItem,
@@ -36,6 +37,10 @@ export class AdminLandingAcessosService {
       params = params.set('deviceType', filtros.deviceType);
     }
 
+    if (filtros.etapaFunil) {
+      params = params.set('etapaFunil', filtros.etapaFunil);
+    }
+
     return this.api.get<any>(this.endpoint, params).pipe(map((raw) => this.mapLista(raw)));
   }
 
@@ -45,6 +50,14 @@ export class AdminLandingAcessosService {
       visitantesUnicos: Number(raw?.['visitantesUnicos'] || 0),
       totalLeads: Number(raw?.['totalLeads'] || 0),
       taxaConversaoPercentual: Number(raw?.['taxaConversaoPercentual'] || 0),
+      visitantesLanding: Number(raw?.['visitantesLanding'] ?? raw?.['visitantesUnicos'] ?? 0),
+      visitantesFormulario: Number(raw?.['visitantesFormulario'] || 0),
+      formulariosConcluidos: Number(raw?.['formulariosConcluidos'] ?? raw?.['totalLeads'] ?? 0),
+      taxaVisitaParaFormularioPercentual: Number(raw?.['taxaVisitaParaFormularioPercentual'] || 0),
+      taxaConclusaoFormularioPercentual: Number(raw?.['taxaConclusaoFormularioPercentual'] || 0),
+      taxaConclusaoSobreLandingPercentual: Number(
+        raw?.['taxaConclusaoSobreLandingPercentual'] ?? raw?.['taxaConversaoPercentual'] ?? 0
+      ),
       desktop: Number(raw?.['desktop'] || 0),
       mobile: Number(raw?.['mobile'] || 0),
       tablet: Number(raw?.['tablet'] || 0),
@@ -71,10 +84,12 @@ export class AdminLandingAcessosService {
       id: Number(raw?.['id'] || 0),
       pagina: String(raw?.['pagina'] || 'Página não informada'),
       path: String(raw?.['path'] || '/'),
+      sessionId: raw?.['sessionId'] != null ? String(raw['sessionId']) : null,
       referrer: raw?.['referrer'] != null ? String(raw['referrer']) : null,
       utmSource: raw?.['utmSource'] != null ? String(raw['utmSource']) : null,
       utmMedium: raw?.['utmMedium'] != null ? String(raw['utmMedium']) : null,
       utmCampaign: raw?.['utmCampaign'] != null ? String(raw['utmCampaign']) : null,
+      etapaFunil: String(raw?.['etapaFunil'] || 'LANDING_VISUALIZADA').toUpperCase() as AdminLandingAcessoEtapaFunil,
       deviceType: String(raw?.['deviceType'] || 'OUTRO').toUpperCase() as AdminLandingAcessoDeviceType,
       sistemaOperacional: raw?.['sistemaOperacional'] != null ? String(raw['sistemaOperacional']) : null,
       navegador: raw?.['navegador'] != null ? String(raw['navegador']) : null,
