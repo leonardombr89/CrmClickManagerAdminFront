@@ -488,6 +488,12 @@
   gap: 12px;
 }
 
+.landing-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .payment-metric-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -495,6 +501,12 @@
 }
 
 .lead-metric-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.landing-metric-card {
   padding: 16px;
   border-radius: 18px;
   border: 1px solid #e2e8f0;
@@ -512,6 +524,12 @@
   display: block;
 }
 
+.landing-metric-card span,
+.landing-metric-card strong,
+.landing-metric-card small {
+  display: block;
+}
+
 .payment-metric-card span,
 .payment-metric-card strong,
 .payment-metric-card small {
@@ -523,12 +541,24 @@
   color: #64748b;
 }
 
+.landing-metric-card span,
+.landing-metric-card small {
+  color: #64748b;
+}
+
 .payment-metric-card span,
 .payment-metric-card small {
   color: #64748b;
 }
 
 .lead-metric-card strong {
+  margin: 10px 0 6px;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.landing-metric-card strong {
   margin: 10px 0 6px;
   color: #0f172a;
   font-size: 28px;
@@ -558,6 +588,22 @@
   background: #ecfeff;
 }
 
+.landing-traffic {
+  background: #eef2ff;
+}
+
+.landing-audience {
+  background: #eff6ff;
+}
+
+.landing-lead {
+  background: #eefbf4;
+}
+
+.landing-conversion {
+  background: #fff8eb;
+}
+
 .payment-received {
   background: #eefbf4;
 }
@@ -577,6 +623,56 @@
 .lead-list-dashboard {
   display: grid;
   gap: 14px;
+}
+
+.landing-device-list,
+.landing-origin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.landing-device-list {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.landing-device-item,
+.landing-origin-item {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid #e5ebf3;
+  background: #fbfdff;
+}
+
+.landing-device-item span,
+.landing-device-item strong {
+  display: block;
+}
+
+.landing-device-item span {
+  color: #64748b;
+}
+
+.landing-device-item strong {
+  margin-top: 8px;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.landing-origin-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.landing-origin-top span {
+  color: #334155;
+  font-weight: 600;
+}
+
+.landing-origin-top strong {
+  color: #0f172a;
 }
 
 .lead-dashboard-item {
@@ -838,6 +934,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .landing-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .payment-metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -876,6 +976,11 @@
   }
 
   .lead-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-metric-grid,
+  .landing-device-list {
     grid-template-columns: 1fr;
   }
 

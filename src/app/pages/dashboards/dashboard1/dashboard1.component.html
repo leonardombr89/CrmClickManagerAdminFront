@@ -413,6 +413,73 @@
     <div class="dashboard-card">
       <div class="dashboard-card-header">
         <div>
+          <h3>Acessos da landing</h3>
+          <p>Visão rápida do tráfego, alcance e conversão da página comercial.</p>
+        </div>
+        <a mat-stroked-button color="primary" class="header-action-button" [routerLink]="['/landing-acessos']">
+          Ver mais
+        </a>
+      </div>
+
+      @if (carregandoLandingAcessos) {
+      <div class="embedded-state">
+        <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        <span>Carregando acessos da landing...</span>
+      </div>
+      } @else {
+      <div class="landing-metric-grid">
+        @for (metrica of metricasLanding; track metrica.label) {
+        <article class="landing-metric-card" [ngClass]="landingMetricClass(metrica.tone)">
+          <span>{{ metrica.label }}</span>
+          <strong>{{ metrica.value }}</strong>
+          <small>{{ metrica.helper }}</small>
+        </article>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>Leitura da audiência</h3>
+          <p>Mix por dispositivo e origens que mais trouxeram tráfego.</p>
+        </div>
+      </div>
+
+      @if (carregandoLandingAcessos) {
+      <div class="embedded-state">
+        <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        <span>Consolidando audiência...</span>
+      </div>
+      } @else {
+      <div class="landing-device-list">
+        @for (item of landingDispositivos; track item.label) {
+        <article class="landing-device-item">
+          <span>{{ item.label }}</span>
+          <strong>{{ item.quantidade }}</strong>
+        </article>
+        }
+      </div>
+
+      <div class="landing-origin-list">
+        @for (item of landingOrigensTop; track item.nome) {
+        <div class="landing-origin-item">
+          <div class="landing-origin-top">
+            <span>{{ item.nome }}</span>
+            <strong>{{ item.quantidade }}</strong>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-card-header">
+        <div>
           <h3>Clientes em observação</h3>
           <p>Contas que pedem ação manual para proteger crescimento, adoção ou retenção.</p>
         </div>
@@ -515,6 +582,14 @@
         <div>
           <strong>Leads da landing</strong>
           <span>Abrir a fila comercial para qualificar mensagens recebidas pela landing page.</span>
+        </div>
+      </a>
+
+      <a class="quick-action" [routerLink]="['/landing-acessos']">
+        <i-tabler name="world-www" class="icon-22"></i-tabler>
+        <div>
+          <strong>Tráfego da landing</strong>
+          <span>Acompanhar acessos, origens e conversão do topo do funil comercial.</span>
         </div>
       </a>
     </div>

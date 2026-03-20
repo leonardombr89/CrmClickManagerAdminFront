@@ -51,5 +51,11 @@ export const navItems: NavItem[] = [
     iconName: 'receipt-2',
     bgcolor: 'primary',
     route: '/pagamentos',
+  },
+  {
+    displayName: 'Landing',
+    iconName: 'world-www',
+    bgcolor: 'primary',
+    route: '/landing-acessos',
   }
 ];

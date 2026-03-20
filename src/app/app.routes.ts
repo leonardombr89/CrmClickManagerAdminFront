@@ -116,6 +116,18 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'landing-acessos',
+        loadComponent: () =>
+          import('./pages/landing-acessos/landing-acessos-admin.component').then((m) => m.LandingAcessosAdminComponent),
+        data: {
+          title: 'Acessos da landing',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Landing' }
+          ]
+        }
+      },
+      {
         path: 'chamados/:id',
         loadComponent: () =>
           import('./pages/suporte/suporte.component').then((m) => m.SuporteComponent),

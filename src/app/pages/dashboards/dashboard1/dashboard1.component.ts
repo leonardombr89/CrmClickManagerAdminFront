@@ -12,6 +12,8 @@ import {
   AdminLeadResumo
 } from '../../leads/models/admin-lead.model';
 import { AdminLeadsService } from '../../leads/services/admin-leads.service';
+import { AdminLandingAcessosResumoResponse } from '../../landing-acessos/models/admin-landing-acesso.model';
+import { AdminLandingAcessosService } from '../../landing-acessos/services/admin-landing-acessos.service';
 import { AdminPagamentosResumoResponse } from '../../pagamentos/models/admin-pagamento.model';
 import { AdminPagamentosService } from '../../pagamentos/services/admin-pagamentos.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -68,6 +70,13 @@ type DashboardPaymentMetric = {
   tone: 'received' | 'pending' | 'approved' | 'refunded';
 };
 
+type DashboardLandingMetric = {
+  label: string;
+  value: string;
+  helper: string;
+  tone: 'traffic' | 'audience' | 'lead' | 'conversion';
+};
+
 @Component({
   selector: 'app-dashboard1',
   standalone: true,
@@ -79,6 +88,7 @@ export class AppDashboard1Component implements OnInit {
   carregandoDashboard = false;
   carregandoLeads = false;
   carregandoPagamentos = false;
+  carregandoLandingAcessos = false;
   erroCarregamento = '';
   dashboard: AdminDashboardResumoResponse | null = null;
   leadsResumo: AdminLeadsResumoResponse = {
@@ -98,12 +108,27 @@ export class AppDashboard1Component implements OnInit {
     chargebacks: 0,
     ultimoRecebimentoEm: null
   };
+  landingResumo: AdminLandingAcessosResumoResponse = {
+    totalAcessos: 0,
+    visitantesUnicos: 0,
+    totalLeads: 0,
+    taxaConversaoPercentual: 0,
+    desktop: 0,
+    mobile: 0,
+    tablet: 0,
+    bots: 0,
+    outros: 0,
+    navegadores: [],
+    sistemasOperacionais: [],
+    origens: []
+  };
   leadsRecentes: AdminLeadResumo[] = [];
 
   constructor(
     private readonly authService: AuthService,
     private readonly dashboardService: AdminDashboardService,
     private readonly leadsService: AdminLeadsService,
+    private readonly landingAcessosService: AdminLandingAcessosService,
     private readonly pagamentosService: AdminPagamentosService,
     private readonly toastr: ToastrService,
     private readonly displayModeService: AdminDisplayModeService
@@ -112,6 +137,7 @@ export class AppDashboard1Component implements OnInit {
   ngOnInit(): void {
     this.carregarDashboard();
     this.carregarLeads();
+    this.carregarLandingAcessos();
     this.carregarPagamentos();
   }
 
@@ -162,6 +188,21 @@ export class AppDashboard1Component implements OnInit {
         },
         error: (err) => {
           this.toastr.warning(err?.userMessage || 'Não foi possível carregar o resumo de pagamentos.');
+        }
+      });
+  }
+
+  carregarLandingAcessos(): void {
+    this.carregandoLandingAcessos = true;
+
+    this.landingAcessosService.buscarResumo$()
+      .pipe(finalize(() => (this.carregandoLandingAcessos = false)))
+      .subscribe({
+        next: (resumo) => {
+          this.landingResumo = resumo;
+        },
+        error: (err) => {
+          this.toastr.warning(err?.userMessage || 'Não foi possível carregar o resumo de acessos da landing.');
         }
       });
   }
@@ -403,6 +444,49 @@ export class AppDashboard1Component implements OnInit {
     ];
   }
 
+  get metricasLanding(): DashboardLandingMetric[] {
+    return [
+      {
+        label: 'Acessos',
+        value: this.formatarInteiro(this.landingResumo.totalAcessos),
+        helper: 'eventos capturados na landing',
+        tone: 'traffic'
+      },
+      {
+        label: 'Visitantes únicos',
+        value: this.formatarInteiro(this.landingResumo.visitantesUnicos),
+        helper: 'alcance consolidado do período',
+        tone: 'audience'
+      },
+      {
+        label: 'Leads gerados',
+        value: this.formatarInteiro(this.landingResumo.totalLeads),
+        helper: 'mensagens convertidas no funil',
+        tone: 'lead'
+      },
+      {
+        label: 'Conversão',
+        value: `${this.landingResumo.taxaConversaoPercentual.toFixed(2)}%`,
+        helper: 'visita para lead',
+        tone: 'conversion'
+      }
+    ];
+  }
+
+  get landingDispositivos(): Array<{ label: string; quantidade: number }> {
+    return [
+      { label: 'Desktop', quantidade: this.landingResumo.desktop },
+      { label: 'Mobile', quantidade: this.landingResumo.mobile },
+      { label: 'Tablet', quantidade: this.landingResumo.tablet },
+      { label: 'Bots', quantidade: this.landingResumo.bots },
+      { label: 'Outros', quantidade: this.landingResumo.outros }
+    ];
+  }
+
+  get landingOrigensTop(): Array<{ nome: string; quantidade: number }> {
+    return this.landingResumo.origens.slice(0, 3);
+  }
+
   moduloClass(status: string): string {
     const normalized = status.toUpperCase();
     if (normalized.includes('OPERACIONAL')) return 'status-operacional';
@@ -450,6 +534,10 @@ export class AppDashboard1Component implements OnInit {
 
   paymentMetricClass(tone: DashboardPaymentMetric['tone']): string {
     return `payment-${tone}`;
+  }
+
+  landingMetricClass(tone: DashboardLandingMetric['tone']): string {
+    return `landing-${tone}`;
   }
 
   private atividadeLabel(tipo: string): string {
@@ -508,5 +596,9 @@ export class AppDashboard1Component implements OnInit {
       style: 'currency',
       currency: 'BRL'
     }).format(valor || 0);
+  }
+
+  private formatarInteiro(valor: number): string {
+    return new Intl.NumberFormat('pt-BR').format(valor || 0);
   }
 }
