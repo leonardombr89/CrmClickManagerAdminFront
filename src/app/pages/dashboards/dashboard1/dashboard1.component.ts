@@ -95,6 +95,8 @@ export class AppDashboard1Component implements OnInit {
   carregandoLeads = false;
   carregandoPagamentos = false;
   carregandoLandingAcessos = false;
+  readonly landingDataInicio = this.dataIsoInicioMesAtual();
+  readonly landingDataFim = this.dataIsoHoje();
   erroCarregamento = '';
   dashboard: AdminDashboardResumoResponse | null = null;
   leadsResumo: AdminLeadsResumoResponse = {
@@ -204,10 +206,17 @@ export class AppDashboard1Component implements OnInit {
       });
   }
 
+  get landingPeriodoLabel(): string {
+    return `${this.formatarDataCurta(this.landingDataInicio)} até ${this.formatarDataCurta(this.landingDataFim)}`;
+  }
+
   carregarLandingAcessos(): void {
     this.carregandoLandingAcessos = true;
 
-    this.landingAcessosService.buscarResumo$()
+    this.landingAcessosService.buscarResumo$({
+      dataInicio: this.landingDataInicio,
+      dataFim: this.landingDataFim
+    })
       .pipe(finalize(() => (this.carregandoLandingAcessos = false)))
       .subscribe({
         next: (resumo) => {
@@ -632,5 +641,22 @@ export class AppDashboard1Component implements OnInit {
 
   private formatarInteiro(valor: number): string {
     return new Intl.NumberFormat('pt-BR').format(valor || 0);
+  }
+
+  private formatarDataCurta(iso: string): string {
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit'
+    }).format(new Date(`${iso}T00:00:00`));
+  }
+
+  private dataIsoHoje(): string {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  private dataIsoInicioMesAtual(): string {
+    const data = new Date();
+    data.setDate(1);
+    return data.toISOString().slice(0, 10);
   }
 }

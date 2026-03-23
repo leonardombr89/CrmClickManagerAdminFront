@@ -20,8 +20,18 @@ export class AdminLandingAcessosService {
 
   constructor(private readonly api: ApiService) {}
 
-  buscarResumo$(): Observable<AdminLandingAcessosResumoResponse> {
-    return this.api.get<any>(`${this.endpoint}/resumo`).pipe(map((raw) => this.mapResumo(raw)));
+  buscarResumo$(filtros?: Pick<AdminListaLandingAcessosFiltros, 'dataInicio' | 'dataFim'>): Observable<AdminLandingAcessosResumoResponse> {
+    let params = new HttpParams();
+
+    if (filtros?.dataInicio) {
+      params = params.set('dataInicio', filtros.dataInicio);
+    }
+
+    if (filtros?.dataFim) {
+      params = params.set('dataFim', filtros.dataFim);
+    }
+
+    return this.api.get<any>(`${this.endpoint}/resumo`, params).pipe(map((raw) => this.mapResumo(raw)));
   }
 
   listar$(filtros: AdminListaLandingAcessosFiltros): Observable<AdminListaLandingAcessosResponse> {
@@ -39,6 +49,14 @@ export class AdminLandingAcessosService {
 
     if (filtros.etapaFunil) {
       params = params.set('etapaFunil', filtros.etapaFunil);
+    }
+
+    if (filtros.dataInicio) {
+      params = params.set('dataInicio', filtros.dataInicio);
+    }
+
+    if (filtros.dataFim) {
+      params = params.set('dataFim', filtros.dataFim);
     }
 
     return this.api.get<any>(this.endpoint, params).pipe(map((raw) => this.mapLista(raw)));

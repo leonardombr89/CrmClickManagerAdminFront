@@ -65,6 +65,8 @@ export interface AdminListaLandingAcessosFiltros {
   busca?: string | null;
   deviceType?: AdminLandingAcessoDeviceType | null;
   etapaFunil?: AdminLandingAcessoEtapaFunil | null;
+  dataInicio?: string | null;
+  dataFim?: string | null;
   pagina?: number;
   tamanho?: number;
 }

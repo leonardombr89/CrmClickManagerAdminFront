@@ -26,20 +26,5 @@
         ]
       }
     }
-  ],
-  "dataGroups": [
-    {
-      "name": "admin-api",
-      "urls": [
-        "/api/**",
-        "/admin/auth/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 20,
-        "maxAge": "1d",
-        "timeout": "10s"
-      }
-    }
   ]
 }

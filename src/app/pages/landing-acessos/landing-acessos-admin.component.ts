@@ -59,6 +59,8 @@ export class LandingAcessosAdminComponent implements OnInit {
   busca = '';
   deviceTypeFiltro: AdminLandingAcessoDeviceType | 'TODOS' = 'TODOS';
   etapaFunilFiltro: AdminLandingAcessoEtapaFunil | 'TODAS' = 'TODAS';
+  dataInicio = this.dataIsoDiasAtras(6);
+  dataFim = this.dataIsoHoje();
   pagina = 0;
   tamanho = 20;
   totalItens = 0;
@@ -99,6 +101,7 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   aplicarFiltros(): void {
     this.pagina = 0;
+    this.carregarResumo();
     this.carregarLista();
   }
 
@@ -106,8 +109,11 @@ export class LandingAcessosAdminComponent implements OnInit {
     this.busca = '';
     this.deviceTypeFiltro = 'TODOS';
     this.etapaFunilFiltro = 'TODAS';
+    this.dataInicio = this.dataIsoDiasAtras(6);
+    this.dataFim = this.dataIsoHoje();
     this.pagina = 0;
     this.carregarLista();
+    this.carregarResumo();
   }
 
   alterarPagina(event: PageEvent): void {
@@ -203,6 +209,10 @@ export class LandingAcessosAdminComponent implements OnInit {
     return `${this.totalItens} acesso(s) encontrado(s)`;
   }
 
+  get periodoSelecionadoLabel(): string {
+    return `${this.formatarDataCurta(this.dataInicio)} até ${this.formatarDataCurta(this.dataFim)}`;
+  }
+
   etapaFunilLabel(etapa: AdminLandingAcessoEtapaFunil): string {
     return {
       LANDING_VISUALIZADA: 'Landing visualizada',
@@ -252,6 +262,18 @@ export class LandingAcessosAdminComponent implements OnInit {
     }).format(new Date(iso));
   }
 
+  formatarDataCurta(iso?: string | null): string {
+    if (!iso) {
+      return 'sem data';
+    }
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(new Date(`${iso}T00:00:00`));
+  }
+
   itemPercentual(item: AdminLandingQuantidadeItem[], quantidade: number): number {
     const base = item.reduce((acc, atual) => Math.max(acc, atual.quantidade), 0) || 1;
     return Math.max(10, Math.round((quantidade / base) * 100));
@@ -259,7 +281,10 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   private carregarResumo(): void {
     this.carregandoResumo = true;
-    this.landingAcessosService.buscarResumo$()
+    this.landingAcessosService.buscarResumo$({
+      dataInicio: this.dataInicio,
+      dataFim: this.dataFim
+    })
       .pipe(finalize(() => (this.carregandoResumo = false)))
       .subscribe({
         next: (resumo) => {
@@ -278,6 +303,8 @@ export class LandingAcessosAdminComponent implements OnInit {
       busca: this.busca || null,
       deviceType: this.deviceTypeFiltro === 'TODOS' ? null : this.deviceTypeFiltro,
       etapaFunil: this.etapaFunilFiltro === 'TODAS' ? null : this.etapaFunilFiltro,
+      dataInicio: this.dataInicio,
+      dataFim: this.dataFim,
       pagina: this.pagina,
       tamanho: this.tamanho
     })
@@ -298,5 +325,15 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   private formatarNumero(valor: number): string {
     return new Intl.NumberFormat('pt-BR').format(valor || 0);
+  }
+
+  private dataIsoHoje(): string {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  private dataIsoDiasAtras(dias: number): string {
+    const data = new Date();
+    data.setDate(data.getDate() - dias);
+    return data.toISOString().slice(0, 10);
   }
 }

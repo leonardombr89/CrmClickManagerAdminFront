@@ -37,7 +37,7 @@ export class AppBoxedLoginComponent {
   form = new FormGroup({
     uname: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    lembrar: new FormControl(false)
+    lembrar: new FormControl(true)
   });
 
   get f() {
