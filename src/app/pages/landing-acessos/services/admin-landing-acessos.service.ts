@@ -65,12 +65,16 @@ export class AdminLandingAcessosService {
   private mapResumo(raw: any): AdminLandingAcessosResumoResponse {
     return {
       totalAcessos: Number(raw?.['totalAcessos'] || 0),
+      baseTotalAcessos: String(raw?.['baseTotalAcessos'] || 'Evento bruto'),
       visitantesUnicos: Number(raw?.['visitantesUnicos'] || 0),
       totalLeads: Number(raw?.['totalLeads'] || 0),
       taxaConversaoPercentual: Number(raw?.['taxaConversaoPercentual'] || 0),
       visitantesLanding: Number(raw?.['visitantesLanding'] ?? raw?.['visitantesUnicos'] ?? 0),
+      baseVisitantesLanding: String(raw?.['baseVisitantesLanding'] || 'Visitante unico'),
       visitantesFormulario: Number(raw?.['visitantesFormulario'] || 0),
+      baseVisitantesFormulario: String(raw?.['baseVisitantesFormulario'] || 'Visitante unico'),
       formulariosConcluidos: Number(raw?.['formulariosConcluidos'] ?? raw?.['totalLeads'] ?? 0),
+      baseFormulariosConcluidos: String(raw?.['baseFormulariosConcluidos'] || 'Visitante unico'),
       taxaVisitaParaFormularioPercentual: Number(raw?.['taxaVisitaParaFormularioPercentual'] || 0),
       taxaConclusaoFormularioPercentual: Number(raw?.['taxaConclusaoFormularioPercentual'] || 0),
       taxaConclusaoSobreLandingPercentual: Number(
@@ -81,6 +85,7 @@ export class AdminLandingAcessosService {
       tablet: Number(raw?.['tablet'] || 0),
       bots: Number(raw?.['bots'] || 0),
       outros: Number(raw?.['outros'] || 0),
+      baseDispositivos: String(raw?.['baseDispositivos'] || 'Visitante unico'),
       navegadores: this.mapQuantidadeLista(raw?.['navegadores']),
       sistemasOperacionais: this.mapQuantidadeLista(raw?.['sistemasOperacionais']),
       origens: this.mapQuantidadeLista(raw?.['origens'])

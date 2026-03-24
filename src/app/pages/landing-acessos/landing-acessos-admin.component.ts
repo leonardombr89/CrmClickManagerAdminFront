@@ -68,12 +68,16 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   resumo: AdminLandingAcessosResumoResponse = {
     totalAcessos: 0,
+    baseTotalAcessos: 'Evento bruto',
     visitantesUnicos: 0,
     totalLeads: 0,
     taxaConversaoPercentual: 0,
     visitantesLanding: 0,
+    baseVisitantesLanding: 'Visitante unico',
     visitantesFormulario: 0,
+    baseVisitantesFormulario: 'Visitante unico',
     formulariosConcluidos: 0,
+    baseFormulariosConcluidos: 'Visitante unico',
     taxaVisitaParaFormularioPercentual: 0,
     taxaConclusaoFormularioPercentual: 0,
     taxaConclusaoSobreLandingPercentual: 0,
@@ -82,6 +86,7 @@ export class LandingAcessosAdminComponent implements OnInit {
     tablet: 0,
     bots: 0,
     outros: 0,
+    baseDispositivos: 'Visitante unico',
     navegadores: [],
     sistemasOperacionais: [],
     origens: []
@@ -125,21 +130,27 @@ export class LandingAcessosAdminComponent implements OnInit {
   get resumoCards(): LandingResumoCard[] {
     return [
       {
-        label: 'Total de acessos',
-        value: this.formatarNumero(this.resumo.visitantesLanding),
-        helper: 'visitas que chegaram na landing',
+        label: 'Visualizações da landing',
+        value: this.formatarNumero(this.resumo.totalAcessos),
+        helper: `base: ${this.formatarBase(this.resumo.baseTotalAcessos)}`,
         tone: 'primary'
+      },
+      {
+        label: 'Visitantes únicos',
+        value: this.formatarNumero(this.resumo.visitantesLanding),
+        helper: `base: ${this.formatarBase(this.resumo.baseVisitantesLanding)}`,
+        tone: 'info'
       },
       {
         label: 'Formulário visualizado',
         value: this.formatarNumero(this.resumo.visitantesFormulario),
-        helper: 'usuários que demonstraram intenção',
+        helper: `base: ${this.formatarBase(this.resumo.baseVisitantesFormulario)}`,
         tone: 'info'
       },
       {
         label: 'Cadastros concluídos',
         value: this.formatarNumero(this.resumo.formulariosConcluidos),
-        helper: 'leads efetivamente capturados',
+        helper: `base: ${this.formatarBase(this.resumo.baseFormulariosConcluidos)}`,
         tone: 'success'
       },
       {
@@ -168,17 +179,17 @@ export class LandingAcessosAdminComponent implements OnInit {
       {
         label: 'Landing visualizada',
         value: this.formatarNumero(this.resumo.visitantesLanding),
-        helper: 'tráfego total qualificado'
+        helper: `base: ${this.formatarBase(this.resumo.baseVisitantesLanding)}`
       },
       {
         label: 'Formulário visualizado',
         value: this.formatarNumero(this.resumo.visitantesFormulario),
-        helper: 'visitantes com intenção declarada'
+        helper: `base: ${this.formatarBase(this.resumo.baseVisitantesFormulario)}`
       },
       {
         label: 'Formulário concluído',
         value: this.formatarNumero(this.resumo.formulariosConcluidos),
-        helper: 'leads realmente capturados'
+        helper: `base: ${this.formatarBase(this.resumo.baseFormulariosConcluidos)}`
       }
     ];
   }
@@ -211,6 +222,10 @@ export class LandingAcessosAdminComponent implements OnInit {
 
   get periodoSelecionadoLabel(): string {
     return `${this.formatarDataCurta(this.dataInicio)} até ${this.formatarDataCurta(this.dataFim)}`;
+  }
+
+  get baseDispositivosLabel(): string {
+    return this.formatarBase(this.resumo.baseDispositivos);
   }
 
   etapaFunilLabel(etapa: AdminLandingAcessoEtapaFunil): string {
@@ -277,6 +292,20 @@ export class LandingAcessosAdminComponent implements OnInit {
   itemPercentual(item: AdminLandingQuantidadeItem[], quantidade: number): number {
     const base = item.reduce((acc, atual) => Math.max(acc, atual.quantidade), 0) || 1;
     return Math.max(10, Math.round((quantidade / base) * 100));
+  }
+
+  private formatarBase(base?: string | null): string {
+    if (!base?.trim()) {
+      return 'nao informada';
+    }
+
+    return base
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\bunico\b/g, 'unico')
+      .trim();
   }
 
   private carregarResumo(): void {

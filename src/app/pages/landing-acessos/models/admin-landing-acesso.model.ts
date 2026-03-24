@@ -17,12 +17,16 @@ export interface AdminLandingQuantidadeItem {
 
 export interface AdminLandingAcessosResumoResponse {
   totalAcessos: number;
+  baseTotalAcessos: string;
   visitantesUnicos: number;
   totalLeads: number;
   taxaConversaoPercentual: number;
   visitantesLanding: number;
+  baseVisitantesLanding: string;
   visitantesFormulario: number;
+  baseVisitantesFormulario: string;
   formulariosConcluidos: number;
+  baseFormulariosConcluidos: string;
   taxaVisitaParaFormularioPercentual: number;
   taxaConclusaoFormularioPercentual: number;
   taxaConclusaoSobreLandingPercentual: number;
@@ -31,6 +35,7 @@ export interface AdminLandingAcessosResumoResponse {
   tablet: number;
   bots: number;
   outros: number;
+  baseDispositivos: string;
   navegadores: AdminLandingQuantidadeItem[];
   sistemasOperacionais: AdminLandingQuantidadeItem[];
   origens: AdminLandingQuantidadeItem[];

@@ -444,7 +444,7 @@
       <div class="dashboard-card-header">
         <div>
           <h3>Leituras do funil</h3>
-          <p>Taxas de avanço e sinais rápidos para entender onde o fluxo quebra.</p>
+          <p>Taxas de avanço e leitura separada entre visualizações brutas e visitantes únicos.</p>
         </div>
       </div>
 
@@ -467,6 +467,7 @@
       </div>
 
       <div class="landing-device-list">
+        <p class="section-note">Dispositivos por {{ landingBaseDispositivosLabel }}.</p>
         @for (item of landingDispositivos; track item.label) {
         <article class="landing-device-item">
           <span>{{ item.label }}</span>

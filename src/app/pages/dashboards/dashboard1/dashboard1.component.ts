@@ -118,12 +118,16 @@ export class AppDashboard1Component implements OnInit {
   };
   landingResumo: AdminLandingAcessosResumoResponse = {
     totalAcessos: 0,
+    baseTotalAcessos: 'Evento bruto',
     visitantesUnicos: 0,
     totalLeads: 0,
     taxaConversaoPercentual: 0,
     visitantesLanding: 0,
+    baseVisitantesLanding: 'Visitante unico',
     visitantesFormulario: 0,
+    baseVisitantesFormulario: 'Visitante unico',
     formulariosConcluidos: 0,
+    baseFormulariosConcluidos: 'Visitante unico',
     taxaVisitaParaFormularioPercentual: 0,
     taxaConclusaoFormularioPercentual: 0,
     taxaConclusaoSobreLandingPercentual: 0,
@@ -132,6 +136,7 @@ export class AppDashboard1Component implements OnInit {
     tablet: 0,
     bots: 0,
     outros: 0,
+    baseDispositivos: 'Visitante unico',
     navegadores: [],
     sistemasOperacionais: [],
     origens: []
@@ -468,21 +473,27 @@ export class AppDashboard1Component implements OnInit {
   get metricasLanding(): DashboardLandingMetric[] {
     return [
       {
-        label: 'Landing',
-        value: this.formatarInteiro(this.landingResumo.visitantesLanding),
-        helper: 'visitantes que chegaram na página',
+        label: 'Visualizações',
+        value: this.formatarInteiro(this.landingResumo.totalAcessos),
+        helper: `base: ${this.formatarBase(this.landingResumo.baseTotalAcessos)}`,
         tone: 'traffic'
+      },
+      {
+        label: 'Visitantes únicos',
+        value: this.formatarInteiro(this.landingResumo.visitantesLanding),
+        helper: `base: ${this.formatarBase(this.landingResumo.baseVisitantesLanding)}`,
+        tone: 'interest'
       },
       {
         label: 'Formulário',
         value: this.formatarInteiro(this.landingResumo.visitantesFormulario),
-        helper: 'aberturas do formulário',
+        helper: `base: ${this.formatarBase(this.landingResumo.baseVisitantesFormulario)}`,
         tone: 'interest'
       },
       {
         label: 'Cadastros',
         value: this.formatarInteiro(this.landingResumo.formulariosConcluidos),
-        helper: 'conclusões do cadastro',
+        helper: `base: ${this.formatarBase(this.landingResumo.baseFormulariosConcluidos)}`,
         tone: 'lead'
       },
       {
@@ -509,7 +520,7 @@ export class AppDashboard1Component implements OnInit {
       {
         label: 'Mobile no funil',
         value: this.formatarInteiro(this.landingResumo.mobile),
-        helper: 'acessos móveis capturados no período'
+        helper: `base de dispositivos: ${this.formatarBase(this.landingResumo.baseDispositivos)}`
       }
     ];
   }
@@ -526,6 +537,10 @@ export class AppDashboard1Component implements OnInit {
 
   get landingOrigensTop(): Array<{ nome: string; quantidade: number }> {
     return this.landingResumo.origens.slice(0, 3);
+  }
+
+  get landingBaseDispositivosLabel(): string {
+    return this.formatarBase(this.landingResumo.baseDispositivos);
   }
 
   moduloClass(status: string): string {
@@ -579,6 +594,20 @@ export class AppDashboard1Component implements OnInit {
 
   landingMetricClass(tone: DashboardLandingMetric['tone']): string {
     return `landing-${tone}`;
+  }
+
+  private formatarBase(base?: string | null): string {
+    if (!base?.trim()) {
+      return 'nao informada';
+    }
+
+    return base
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\bunico\b/g, 'unico')
+      .trim();
   }
 
   private atividadeLabel(tipo: string): string {
