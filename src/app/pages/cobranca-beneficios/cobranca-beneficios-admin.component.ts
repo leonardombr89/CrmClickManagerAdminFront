@@ -8,6 +8,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
 import { AdminEmpresaResumo } from '../empresas/models/admin-empresa.model';
 import { AdminEmpresasService } from '../empresas/services/admin-empresas.service';
+import { AdminPlanoResponse } from '../planos/models/admin-plano.model';
+import { AdminPlanosService } from '../planos/services/admin-planos.service';
 import {
   AdminAplicacaoBeneficioCobrancaResponse,
   AdminAplicarBeneficioCobrancaEmpresaRequest,
@@ -21,6 +23,7 @@ interface BeneficioFormModel {
   codigo: string;
   nome: string;
   descricao: string;
+  planoId: number | null;
   tipo: TipoBeneficioCobranca;
   valorDescontoCentavos: number | null;
   percentualDesconto: number | null;
@@ -46,10 +49,13 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
   buscandoEmpresas = false;
   aplicandoBeneficio = false;
   carregandoAplicacoes = false;
+  carregandoPlanos = false;
+  removendoAplicacaoId: number | null = null;
 
   beneficios: AdminBeneficioCobrancaResponse[] = [];
   beneficioSelecionado: AdminBeneficioCobrancaResponse | null = null;
   modoCriacao = false;
+  planos: AdminPlanoResponse[] = [];
 
   form: BeneficioFormModel = this.criarFormPadrao();
 
@@ -63,10 +69,12 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
   constructor(
     private readonly cobrancaBeneficiosService: AdminCobrancaBeneficiosService,
     private readonly empresasService: AdminEmpresasService,
+    private readonly planosService: AdminPlanosService,
     private readonly toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
+    this.carregarPlanos();
     this.carregarBeneficios(true);
   }
 
@@ -79,6 +87,18 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
   selecionarBeneficio(beneficio: AdminBeneficioCobrancaResponse): void {
     this.modoCriacao = false;
     this.carregarDetalhe(beneficio.id);
+  }
+
+  selecionarBeneficioPorId(beneficioId: number | null): void {
+    if (!beneficioId) {
+      this.beneficioSelecionado = null;
+      return;
+    }
+
+    const beneficio = this.beneficios.find((item) => item.id === beneficioId);
+    if (beneficio) {
+      this.selecionarBeneficio(beneficio);
+    }
   }
 
   recarregarBeneficios(): void {
@@ -238,6 +258,59 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
     return this.beneficios.filter((item) => item.tipo === 'ISENCAO').length;
   }
 
+  get planoSelecionadoLabel(): string {
+    if (this.form.planoId == null) {
+      return 'Todos os planos';
+    }
+
+    return this.nomePlano(this.form.planoId, this.beneficioSelecionado?.planoNome || null);
+  }
+
+  get resumoCupomSelecionado(): string {
+    if (!this.beneficioSelecionado) {
+      return 'Escolha um cupom disponível para aplicar na empresa.';
+    }
+
+    return `${this.resumoValor(this.beneficioSelecionado)} · ${this.nomePlano(
+      this.beneficioSelecionado.planoId,
+      this.beneficioSelecionado.planoNome
+    )}`;
+  }
+
+  get descricaoCupomSelecionado(): string {
+    if (!this.beneficioSelecionado) {
+      return 'Nenhum cupom selecionado';
+    }
+
+    return this.beneficioSelecionado.descricao?.trim() || 'Sem descrição resumida';
+  }
+
+  get resumoEmpresaSelecionada(): string {
+    if (!this.empresaSelecionada) {
+      return 'Nenhuma empresa selecionada';
+    }
+
+    return `${this.empresaSelecionada.plano} · ${this.empresaSelecionada.cidade}`;
+  }
+
+  get detalheEmpresaSelecionada(): string {
+    if (!this.empresaSelecionada) {
+      return 'Selecione uma empresa para revisar a aplicação.';
+    }
+
+    return this.empresaSelecionada.responsavelNome?.trim()
+      ? `Responsável: ${this.empresaSelecionada.responsavelNome}`
+      : `Status: ${this.statusEmpresaLabel(this.empresaSelecionada.status)}`;
+  }
+
+  get podeAplicarBeneficioSelecionado(): boolean {
+    return !!this.beneficioSelecionado && !!this.empresaSelecionada && !this.aplicandoBeneficio;
+  }
+
+  get avisoSubstituicao(): string {
+    return 'Ao aplicar este benefício, qualquer aplicação pendente ou ativa desta empresa poderá ser substituída.';
+  }
+
   tipoLabel(tipo: TipoBeneficioCobranca): string {
     return {
       DESCONTO_PERCENTUAL: 'Desconto percentual',
@@ -254,6 +327,14 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
     return ativo ? 'status-ativo' : 'status-inativo';
   }
 
+  statusEmpresaLabel(status: AdminEmpresaResumo['status']): string {
+    return {
+      ATIVA: 'Ativa',
+      ONBOARDING: 'Onboarding',
+      BAIXA_ATIVIDADE: 'Baixa atividade'
+    }[status];
+  }
+
   resumoValor(beneficio: AdminBeneficioCobrancaResponse): string {
     if (beneficio.tipo === 'DESCONTO_PERCENTUAL') {
       return `${beneficio.percentualDesconto || 0}%`;
@@ -264,6 +345,14 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
     }
 
     return '100% do valor';
+  }
+
+  nomePlano(planoId?: number | null, fallback?: string | null): string {
+    if (planoId == null) {
+      return 'Todos os planos';
+    }
+
+    return this.planos.find((item) => item.id === planoId)?.nome || fallback || `Plano #${planoId}`;
   }
 
   formatarMoeda(centavos: number): string {
@@ -312,6 +401,39 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
     return aplicacao.ativo ? 'status-ativo' : 'status-inativo';
   }
 
+  aplicacaoPlanoLabel(aplicacao: AdminAplicacaoBeneficioCobrancaResponse): string {
+    if (aplicacao.todosOsPlanos || aplicacao.planoId == null) {
+      return 'Todos os planos';
+    }
+
+    return this.nomePlano(aplicacao.planoId, aplicacao.planoNome);
+  }
+
+  podeRemoverAplicacao(aplicacao: AdminAplicacaoBeneficioCobrancaResponse): boolean {
+    return aplicacao.ativo && !aplicacao.utilizadoEm;
+  }
+
+  removerAplicacao(aplicacao: AdminAplicacaoBeneficioCobrancaResponse): void {
+    if (!this.podeRemoverAplicacao(aplicacao) || this.removendoAplicacaoId === aplicacao.id) {
+      return;
+    }
+
+    this.removendoAplicacaoId = aplicacao.id;
+    this.cobrancaBeneficiosService.removerAplicacao$(aplicacao.id)
+      .pipe(finalize(() => (this.removendoAplicacaoId = null)))
+      .subscribe({
+        next: () => {
+          this.aplicacoesEmpresa = this.aplicacoesEmpresa.map((item) =>
+            item.id === aplicacao.id ? { ...item, ativo: false } : item
+          );
+          this.toastr.success('Cupom removido da empresa.');
+        },
+        error: (err) => {
+          this.toastr.error(err?.userMessage || 'Não foi possível remover o cupom da empresa.');
+        }
+      });
+  }
+
   private carregarBeneficios(resolverSelecao = false, beneficioId: number | null = null): void {
     this.carregandoBeneficios = true;
 
@@ -326,6 +448,21 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
         },
         error: (err) => {
           this.toastr.error(err?.userMessage || 'Não foi possível carregar os benefícios.');
+        }
+      });
+  }
+
+  private carregarPlanos(): void {
+    this.carregandoPlanos = true;
+
+    this.planosService.listar$()
+      .pipe(finalize(() => (this.carregandoPlanos = false)))
+      .subscribe({
+        next: (planos) => {
+          this.planos = [...(planos || [])].sort((a, b) => a.nome.localeCompare(b.nome));
+        },
+        error: (err) => {
+          this.toastr.warning(err?.userMessage || 'Não foi possível carregar os planos para vincular o cupom.');
         }
       });
   }
@@ -389,6 +526,7 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
       codigo: beneficio.codigo,
       nome: beneficio.nome,
       descricao: beneficio.descricao || '',
+      planoId: beneficio.planoId ?? null,
       tipo: beneficio.tipo,
       valorDescontoCentavos: beneficio.valorDescontoCentavos,
       percentualDesconto: beneficio.percentualDesconto,
@@ -421,6 +559,7 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
       codigo,
       nome,
       descricao: this.form.descricao.trim() || null,
+      planoId: this.form.planoId ?? null,
       tipo: this.form.tipo,
       valorDescontoCentavos: this.form.tipo === 'DESCONTO_VALOR_FIXO'
         ? Number(this.form.valorDescontoCentavos || 0)
@@ -439,6 +578,7 @@ export class CobrancaBeneficiosAdminComponent implements OnInit {
       codigo: '',
       nome: '',
       descricao: '',
+      planoId: null,
       tipo: 'DESCONTO_PERCENTUAL',
       valorDescontoCentavos: null,
       percentualDesconto: 10,

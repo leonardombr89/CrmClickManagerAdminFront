@@ -88,6 +88,7 @@
               {{ tipoLabel(beneficio.tipo) }}
             </span>
             <span>{{ resumoValor(beneficio) }}</span>
+            <span>{{ nomePlano(beneficio.planoId, beneficio.planoNome) }}</span>
           </div>
 
           <div class="beneficio-footer">
@@ -162,6 +163,10 @@
           <span>Validade fim</span>
           <strong>{{ form.validadeFim || 'Livre' }}</strong>
         </article>
+        <article class="detail-stat">
+          <span>Plano alvo</span>
+          <strong>{{ planoSelecionadoLabel }}</strong>
+        </article>
       </div>
 
       <div class="form-grid">
@@ -182,6 +187,23 @@
             <mat-option [value]="option">{{ tipoLabel(option) }}</mat-option>
             }
           </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Plano aplicável</mat-label>
+          <mat-select [(ngModel)]="form.planoId">
+            <mat-option [value]="null">Todos os planos</mat-option>
+            @for (plano of planos; track plano.id) {
+            <mat-option [value]="plano.id">{{ plano.nome }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>
+            @if (carregandoPlanos) {
+              Carregando planos...
+            } @else {
+              Se vazio, o cupom pode ser usado em qualquer plano.
+            }
+          </mat-hint>
         </mat-form-field>
 
         @if (form.tipo === 'DESCONTO_PERCENTUAL') {
@@ -251,72 +273,192 @@
       <div class="section-header">
         <div>
           <h3>Aplicar em empresa</h3>
-          <p>Ao aplicar um benefício ativo, outra aplicação pendente da empresa é substituída automaticamente.</p>
+          <p>Selecione o cupom, escolha a empresa, revise os detalhes e conclua a aplicação.</p>
         </div>
       </div>
 
-      <div class="company-search">
-        <mat-form-field appearance="outline">
-          <mat-label>Buscar empresa</mat-label>
-          <input matInput [(ngModel)]="buscaEmpresa" placeholder="Nome da empresa" (keyup.enter)="buscarEmpresas()" />
-        </mat-form-field>
-
-        <button mat-stroked-button color="primary" (click)="buscarEmpresas()" [disabled]="buscandoEmpresas">
-          Buscar
-        </button>
-      </div>
-
-      @if (buscandoEmpresas) {
-      <div class="embedded-state">
-        <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
-        <span>Buscando empresas...</span>
-      </div>
-      } @else if (empresasEncontradas.length) {
-      <div class="empresa-list">
-        @for (empresa of empresasEncontradas; track empresa.id) {
-        <button
-          type="button"
-          class="empresa-item"
-          [class.selected]="empresaSelecionada?.id === empresa.id"
-          (click)="selecionarEmpresa(empresa)"
-        >
-          <div>
-            <strong>{{ empresa.nome }}</strong>
-            <span>{{ empresa.plano }} · {{ empresa.cidade }}</span>
+      <div class="application-sections">
+        <section class="flow-section">
+          <div class="flow-header">
+            <span class="flow-step">1</span>
+            <div>
+              <h4>Cupom</h4>
+              <p>Escolha qual benefício será aplicado nesta empresa.</p>
+            </div>
           </div>
-          <small>#{{ empresa.id }}</small>
-        </button>
-        }
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Selecionar cupom</mat-label>
+            <mat-select
+              [ngModel]="beneficioSelecionado?.id ?? null"
+              (ngModelChange)="selecionarBeneficioPorId($event)"
+            >
+              <mat-option [value]="null">Escolher cupom</mat-option>
+              @for (beneficio of beneficios; track beneficio.id) {
+              <mat-option [value]="beneficio.id">
+                {{ beneficio.codigo }} · {{ beneficio.nome }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @if (beneficioSelecionado && !modoCriacao) {
+          <div class="selection-card">
+            <div class="selection-card-body">
+              <div class="selection-card-top">
+                <strong>{{ beneficioSelecionado.nome }}</strong>
+                <span class="status-badge" [ngClass]="statusClass(beneficioSelecionado.ativo)">
+                  {{ beneficioSelecionado.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </div>
+              <p>{{ descricaoCupomSelecionado }}</p>
+              <div class="selection-meta">
+                <span>{{ beneficioSelecionado.codigo }}</span>
+                <span>{{ resumoValor(beneficioSelecionado) }}</span>
+                <span>{{ nomePlano(beneficioSelecionado.planoId, beneficioSelecionado.planoNome) }}</span>
+              </div>
+            </div>
+          </div>
+          } @else {
+          <div class="selection-placeholder">
+            <i-tabler name="ticket" class="icon-22"></i-tabler>
+            <div>
+              <strong>Nenhum cupom selecionado</strong>
+              <p>Escolha um cupom para continuar a aplicação.</p>
+            </div>
+          </div>
+          }
+        </section>
+
+        <section class="flow-section">
+          <div class="flow-header">
+            <span class="flow-step">2</span>
+            <div>
+              <h4>Empresa</h4>
+              <p>Busque a empresa alvo e confirme a conta que receberá o benefício.</p>
+            </div>
+          </div>
+
+          <div class="company-search">
+            <mat-form-field appearance="outline">
+              <mat-label>Buscar empresa</mat-label>
+              <input matInput [(ngModel)]="buscaEmpresa" placeholder="Nome da empresa" (keyup.enter)="buscarEmpresas()" />
+            </mat-form-field>
+
+            <button mat-stroked-button color="primary" (click)="buscarEmpresas()" [disabled]="buscandoEmpresas">
+              Buscar
+            </button>
+          </div>
+
+          @if (buscandoEmpresas) {
+          <div class="embedded-state compact-state">
+            <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+            <span>Buscando empresas...</span>
+          </div>
+          } @else if (empresasEncontradas.length) {
+          <div class="empresa-list">
+            @for (empresa of empresasEncontradas; track empresa.id) {
+            <button
+              type="button"
+              class="empresa-item"
+              [class.selected]="empresaSelecionada?.id === empresa.id"
+              (click)="selecionarEmpresa(empresa)"
+            >
+              <div>
+                <strong>{{ empresa.nome }}</strong>
+                <span>{{ empresa.plano }} · {{ empresa.cidade }}</span>
+              </div>
+              <small>#{{ empresa.id }}</small>
+            </button>
+            }
+          </div>
+          }
+
+          @if (empresaSelecionada) {
+          <div class="selection-card company-card">
+            <div class="selection-card-body">
+              <div class="selection-card-top">
+                <strong>{{ empresaSelecionada.nome }}</strong>
+                <span class="status-badge" [ngClass]="'status-empresa-' + empresaSelecionada.status.toLowerCase()">
+                  {{ statusEmpresaLabel(empresaSelecionada.status) }}
+                </span>
+              </div>
+              <p>{{ resumoEmpresaSelecionada }}</p>
+              <div class="selection-meta">
+                <span>Empresa #{{ empresaSelecionada.id }}</span>
+                <span>{{ detalheEmpresaSelecionada }}</span>
+              </div>
+            </div>
+          </div>
+          } @else {
+          <div class="selection-placeholder company-placeholder">
+            <i-tabler name="building-store" class="icon-22"></i-tabler>
+            <div>
+              <strong>Nenhuma empresa selecionada</strong>
+              <p>Busque e selecione uma empresa para continuar.</p>
+            </div>
+          </div>
+          }
+        </section>
+
+        <section class="flow-section">
+          <div class="flow-header">
+            <span class="flow-step">3</span>
+            <div>
+              <h4>Detalhes da aplicação</h4>
+              <p>Registre o responsável e observações úteis para auditoria comercial.</p>
+            </div>
+          </div>
+
+          <div class="application-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Aplicado por</mat-label>
+              <input matInput [(ngModel)]="aplicadoPorNome" placeholder="Leonardo" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Observação</mat-label>
+              <textarea matInput rows="3" [(ngModel)]="observacaoAplicacao" placeholder="Condição comercial aprovada"></textarea>
+            </mat-form-field>
+          </div>
+        </section>
+
+        <section class="flow-section action-section">
+          <div class="flow-header">
+            <span class="flow-step">4</span>
+            <div>
+              <h4>Resumo e ação</h4>
+              <p>Revise os itens selecionados antes de concluir a aplicação.</p>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-row">
+              <span>Cupom selecionado</span>
+              <strong>{{ beneficioSelecionado?.codigo || 'Nenhum cupom' }}</strong>
+            </div>
+            <div class="review-row">
+              <span>Empresa selecionada</span>
+              <strong>{{ empresaSelecionada?.nome || 'Nenhuma empresa' }}</strong>
+            </div>
+          </div>
+
+          <div class="warning-banner">
+            <i-tabler name="alert-triangle" class="icon-18"></i-tabler>
+            <span>{{ avisoSubstituicao }}</span>
+          </div>
+
+          <button
+            mat-flat-button
+            color="primary"
+            class="apply-cta"
+            (click)="aplicarBeneficio()"
+            [disabled]="!podeAplicarBeneficioSelecionado"
+          >
+            {{ beneficioSelecionado ? 'Aplicar cupom' : 'Selecione um cupom para aplicar' }}
+          </button>
+        </section>
       </div>
-      }
-
-      @if (empresaSelecionada) {
-      <div class="empresa-selected-card">
-        <strong>{{ empresaSelecionada.nome }}</strong>
-        <span>Empresa #{{ empresaSelecionada.id }} · {{ empresaSelecionada.plano }}</span>
-      </div>
-      }
-
-      <div class="application-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Aplicado por</mat-label>
-          <input matInput [(ngModel)]="aplicadoPorNome" placeholder="Leonardo" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Observação</mat-label>
-          <textarea matInput rows="3" [(ngModel)]="observacaoAplicacao" placeholder="Condição comercial aprovada"></textarea>
-        </mat-form-field>
-      </div>
-
-      <button
-        mat-flat-button
-        color="primary"
-        (click)="aplicarBeneficio()"
-        [disabled]="aplicandoBeneficio || !beneficioSelecionado || !empresaSelecionada"
-      >
-        Aplicar benefício selecionado
-      </button>
     </div>
 
     <div class="history-card">
@@ -362,6 +504,7 @@
             <div>
               <strong>{{ aplicacao.nome }}</strong>
               <span>{{ aplicacao.codigo }} · {{ tipoLabel(aplicacao.tipo) }}</span>
+              <small>{{ aplicacaoPlanoLabel(aplicacao) }}</small>
             </div>
             <span class="status-badge" [ngClass]="aplicacaoStatusClass(aplicacao)">
               {{ aplicacaoStatus(aplicacao) }}
@@ -377,9 +520,24 @@
           <p>{{ aplicacao.observacao }}</p>
           }
 
-          @if (aplicacao.utilizadoEm) {
-          <small class="history-usage">Utilizado {{ dataRelativa(aplicacao.utilizadoEm) }}</small>
-          }
+          <div class="history-actions">
+            @if (aplicacao.utilizadoEm) {
+            <small class="history-usage">Utilizado {{ dataRelativa(aplicacao.utilizadoEm) }}</small>
+            <button mat-stroked-button disabled>Cupom já utilizado</button>
+            } @else if (podeRemoverAplicacao(aplicacao)) {
+            <small class="history-usage">Aplicação ainda ativa</small>
+            <button
+              mat-stroked-button
+              color="warn"
+              (click)="removerAplicacao(aplicacao)"
+              [disabled]="removendoAplicacaoId === aplicacao.id"
+            >
+              Remover
+            </button>
+            } @else {
+            <small class="history-usage">Aplicação encerrada</small>
+            }
+          </div>
         </article>
         }
       </div>

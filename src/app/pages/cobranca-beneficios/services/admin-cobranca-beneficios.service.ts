@@ -58,12 +58,18 @@ export class AdminCobrancaBeneficiosService {
     );
   }
 
+  removerAplicacao$(aplicacaoId: number): Observable<void> {
+    return this.api.delete<void>(`${this.endpoint}/aplicacoes/${aplicacaoId}`);
+  }
+
   private mapBeneficio(raw: any): AdminBeneficioCobrancaResponse {
     return {
       id: Number(raw?.['id'] || 0),
       codigo: String(raw?.['codigo'] || ''),
       nome: String(raw?.['nome'] || ''),
       descricao: raw?.['descricao'] != null ? String(raw['descricao']) : null,
+      planoId: raw?.['planoId'] != null ? Number(raw['planoId']) : null,
+      planoNome: raw?.['planoNome'] != null ? String(raw['planoNome']) : null,
       tipo: String(raw?.['tipo'] || 'ISENCAO').toUpperCase() as any,
       valorDescontoCentavos: raw?.['valorDescontoCentavos'] != null ? Number(raw['valorDescontoCentavos']) : null,
       percentualDesconto: raw?.['percentualDesconto'] != null ? Number(raw['percentualDesconto']) : null,
@@ -84,6 +90,9 @@ export class AdminCobrancaBeneficiosService {
       codigo: String(raw?.['codigo'] || ''),
       nome: String(raw?.['nome'] || ''),
       tipo: String(raw?.['tipo'] || 'ISENCAO').toUpperCase() as any,
+      planoId: raw?.['planoId'] != null ? Number(raw['planoId']) : null,
+      planoNome: raw?.['planoNome'] != null ? String(raw['planoNome']) : null,
+      todosOsPlanos: Boolean(raw?.['todosOsPlanos']),
       aplicadoPorNome: raw?.['aplicadoPorNome'] != null ? String(raw['aplicadoPorNome']) : null,
       observacao: raw?.['observacao'] != null ? String(raw['observacao']) : null,
       aplicadoEm: String(raw?.['aplicadoEm'] || ''),

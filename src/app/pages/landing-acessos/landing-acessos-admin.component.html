@@ -30,6 +30,16 @@
     }
   </section>
 
+  <section class="rate-strip">
+    @for (item of taxasResumo; track item.label) {
+    <article class="rate-card">
+      <span>{{ item.label }}</span>
+      <strong>{{ item.value }}</strong>
+      <small>{{ item.helper }}</small>
+    </article>
+    }
+  </section>
+
   <section class="insights-grid">
     <article class="insight-card">
       <div class="section-header">
@@ -39,7 +49,7 @@
         </div>
       </div>
 
-      <div class="funnel-step-grid">
+      <div class="funnel-visual-grid">
         @for (item of etapasFunil; track item.label) {
         <div class="funnel-step-card">
           <span>{{ item.label }}</span>

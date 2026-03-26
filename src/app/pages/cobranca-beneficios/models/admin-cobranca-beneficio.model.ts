@@ -8,6 +8,8 @@ export interface AdminBeneficioCobrancaResponse {
   codigo: string;
   nome: string;
   descricao: string | null;
+  planoId: number | null;
+  planoNome?: string | null;
   tipo: TipoBeneficioCobranca;
   valorDescontoCentavos: number | null;
   percentualDesconto: number | null;
@@ -22,6 +24,7 @@ export interface AdminSalvarBeneficioCobrancaRequest {
   codigo: string;
   nome: string;
   descricao?: string | null;
+  planoId?: number | null;
   tipo: TipoBeneficioCobranca;
   valorDescontoCentavos?: number | null;
   percentualDesconto?: number | null;
@@ -44,6 +47,9 @@ export interface AdminAplicacaoBeneficioCobrancaResponse {
   codigo: string;
   nome: string;
   tipo: TipoBeneficioCobranca;
+  planoId: number | null;
+  planoNome: string | null;
+  todosOsPlanos: boolean;
   aplicadoPorNome: string | null;
   observacao: string | null;
   aplicadoEm: string;

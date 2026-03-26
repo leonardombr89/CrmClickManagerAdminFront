@@ -24,6 +24,12 @@ type LandingResumoCard = {
   tone: 'primary' | 'success' | 'warning' | 'info';
 };
 
+type LandingTaxaCard = {
+  label: string;
+  value: string;
+  helper: string;
+};
+
 type LandingFunilStep = {
   label: string;
   value: string;
@@ -152,24 +158,26 @@ export class LandingAcessosAdminComponent implements OnInit {
         value: this.formatarNumero(this.resumo.formulariosConcluidos),
         helper: `base: ${this.formatarBase(this.resumo.baseFormulariosConcluidos)}`,
         tone: 'success'
-      },
+      }
+    ];
+  }
+
+  get taxasResumo(): LandingTaxaCard[] {
+    return [
       {
         label: 'Visita > formulário',
         value: `${this.resumo.taxaVisitaParaFormularioPercentual.toFixed(2)}%`,
-        helper: 'avanço da landing para intenção',
-        tone: 'warning'
+        helper: 'avanço da landing para intenção'
       },
       {
         label: 'Formulário > conclusão',
         value: `${this.resumo.taxaConclusaoFormularioPercentual.toFixed(2)}%`,
-        helper: 'eficiência do formulário',
-        tone: 'warning'
+        helper: 'eficiência da etapa final'
       },
       {
         label: 'Landing > conclusão',
         value: `${this.resumo.taxaConclusaoSobreLandingPercentual.toFixed(2)}%`,
-        helper: 'conversão final do funil',
-        tone: 'warning'
+        helper: 'conversão final do funil'
       }
     ];
   }

@@ -134,6 +134,7 @@
 .editor-actions,
 .company-search,
 .history-meta,
+.history-actions,
 .empresa-item,
 .application-form {
   display: flex;
@@ -288,6 +289,111 @@
   gap: 16px;
 }
 
+.application-sections {
+  display: grid;
+  gap: 22px;
+}
+
+.flow-section {
+  padding: 22px;
+  border: 1px solid #e3e9f5;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.flow-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.flow-header h4 {
+  margin: 0;
+  color: #122553;
+  font-size: 1.05rem;
+}
+
+.flow-header p {
+  margin: 4px 0 0;
+  color: #66779a;
+}
+
+.flow-step {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eaf1ff;
+  color: #2b6cff;
+  font-weight: 800;
+}
+
+.selection-card {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid #dbe4f2;
+  background: #f7faff;
+}
+
+.selection-card-body {
+  display: grid;
+  gap: 8px;
+}
+
+.selection-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.selection-card p {
+  margin: 0;
+  color: #66779a;
+}
+
+.selection-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.selection-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #4c5f83;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.selection-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border: 1px dashed #cad5e8;
+  border-radius: 20px;
+  color: #7181a1;
+  background: #fbfdff;
+}
+
+.selection-placeholder strong {
+  display: block;
+  color: #10224f;
+}
+
+.selection-placeholder p {
+  margin: 4px 0 0;
+}
+
 .full-width {
   grid-column: 1 / -1;
 }
@@ -324,6 +430,14 @@
   margin-top: 18px;
 }
 
+.selected-benefit-card {
+  margin-top: 0;
+}
+
+.company-card {
+  margin-top: 14px;
+}
+
 .history-top {
   margin-bottom: 10px;
 }
@@ -332,10 +446,74 @@
   margin: 10px 0;
 }
 
+.history-actions {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
 .history-usage {
   display: block;
   color: #3556c5;
   font-weight: 600;
+}
+
+.review-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid #dbe4f2;
+  background: #f8fbff;
+}
+
+.review-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.review-row span {
+  color: #66779a;
+}
+
+.review-row strong {
+  color: #10224f;
+  text-align: right;
+}
+
+.warning-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #fff8eb;
+  border: 1px solid #fde7b0;
+  color: #8a5a00;
+}
+
+.apply-cta {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 16px;
+}
+
+.status-empresa-ativa {
+  background: #e8f7ec;
+  color: #1d7a42;
+}
+
+.status-empresa-onboarding {
+  background: #eef4ff;
+  color: #3556c5;
+}
+
+.status-empresa-baixa_atividade {
+  background: #fff3e8;
+  color: #ba5c16;
 }
 
 .state-card,
@@ -358,6 +536,10 @@
 
 .compact {
   min-height: 150px;
+}
+
+.compact-state {
+  min-height: 120px;
 }
 
 .info-card {
@@ -393,6 +575,16 @@
   .form-grid,
   .application-form {
     grid-template-columns: 1fr;
+  }
+
+  .flow-section {
+    padding: 18px;
+  }
+
+  .selection-card-top,
+  .review-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .hero,
