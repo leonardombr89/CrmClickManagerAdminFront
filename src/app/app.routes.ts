@@ -116,6 +116,18 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'notificacoes',
+        loadComponent: () =>
+          import('./pages/notificacoes-admin/notificacoes-admin.component').then((m) => m.NotificacoesAdminComponent),
+        data: {
+          title: 'Enviar notificações',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Notificações' }
+          ]
+        }
+      },
+      {
         path: 'landing-acessos',
         loadComponent: () =>
           import('./pages/landing-acessos/landing-acessos-admin.component').then((m) => m.LandingAcessosAdminComponent),
@@ -124,6 +136,18 @@ export const routes: Routes = [
           urls: [
             { title: 'Admin', url: '/dashboard' },
             { title: 'Landing' }
+          ]
+        }
+      },
+      {
+        path: 'demo-smartcalc',
+        loadComponent: () =>
+          import('./pages/analytics/demo-funnel/demo-funnel.component').then((m) => m.DemoFunnelComponent),
+        data: {
+          title: 'Funil da demo SmartCalc',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Demo SmartCalc' }
           ]
         }
       },

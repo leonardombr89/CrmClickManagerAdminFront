@@ -53,9 +53,21 @@ export const navItems: NavItem[] = [
     route: '/pagamentos',
   },
   {
+    displayName: 'Notificações',
+    iconName: 'bell-ringing',
+    bgcolor: 'primary',
+    route: '/notificacoes',
+  },
+  {
     displayName: 'Landing',
     iconName: 'world-www',
     bgcolor: 'primary',
     route: '/landing-acessos',
+  },
+  {
+    displayName: 'Demo SmartCalc',
+    iconName: 'chart-bar',
+    bgcolor: 'primary',
+    route: '/demo-smartcalc',
   }
 ];
