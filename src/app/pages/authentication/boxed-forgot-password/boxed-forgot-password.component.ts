@@ -53,7 +53,7 @@ export class AppBoxedForgotPasswordComponent {
     this.authService.recuperarSenha(email).subscribe({
       next: () => {
         this.toastr.success('Link de recuperação enviado para o e-mail.');
-        this.router.navigate(['/authentication/login']);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         const msg = err?.error?.message || 'Erro ao enviar e-mail de recuperação.';

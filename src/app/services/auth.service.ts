@@ -52,7 +52,7 @@ export class AuthService {
     this.tokenStorage.limparTokens();
     this.jwtPayload = null;
     this.usuarioSubject.next(null);
-    void this.router.navigateByUrl('/authentication/login');
+    void this.router.navigateByUrl('/login');
   }
 
   temPermissao(_: string): boolean {

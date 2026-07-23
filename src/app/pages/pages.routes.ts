@@ -33,6 +33,9 @@ import { DetalheFolhaPagamentoComponent } from './pessoas/folha/detalhe-folha/de
 import { SuporteComponent } from './suporte/suporte.component';
 import { featureModuleGuard } from '../guards/feature-module.guard';
 import { permissionGuard } from '../guards/permission.guard';
+import { OnboardingCatalogoAdminComponent } from './onboarding/catalogo-admin/onboarding-catalogo-admin.component';
+import { ListarHomeSectionsComponent } from './site/home-sections/listar-home-sections/listar-home-sections.component';
+import { FormHomeSectionComponent } from './site/home-sections/form-home-section/form-home-section.component';
 
 export const PagesRoutes: Routes = [
   {
@@ -505,6 +508,58 @@ export const PagesRoutes: Routes = [
       urls: [
         { title: 'Lista de Configurações', url: '/page/calculadora/config' },
         { title: 'Editar Configuração' }
+      ]
+    }
+  },
+  {
+    path: 'onboarding/catalogo',
+    component: OnboardingCatalogoAdminComponent,
+    canActivate: [permissionGuard],
+    data: {
+      requiredPermission: ['GERENCIAR_PRODUTOS'],
+      title: 'Catálogo do Onboarding',
+      urls: [
+        { title: 'Gerenciar Produtos', url: '/page/cadastro-tecnico/produtos' },
+        { title: 'Catálogo do Onboarding' }
+      ]
+    }
+  },
+  {
+    path: 'site/home-sections',
+    component: ListarHomeSectionsComponent,
+    canActivate: [permissionGuard],
+    data: {
+      requiredPermission: ['SITE_HOME_SECTIONS_VER'],
+      title: 'Seções da Home',
+      urls: [
+        { title: 'Meu Site', url: '/page/site/home-sections' },
+        { title: 'Seções da Home' }
+      ]
+    }
+  },
+  {
+    path: 'site/home-sections/novo',
+    component: FormHomeSectionComponent,
+    canActivate: [permissionGuard],
+    data: {
+      requiredPermission: ['SITE_HOME_SECTIONS_CADASTRAR'],
+      title: 'Nova seção da Home',
+      urls: [
+        { title: 'Meu Site', url: '/page/site/home-sections' },
+        { title: 'Nova seção' }
+      ]
+    }
+  },
+  {
+    path: 'site/home-sections/editar/:id',
+    component: FormHomeSectionComponent,
+    canActivate: [permissionGuard],
+    data: {
+      requiredPermission: ['SITE_HOME_SECTIONS_EDITAR'],
+      title: 'Editar seção da Home',
+      urls: [
+        { title: 'Meu Site', url: '/page/site/home-sections' },
+        { title: 'Editar seção' }
       ]
     }
   },

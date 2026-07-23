@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './pages/authentication/guards/auth.guard';
+import { AppBoxedLoginComponent } from './pages/authentication/boxed-login/boxed-login.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,11 @@ export const routes: Routes = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard',
+      },
+      {
+        path: 'page',
+        loadChildren: () =>
+          import('./pages/pages.routes').then((m) => m.PagesRoutes),
       },
       {
         path: 'dashboard',
@@ -64,6 +70,18 @@ export const routes: Routes = [
           urls: [
             { title: 'Admin', url: '/dashboard' },
             { title: 'Empresas' }
+          ]
+        }
+      },
+      {
+        path: 'configuracoes',
+        loadComponent: () =>
+          import('./pages/config/email-servidor/email-servidor.component').then((m) => m.EmailServidorComponent),
+        data: {
+          title: 'Configurações',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Configurações' }
           ]
         }
       },
@@ -140,6 +158,100 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'onboarding/catalogo',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-admin.component').then((m) => m.OnboardingCatalogoAdminComponent),
+        data: {
+          title: 'Catálogo do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/servicos/novo',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-item-form.component').then((m) => m.OnboardingCatalogoItemFormComponent),
+        data: {
+          entity: 'servicos',
+          title: 'Novo serviço do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=servicos' },
+            { title: 'Novo serviço' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/servicos/:id/editar',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-item-form.component').then((m) => m.OnboardingCatalogoItemFormComponent),
+        data: {
+          entity: 'servicos',
+          title: 'Editar serviço do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=servicos' },
+            { title: 'Editar serviço' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/acabamentos/novo',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-item-form.component').then((m) => m.OnboardingCatalogoItemFormComponent),
+        data: {
+          entity: 'acabamentos',
+          title: 'Novo acabamento do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=acabamentos' },
+            { title: 'Novo acabamento' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/acabamentos/:id/editar',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-item-form.component').then((m) => m.OnboardingCatalogoItemFormComponent),
+        data: {
+          entity: 'acabamentos',
+          title: 'Editar acabamento do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=acabamentos' },
+            { title: 'Editar acabamento' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/produtos/novo',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-produto-form.component').then((m) => m.OnboardingCatalogoProdutoFormComponent),
+        data: {
+          title: 'Novo produto do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=produtos' },
+            { title: 'Novo produto' }
+          ]
+        }
+      },
+      {
+        path: 'onboarding/catalogo/produtos/:id/editar',
+        loadComponent: () =>
+          import('./pages/onboarding/catalogo-admin/onboarding-catalogo-produto-form.component').then((m) => m.OnboardingCatalogoProdutoFormComponent),
+        data: {
+          title: 'Editar produto do onboarding',
+          urls: [
+            { title: 'Admin', url: '/dashboard' },
+            { title: 'Onboarding', url: '/onboarding/catalogo?tab=produtos' },
+            { title: 'Editar produto' }
+          ]
+        }
+      },
+      {
         path: 'demo-smartcalc',
         loadComponent: () =>
           import('./pages/analytics/demo-funnel/demo-funnel.component').then((m) => m.DemoFunnelComponent),
@@ -170,6 +282,10 @@ export const routes: Routes = [
     path: '',
     component: BlankComponent,
     children: [
+      {
+        path: 'login',
+        component: AppBoxedLoginComponent,
+      },
       {
         path: 'authentication',
         loadChildren: () =>

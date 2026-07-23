@@ -6,8 +6,8 @@
   "background_color": "#eef4fb",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "scope": "/painel-admin/",
-  "start_url": "/painel-admin/",
+  "scope": "/",
+  "start_url": "/",
   "lang": "pt-BR",
   "categories": ["business", "productivity"],
   "icons": [

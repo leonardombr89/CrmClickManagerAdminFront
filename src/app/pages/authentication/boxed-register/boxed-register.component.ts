@@ -149,7 +149,7 @@ export class AppBoxedRegisterComponent implements OnInit {
     this.onboardingService.registrarEmpresaComGestor(payload).subscribe({
       next: () => {
         this.toastr.success('Empresa e gestor cadastrados com sucesso!');
-        this.router.navigate(['authentication/login']);
+        this.router.navigate(['/login']);
       },
       error: err => {
         const msg = err?.error?.message || 'Erro desconhecido';

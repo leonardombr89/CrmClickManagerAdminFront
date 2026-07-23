@@ -65,6 +65,34 @@ export const navItems: NavItem[] = [
     route: '/landing-acessos',
   },
   {
+    displayName: 'Meu Site',
+    iconName: 'browser',
+    bgcolor: 'primary',
+    route: '/page/site',
+    requiredPermission: ['SITE_HOME_SECTIONS_VER'],
+    children: [
+      {
+        displayName: 'Banners',
+        iconName: 'point',
+        bgcolor: 'transparent',
+        route: '/page/site/banners',
+      },
+      {
+        displayName: 'Seções da Home',
+        iconName: 'point',
+        bgcolor: 'transparent',
+        route: '/page/site/home-sections',
+        requiredPermission: ['SITE_HOME_SECTIONS_VER'],
+      },
+    ],
+  },
+  {
+    displayName: 'Onboarding',
+    iconName: 'sparkles',
+    bgcolor: 'primary',
+    route: '/onboarding/catalogo',
+  },
+  {
     displayName: 'Demo SmartCalc',
     iconName: 'chart-bar',
     bgcolor: 'primary',

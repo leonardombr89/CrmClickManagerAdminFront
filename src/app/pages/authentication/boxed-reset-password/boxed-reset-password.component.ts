@@ -45,7 +45,7 @@ export class AppBoxedResetPasswordComponent implements OnInit {
       this.token = params['token'];
       if (!this.token) {
         this.toastr.error('Token de redefinição de senha não encontrado na URL.');
-        this.router.navigate(['/authentication/login']);
+        this.router.navigate(['/login']);
       }
     });
   }
@@ -61,7 +61,7 @@ export class AppBoxedResetPasswordComponent implements OnInit {
     this.authService.resetarSenha(this.token, senha).subscribe({
       next: () => {
         this.toastr.success('Senha redefinida com sucesso!');
-        this.router.navigate(['/authentication/login']);
+        this.router.navigate(['/login']);
       },
       error: () => {
         this.toastr.error('Erro ao redefinir a senha. O link pode ter expirado.');
