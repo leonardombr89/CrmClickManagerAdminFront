@@ -22,7 +22,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # copie o build Angular para a raiz publica do admin
-COPY --from=build /app/dist/CrmClickManagerAdminFront/browser /usr/share/nginx/html
+COPY --from=build /app/dist/clickmanager-admin/browser /usr/share/nginx/html
 
 # Copia config SPA customizada
 COPY nginx.conf /etc/nginx/conf.d/default.conf

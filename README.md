@@ -1,4 +1,4 @@
-# CrmClickManagerAdminFront
+# clickmanager-admin
 
 Frontend administrativo do ecossistema ClickManager.
 
@@ -25,8 +25,8 @@ O proxy/reverse proxy externo deve encaminhar esses caminhos para o backend. O f
 
 - desenvolvimento local: `npm start`
 - build de produção: `npm run build:prod`
-- build da imagem Docker: `docker build -t clickmanager-admin-frontend .`
-- teste local da imagem: `docker run --rm -p 8081:80 clickmanager-admin-frontend`
+- build da imagem Docker: `docker build -t clickmanager-admin .`
+- teste local da imagem: `docker run --rm -p 8081:80 clickmanager-admin`
 
 Com a imagem local em execução, valide:
 
@@ -39,9 +39,9 @@ Com a imagem local em execução, valide:
 
 Este projeto publica uma imagem Docker própria via GitHub Actions:
 
-- workflow de build: `.github/workflows/build-frontend.yml`
-- workflow de deploy: `.github/workflows/deploy-frontend.yml`
-- imagem publicada: `ghcr.io/<owner>/clickmanager-admin-frontend:latest`
+- workflow de build: `.github/workflows/build-admin.yml`
+- workflow de deploy: `.github/workflows/deploy-admin.yml`
+- imagem publicada: `ghcr.io/<owner>/clickmanager-admin:latest`
 
 Para o deploy remoto funcionar, configure no repositório:
 
@@ -50,6 +50,7 @@ Para o deploy remoto funcionar, configure no repositório:
 - `SSH_PRIVATE_KEY`
 - variável opcional `CLICKMANAGER_ADMIN_DEPLOY_PATH`
 
-O deploy remoto executa `docker compose pull admin-frontend` e `docker compose up -d admin-frontend` no diretório configurado.
+O deploy remoto detecta `docker compose` ou `docker-compose` e atualiza o
+serviço `admin` no diretório configurado.
 
 O container Nginx interno serve o build em `/usr/share/nginx/html/` com fallback SPA para `/index.html`.
