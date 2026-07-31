@@ -30,6 +30,19 @@ import { PoliticaRevenda } from 'src/app/models/politica-revenda.model';
 import { PoliticaRevendaComponent } from './politica-revenda/politica-revenda.component';
 import { ProdutoResponse } from 'src/app/models/produto/produto-response.model';
 import { CardHeaderComponent } from "src/app/components/card-header/card-header.component";
+import { AuthService } from 'src/app/services/auth.service';
+import { BillingService } from 'src/app/pages/billing/services/billing.service';
+import { CalculadoraMateriaisComponent } from './calculadora-materiais/calculadora-materiais.component';
+
+type ProdutoTabId = 'geral' | 'politica-revenda' | 'variacoes' | 'calculadora-materiais';
+
+interface ProdutoTab {
+  id: ProdutoTabId;
+  label: string;
+}
+
+const CALCULADORA_MATERIAIS_MODULO = 'CALCULADORA_MATERIAIS';
+const CALCULADORA_MATERIAIS_PERMISSAO = 'CONFIG_CALCULADORAS';
 
 @Component({
   selector: 'app-form-produto',
@@ -51,6 +64,7 @@ import { CardHeaderComponent } from "src/app/components/card-header/card-header.
     SharedComponentsModule,
     VariacoesProdutoComponent,
     PoliticaRevendaComponent,
+    CalculadoraMateriaisComponent,
     CardHeaderComponent
   ],
   templateUrl: './form-produto.component.html',
@@ -72,6 +86,10 @@ export class FormProdutoComponent implements OnInit, OnDestroy {
   /** loading simples para feedback */
   loading = false;
 
+  tabs: ProdutoTab[] = [];
+  selectedTabIndex = 0;
+  private requestedTabId: ProdutoTabId | null = null;
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -80,13 +98,18 @@ export class FormProdutoComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly produtoService: ProdutoService,
     private readonly toastr: ToastrService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly authService: AuthService,
+    private readonly billingService: BillingService
   ) { }
 
   // ================= lifecycle =================
 
   ngOnInit(): void {
     this.buildForm();
+    this.buildTabs();
+    this.watchQueryParamTab();
+    this.loadCalculadoraMateriaisAccess();
     this.detectEditModeAndLoad();
   }
 
@@ -103,6 +126,38 @@ export class FormProdutoComponent implements OnInit, OnDestroy {
       .filter(v => typeof v === 'object' && v !== null) as VariacaoProduto[];
   }
 
+  onTabIndexChange(index: number): void {
+    const tab = this.tabs[index];
+    if (!tab) return;
+
+    this.selectedTabIndex = index;
+    this.requestedTabId = tab.id;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tab.id },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+  }
+
+  previousTab(): void {
+    if (this.selectedTabIndex <= 0) return;
+    this.onTabIndexChange(this.selectedTabIndex - 1);
+  }
+
+  nextTab(): void {
+    if (this.isLastTab) return;
+    this.onTabIndexChange(this.selectedTabIndex + 1);
+  }
+
+  get isFirstTab(): boolean {
+    return this.selectedTabIndex <= 0;
+  }
+
+  get isLastTab(): boolean {
+    return this.selectedTabIndex >= this.tabs.length - 1;
+  }
+
   // ================= init/load =================
 
   private buildForm(): void {
@@ -113,6 +168,66 @@ export class FormProdutoComponent implements OnInit, OnDestroy {
       // categoriaId: [null],
       // grupoId: [null],
     });
+  }
+
+  private watchQueryParamTab(): void {
+    this.route.queryParamMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const requested = this.toProdutoTabId(params.get('tab'));
+        this.requestedTabId = requested;
+        this.applyRequestedTab();
+      });
+  }
+
+  private loadCalculadoraMateriaisAccess(): void {
+    this.billingService.obterStatus()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.buildTabs(),
+        error: () => {
+          this.buildTabs();
+        }
+      });
+  }
+
+  private buildTabs(): void {
+    const activeTab = this.tabs[this.selectedTabIndex]?.id ?? this.requestedTabId;
+    const shouldShowCalculadoraMateriais = this.authService.podeAcessarFuncionalidade(
+      CALCULADORA_MATERIAIS_MODULO,
+      CALCULADORA_MATERIAIS_PERMISSAO
+    );
+
+    this.tabs = [
+      { id: 'geral', label: 'Geral' },
+      { id: 'politica-revenda', label: 'Política de Revenda' },
+      { id: 'variacoes', label: 'Variações' },
+      ...(shouldShowCalculadoraMateriais
+        ? [{ id: 'calculadora-materiais' as const, label: 'Calculadora de Materiais' }]
+        : [])
+    ];
+
+    this.selectedTabIndex = this.resolveTabIndex(activeTab);
+    this.applyRequestedTab();
+    this.cdr.markForCheck();
+  }
+
+  private applyRequestedTab(): void {
+    this.selectedTabIndex = this.resolveTabIndex(this.requestedTabId ?? this.tabs[this.selectedTabIndex]?.id);
+    this.cdr.markForCheck();
+  }
+
+  private resolveTabIndex(tabId: ProdutoTabId | null | undefined): number {
+    if (!this.tabs.length) return 0;
+    const index = tabId ? this.tabs.findIndex(tab => tab.id === tabId) : -1;
+    return index >= 0 ? index : 0;
+  }
+
+  private toProdutoTabId(value: string | null): ProdutoTabId | null {
+    const normalized = (value || '').trim() as ProdutoTabId;
+    return ['geral', 'politica-revenda', 'variacoes', 'calculadora-materiais'].includes(normalized)
+      ? normalized
+      : null;
   }
 
   private detectEditModeAndLoad(): void {

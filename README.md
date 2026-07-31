@@ -1,56 +1,68 @@
 # clickmanager-admin
 
-Frontend administrativo do ecossistema ClickManager.
+Painel de administração global do ecossistema ClickManager. É uma aplicação
+Angular independente do ERP dos clientes e consome as rotas administrativas do
+`clickmanager-backend`.
 
-Desenvolvimento local: `npm start` sobe em `http://localhost:4300`.
+## Requisitos
 
-## Domínio
+- Node.js 20 ou superior;
+- npm;
+- backend disponível em `http://localhost:8080` para uso local;
+- Docker, somente para execução em container.
 
-O frontend administrativo deve ser servido na raiz do domínio:
+## Subir localmente
 
-- produção: `https://admin.clickmanager.com.br/`
-- login: `https://admin.clickmanager.com.br/login`
-- rotas internas: `https://admin.clickmanager.com.br/empresas`, `https://admin.clickmanager.com.br/configuracoes`
+```bash
+npm install
+npm start
+```
 
-A aplicação usa `<base href="/">` em `src/index.html` e é servida diretamente na raiz do domínio admin.
+Acesse `http://localhost:4300`. Em desenvolvimento, a API é chamada em
+`http://localhost:8080`; em produção, as URLs são relativas ao mesmo domínio.
 
-As chamadas ao backend continuam relativas em produção:
+## Testar e gerar o build
 
-- autenticação admin: `/admin/auth/`
-- APIs da plataforma: `/api/`
+```bash
+npm test -- --watch=false
+npm run build:prod
+```
 
-O proxy/reverse proxy externo deve encaminhar esses caminhos para o backend. O frontend não precisa de configuração de CORS.
+O build é gerado em `dist/clickmanager-admin/browser`.
 
-## Build e teste
+## Subir com Docker
 
-- desenvolvimento local: `npm start`
-- build de produção: `npm run build:prod`
-- build da imagem Docker: `docker build -t clickmanager-admin .`
-- teste local da imagem: `docker run --rm -p 8081:80 clickmanager-admin`
+```bash
+docker build -t clickmanager-admin .
+docker run --rm -p 8081:80 clickmanager-admin
+```
 
-Com a imagem local em execução, valide:
-
-- `http://localhost:8081/`
-- `http://localhost:8081/login`
-- `http://localhost:8081/empresas`
-- refresh direto em rotas Angular, sem HTTP 404
+Acesse `http://localhost:8081`. O Nginx do container possui fallback para
+`index.html`, portanto o refresh de rotas Angular deve funcionar.
 
 ## Produção
 
-Este projeto publica uma imagem Docker própria via GitHub Actions:
+- domínio: `https://admin.clickmanager.com.br`;
+- imagem: `ghcr.io/leonardombr89/clickmanager-admin:latest`;
+- serviço no compose da VPS: `admin`;
+- build: `.github/workflows/build-admin.yml`;
+- deploy: `.github/workflows/deploy-admin.yml`.
 
-- workflow de build: `.github/workflows/build-admin.yml`
-- workflow de deploy: `.github/workflows/deploy-admin.yml`
-- imagem publicada: `ghcr.io/<owner>/clickmanager-admin:latest`
+O push na `main` gera a imagem. Após o build aprovado, o deploy atualiza apenas
+o serviço `admin` em `/opt/clickmanager`. O repositório precisa dos secrets
+`SSH_HOST`, `SSH_USER` e `SSH_PRIVATE_KEY`.
 
-Para o deploy remoto funcionar, configure no repositório:
+Deploy manual na VPS:
 
-- `SSH_HOST`
-- `SSH_USER`
-- `SSH_PRIVATE_KEY`
-- variável opcional `CLICKMANAGER_ADMIN_DEPLOY_PATH`
+```bash
+cd /opt/clickmanager
+docker-compose -f docker-compose.prod.yml pull admin
+docker-compose -f docker-compose.prod.yml up -d --no-deps admin
+docker-compose -f docker-compose.prod.yml ps admin
+```
 
-O deploy remoto detecta `docker compose` ou `docker-compose` e atualiza o
-serviço `admin` no diretório configurado.
+## Integração
 
-O container Nginx interno serve o build em `/usr/share/nginx/html/` com fallback SPA para `/index.html`.
+- login administrativo: `/admin/auth/login`;
+- APIs administrativas: `/api/admin/**`;
+- o proxy principal deve encaminhar `/admin/auth/` e `/api/` ao backend.

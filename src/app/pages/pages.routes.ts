@@ -36,6 +36,7 @@ import { permissionGuard } from '../guards/permission.guard';
 import { OnboardingCatalogoAdminComponent } from './onboarding/catalogo-admin/onboarding-catalogo-admin.component';
 import { ListarHomeSectionsComponent } from './site/home-sections/listar-home-sections/listar-home-sections.component';
 import { FormHomeSectionComponent } from './site/home-sections/form-home-section/form-home-section.component';
+import { CalculadoraMateriaisComponent } from './cadastro-tecnico/produtos/form-produto/calculadora-materiais/calculadora-materiais.component';
 
 export const PagesRoutes: Routes = [
   {
@@ -508,6 +509,20 @@ export const PagesRoutes: Routes = [
       urls: [
         { title: 'Lista de Configurações', url: '/page/calculadora/config' },
         { title: 'Editar Configuração' }
+      ]
+    }
+  },
+  {
+    path: 'calculadora-materiais',
+    component: CalculadoraMateriaisComponent,
+    canActivate: [featureModuleGuard],
+    data: {
+      featureKey: 'CALCULADORA_MATERIAIS',
+      requiredPermission: ['CONFIG_CALCULADORAS'],
+      title: 'Calculadora de Materiais',
+      urls: [
+        { title: 'Dashboard', url: '/dashboard' },
+        { title: 'Calculadora de Materiais' }
       ]
     }
   },

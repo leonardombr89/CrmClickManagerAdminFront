@@ -11,6 +11,14 @@ export const navItems: NavItem[] = [
     route: '/dashboard',
   },
   {
+    displayName: 'Calculadora de Materiais',
+    iconName: 'calculator',
+    bgcolor: 'primary',
+    route: '/page/calculadora-materiais',
+    featureKey: 'CALCULADORA_MATERIAIS',
+    requiredPermission: ['CONFIG_CALCULADORAS'],
+  },
+  {
     displayName: 'Chamados',
     iconName: 'lifebuoy',
     bgcolor: 'primary',
