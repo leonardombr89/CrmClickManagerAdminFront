@@ -4,7 +4,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -13,11 +13,10 @@ import { MatInputModule } from '@angular/material/input';
   standalone: true,
   templateUrl: './input-numerico.component.html',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule
-  ],
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputNumericoComponent implements OnInit {

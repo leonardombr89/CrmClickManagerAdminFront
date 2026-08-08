@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -26,7 +26,6 @@ import { AcabamentoVariacaoResponse } from 'src/app/models/acabamento/acabamento
   selector: 'app-listar-acabamento',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatPaginatorModule,
@@ -39,7 +38,7 @@ import { AcabamentoVariacaoResponse } from 'src/app/models/acabamento/acabamento
     TemPermissaoDirective,
     InputPesquisaComponent,
     CardHeaderComponent
-  ],
+],
   templateUrl: './listar-acabamento.component.html',
   styleUrl: './listar-acabamento.component.scss'
 })

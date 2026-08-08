@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -31,7 +31,7 @@ interface ProdutoFormModel {
 @Component({
   selector: 'app-onboarding-catalogo-produto-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
+  imports: [FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './onboarding-catalogo-produto-form.component.html',
   styleUrl: './onboarding-catalogo-produto-form.component.scss'
 })

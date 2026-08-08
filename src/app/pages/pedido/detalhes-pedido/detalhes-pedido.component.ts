@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -48,35 +48,34 @@ import { mapPedidoToFlowContext } from 'src/app/core/flow/pedido-flow.context';
     selector: 'app-detalhes-pedido',
     standalone: true,
     imports: [
-        CommonModule,
-        MatCardModule,
-        ReactiveFormsModule,
-        MatTableModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDividerModule,
-        MatMenuModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        RouterModule,
-        TelefonePipe,
-        InputMoedaComponent,
-        InputOptionsComponent,
-        SharedComponentsModule,
-        DialogDescreverItemComponent,
-        HttpClientModule,
-        SectionCardComponent,
-        PageCardComponent,
-        PedidoFluxoControlesComponent,
-        ResumoFinanceiroCardComponent,
-        PedidoInfoCardComponent,
-        ClienteSelectorCardComponent,
-        ItensPedidoSectionComponent,
-        ObservacoesCardComponent,
-        PagamentosSectionComponent,
-        ConfirmDialogComponent
-    ],
+    MatCardModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    RouterModule,
+    TelefonePipe,
+    InputMoedaComponent,
+    InputOptionsComponent,
+    SharedComponentsModule,
+    DialogDescreverItemComponent,
+    HttpClientModule,
+    SectionCardComponent,
+    PageCardComponent,
+    PedidoFluxoControlesComponent,
+    ResumoFinanceiroCardComponent,
+    PedidoInfoCardComponent,
+    ClienteSelectorCardComponent,
+    ItensPedidoSectionComponent,
+    ObservacoesCardComponent,
+    PagamentosSectionComponent,
+    ConfirmDialogComponent
+],
     templateUrl: './detalhes-pedido.component.html',
     styleUrls: ['./detalhes-pedido.component.scss']
 })

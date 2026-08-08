@@ -22,43 +22,37 @@
         [selectedIndex]="selectedTabIndex"
         (selectedIndexChange)="onTabIndexChange($event)">
 
-        <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
-          <mat-card class="cardWithShadow tab-card">
-            <mat-card-content>
-
-              <ng-container [ngSwitch]="tab.id">
-
-                <ng-container *ngSwitchCase="'geral'">
-                  <app-input-texto-restrito class="m-b-16" [control]="nomeControl" label="Nome" placeholder="Digite o nome do produto">
-                  </app-input-texto-restrito>
-
-                  <app-input-texto-restrito class="m-b-16" [control]="descricaoControl" label="Descrição"
-                    placeholder="Digite uma descrição do produto">
-                  </app-input-texto-restrito>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'politica-revenda'">
-                  <app-politica-revenda [formGroup]="form" [value]="politicaDoProduto"
-                    (valueChange)="onPoliticaChange($event)">
-                  </app-politica-revenda>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'variacoes'">
-                  <app-variacoes-produto [variacoesIniciais]="variacoesIniciais" [politicaProduto]="politicaDoProduto"
-                    (variacoesChange)="onVariacoesChange($event)">
-                  </app-variacoes-produto>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'calculadora-materiais'">
-                  <app-calculadora-materiais [produtoId]="produtoId">
-                  </app-calculadora-materiais>
-                </ng-container>
-
-              </ng-container>
-
-            </mat-card-content>
-          </mat-card>
-        </mat-tab>
+        @for (tab of tabs; track tab) {
+          <mat-tab [label]="tab.label">
+            <mat-card class="cardWithShadow tab-card">
+              <mat-card-content>
+                @switch (tab.id) {
+                  @case ('geral') {
+                    <app-input-texto-restrito class="m-b-16" [control]="nomeControl" label="Nome" placeholder="Digite o nome do produto">
+                    </app-input-texto-restrito>
+                    <app-input-texto-restrito class="m-b-16" [control]="descricaoControl" label="Descrição"
+                      placeholder="Digite uma descrição do produto">
+                    </app-input-texto-restrito>
+                  }
+                  @case ('politica-revenda') {
+                    <app-politica-revenda [formGroup]="form" [value]="politicaDoProduto"
+                      (valueChange)="onPoliticaChange($event)">
+                    </app-politica-revenda>
+                  }
+                  @case ('variacoes') {
+                    <app-variacoes-produto [variacoesIniciais]="variacoesIniciais" [politicaProduto]="politicaDoProduto"
+                      (variacoesChange)="onVariacoesChange($event)">
+                    </app-variacoes-produto>
+                  }
+                  @case ('calculadora-materiais') {
+                    <app-calculadora-materiais [produtoId]="produtoId">
+                    </app-calculadora-materiais>
+                  }
+                }
+              </mat-card-content>
+            </mat-card>
+          </mat-tab>
+        }
 
       </mat-tab-group>
 

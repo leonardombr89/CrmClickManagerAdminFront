@@ -2,18 +2,17 @@ import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-input-texto-restrito',
   standalone: true,
   templateUrl: './input-texto-restrito.component.html',
   imports: [
-    CommonModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputTextoRestritoComponent implements OnInit {
