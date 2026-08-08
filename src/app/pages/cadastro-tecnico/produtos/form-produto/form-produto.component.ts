@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { ToastrService } from 'ngx-toastr';
 
 import { SharedComponentsModule } from 'src/app/components/shared-components.module';
@@ -60,7 +60,7 @@ const CALCULADORA_MATERIAIS_PERMISSAO = 'CONFIG_CALCULADORAS';
     MatTabsModule,
     MatIconModule,
     MatDividerModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     SharedComponentsModule,
     VariacoesProdutoComponent,
     PoliticaRevendaComponent,

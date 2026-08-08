@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { MatButtonModule } from '@angular/material/button';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { FormatoService } from '../../services/formato.service';
 import { TemPermissaoDirective } from 'src/app/diretivas/tem-permissao.directive';
 import { CardHeaderComponent } from "src/app/components/card-header/card-header.component";
@@ -28,7 +28,7 @@ import { InputPesquisaComponent } from 'src/app/components/inputs/input-pesquisa
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     RouterModule,
     TemPermissaoDirective,
     CardHeaderComponent,

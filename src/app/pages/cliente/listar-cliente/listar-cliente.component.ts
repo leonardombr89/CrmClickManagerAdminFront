@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
 import { ClienteListagem } from 'src/app/models/cliente/cliente-listagem.model';
 import { TemPermissaoDirective } from 'src/app/diretivas/tem-permissao.directive';
@@ -29,7 +29,7 @@ import { CardHeaderComponent } from "src/app/components/card-header/card-header.
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     RouterModule,
     TemPermissaoDirective,
     InputPesquisaComponent,

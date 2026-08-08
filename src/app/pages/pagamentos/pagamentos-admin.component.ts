@@ -5,7 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import {
   AdminListaPagamentosResponse,
@@ -19,7 +19,7 @@ import { AdminPagamentosService } from './services/admin-pagamentos.service';
 @Component({
   selector: 'app-pagamentos-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TablerIconsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './pagamentos-admin.component.html',
   styleUrl: './pagamentos-admin.component.scss'
 })

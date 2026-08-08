@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import {
   AdminAtividadeCriticidade,
@@ -17,7 +17,7 @@ import { AdminAtividadesService } from './services/admin-atividades.service';
 @Component({
   selector: 'app-atividades-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TablerIconsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './atividades-admin.component.html',
   styleUrl: './atividades-admin.component.scss'
 })

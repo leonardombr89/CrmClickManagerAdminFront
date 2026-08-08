@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DEFINICOES, PermissaoDefinicao } from 'src/app/permissions/permissions.config';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { InputTextoRestritoComponent } from 'src/app/components/inputs/input-texto/input-texto-restrito.component';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 
 @Component({
   selector: 'app-perfil-dialog',
@@ -21,7 +21,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
         MatButtonModule,
         MatSlideToggleModule,
         InputTextoRestritoComponent,
-        TablerIconsModule
+        DesignSystemIconsModule
       ]
 })
 export class PerfilDialogComponent implements OnInit {

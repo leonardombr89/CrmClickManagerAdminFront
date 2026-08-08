@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TemPermissaoDirective } from 'src/app/diretivas/tem-permissao.directive';
 import { InputPesquisaComponent } from 'src/app/components/inputs/input-pesquisa/input-pesquisa.component';
 import { MatButtonModule } from '@angular/material/button';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { CorService } from '../../services/cor.service';
 import { CardHeaderComponent } from "src/app/components/card-header/card-header.component";
 
@@ -29,7 +29,7 @@ import { CardHeaderComponent } from "src/app/components/card-header/card-header.
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     RouterModule,
     TemPermissaoDirective,
     InputPesquisaComponent,

@@ -12,7 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { PedidoService } from '../pedido.service';
 import { SharedComponentsModule } from "../../../components/shared-components.module";
 import { map, Observable, take } from 'rxjs';
@@ -54,7 +54,7 @@ import { ClienteService } from "../../cliente/cliente.service";
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     SharedComponentsModule,
     InputTextareaComponent,
     InputOptionsComponent,

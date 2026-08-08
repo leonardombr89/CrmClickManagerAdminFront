@@ -9,7 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ImagemUtil } from 'src/app/utils/imagem-util';
 import { ToastrService } from 'ngx-toastr';
@@ -43,7 +43,7 @@ import { InputCepComponent } from 'src/app/components/inputs/input-cep/input-cep
     MatCardModule,
     MatSelectModule,
     MatRadioModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     NgxMaskDirective,
     CardHeaderComponent,
     InputTextoRestritoComponent,

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { ToastrService } from 'ngx-toastr';
 
 import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
@@ -35,7 +35,7 @@ import { AcabamentoVariacaoResponse } from 'src/app/models/acabamento/acabamento
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     TemPermissaoDirective,
     InputPesquisaComponent,
     CardHeaderComponent

@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ToastrService } from 'ngx-toastr';
 import { MaterialModule } from 'src/app/material.module';
@@ -15,7 +15,7 @@ import { ManualLinkComponent } from 'src/app/components/manual-link/manual-link.
 @Component({
   selector: 'app-notificacoes',
   standalone: true,
-  imports: [CommonModule, MaterialModule, NgScrollbarModule, TablerIconsModule, RouterModule, DatePipe, ManualLinkComponent],
+  imports: [CommonModule, MaterialModule, NgScrollbarModule, DesignSystemIconsModule, RouterModule, DatePipe, ManualLinkComponent],
   templateUrl: './notificacoes.component.html',
   styleUrl: './notificacoes.component.scss'
 })

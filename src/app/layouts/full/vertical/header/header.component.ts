@@ -9,13 +9,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, CommonModule, TablerIconsModule, MaterialModule],
+  imports: [RouterModule, CommonModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   encapsulation: ViewEncapsulation.None,

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import {
   AdminPlanoPeriodicidade,
@@ -32,7 +32,7 @@ interface PlanoFormModel {
 @Component({
   selector: 'app-planos-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TablerIconsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './planos-admin.component.html',
   styleUrl: './planos-admin.component.scss'
 })

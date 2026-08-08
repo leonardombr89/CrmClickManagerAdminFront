@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { BillingService } from 'src/app/pages/billing/services/billing.service';
 import { PlanoPublico } from 'src/app/types/plano-publico.type';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,7 @@ import { CurrencyPipe, NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'app-pricing',
-    imports: [TablerIconsModule, MatCardModule, MatSlideToggleModule, MatButtonModule, MatSlideToggleModule, CurrencyPipe, NgIf, NgFor],
+    imports: [DesignSystemIconsModule, MatCardModule, MatSlideToggleModule, MatButtonModule, MatSlideToggleModule, CurrencyPipe, NgIf, NgFor],
     templateUrl: './pricing.component.html',
 })
 export class AppPricingComponent implements OnInit {
