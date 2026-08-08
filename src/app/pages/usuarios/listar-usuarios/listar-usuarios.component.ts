@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { ImagemUtil } from 'src/app/utils/imagem-util';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
@@ -34,7 +34,7 @@ import { CardHeaderComponent } from "src/app/components/card-header/card-header.
     MatTooltipModule,
     MatButtonModule,
     MatIconModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     MatChipsModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,

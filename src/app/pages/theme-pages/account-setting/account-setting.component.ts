@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { ToastrService } from 'ngx-toastr';
 import { AccountSettingService } from './account-setting.service';
@@ -29,7 +29,7 @@ import { AppNotificacoesComponent } from '../../notificacoes/notificacoes.compon
     CommonModule,
     MatCardModule,
     MatIconModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     MatTabsModule,
     MatFormFieldModule,
     MatSlideToggleModule,

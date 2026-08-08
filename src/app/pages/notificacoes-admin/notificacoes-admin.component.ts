@@ -5,7 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import { AdminEmpresaResumo } from '../empresas/models/admin-empresa.model';
 import { AdminEmpresasService } from '../empresas/services/admin-empresas.service';
@@ -20,7 +20,7 @@ import { AdminNotificacoesService } from './services/admin-notificacoes.service'
 @Component({
   selector: 'app-notificacoes-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TablerIconsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './notificacoes-admin.component.html',
   styleUrl: './notificacoes-admin.component.scss'
 })

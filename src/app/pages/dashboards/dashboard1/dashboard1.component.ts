@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import { AdminDisplayModeService } from 'src/app/services/admin-display-mode.service';
 import {
@@ -86,7 +86,7 @@ type DashboardLandingFunnelRead = {
 @Component({
   selector: 'app-dashboard1',
   standalone: true,
-  imports: [CommonModule, RouterModule, TablerIconsModule, MaterialModule],
+  imports: [CommonModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './dashboard1.component.html',
   styleUrl: './dashboard1.component.scss'
 })

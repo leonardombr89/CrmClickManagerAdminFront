@@ -12,7 +12,7 @@ import { NavService } from '../../services/nav.service';
 import { AppNavItemComponent } from './vertical/sidebar/nav-item/nav-item.component';
 import { SidebarComponent } from './vertical/sidebar/sidebar.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { HeaderComponent } from './vertical/header/header.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { navItems } from './vertical/sidebar/sidebar-data';
@@ -36,7 +36,7 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
     CommonModule,
     SidebarComponent,
     NgScrollbarModule,
-    TablerIconsModule,
+    DesignSystemIconsModule,
     HeaderComponent,
     AppBreadcrumbComponent
   ],

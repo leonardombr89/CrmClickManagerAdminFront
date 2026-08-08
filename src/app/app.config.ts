@@ -25,8 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { provideToastr } from 'ngx-toastr';
 
 // icons
-import { TablerIconsModule } from 'angular-tabler-icons';
-import * as TablerIcons from 'angular-tabler-icons/icons';
+import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 
@@ -111,7 +110,7 @@ export const appConfig: ApplicationConfig = {
       ReactiveFormsModule,
       MaterialModule,
       NgxPermissionsModule.forRoot(),
-      TablerIconsModule.pick(TablerIcons),
+      DesignSystemIconsModule,
       FeatherModule.pick(allIcons),
       NgScrollbarModule,
       CalendarModule.forRoot({
