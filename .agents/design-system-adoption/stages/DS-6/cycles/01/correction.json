@@ -1,0 +1,18 @@
+{
+  "stageId": "DS-6",
+  "cycle": 1,
+  "implementer": "/root/ds6_implementer",
+  "correctedAt": "2026-08-08T10:39:00Z",
+  "summary": "Added real Angular Material, dialog, keyboard/focus, theme-storage and open-dialog accessibility coverage; made browser-only theme persistence resilient to unavailable storage.",
+  "commit": "d179c70",
+  "resolutions": [
+    { "finding": "DS6-R1", "resolution": "TestBed/CDK harness now selects a real mat-select option; the pilot test opens and closes MatDialog, verifies restoreFocus and runs axe-core while the dialog is open; the switch is driven by Space and Enter with focus and disabled-state assertions." },
+    { "finding": "DS6-R2", "resolution": "Theme preference is restored and saved through document.defaultView localStorage only on browser platforms, guarded for missing/throwing storage; tests provide browser storage and verify persistence across a recreated component." },
+    { "finding": "accessibility follow-up", "resolution": "axe-core exposed an unnamed Material dialog; the dialog now receives an explicit Portuguese ariaLabel and the open-dialog scan passes with no serious or critical violations." }
+  ],
+  "validation": {
+    "command": "PATH=/opt/homebrew/Cellar/node/26.0.0/bin:$PATH corepack yarn workspace @code2youlabs/angular-example test && PATH=/opt/homebrew/Cellar/node/26.0.0/bin:$PATH corepack yarn workspace @code2youlabs/angular-example build && GOMAXPROCS=1 PATH=/opt/homebrew/Cellar/node/26.0.0/bin:$PATH corepack yarn verify && git diff --check",
+    "result": "passed",
+    "details": "8 Angular Vitest/TestBed tests passed, including MatSelectHarness, MatDialog open/close/focus restoration, Space/Enter switch interaction, persisted theme and axe-core for form and open dialog. Standalone production build and full workspace verification passed; GOMAXPROCS=1 avoids a transient esbuild deadlock observed when Angular runs after Next.js under host Node 26."
+  }
+}

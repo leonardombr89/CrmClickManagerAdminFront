@@ -1,0 +1,14 @@
+{
+  "stageId": "DS-7",
+  "cycle": 1,
+  "implementer": "/root/ds7_implementer",
+  "summary": "Updated all release-specific 0.2.0 references used by the Angular workspace initializer and private consumer flow to 0.3.0, then regenerated dist output and reran validation.",
+  "resolutions": [
+    { "findingId": "DS7-R1", "status": "resolved", "evidence": "packages/angular/src/workspace-init.mjs and generated dist/workspace-init.mjs now default to ^0.3.0 for icons, styles and tokens." },
+    { "findingId": "DS7-R2", "status": "resolved", "evidence": "CONSUMING-PRIVATE-PACKAGES.md, examples/private-angular-consumer/package.json, fixture checker, set-version usage and Angular example metadata now reflect 0.3.0." }
+  ],
+  "validation": {
+    "command": ". $HOME/.nvm/nvm.sh && nvm use 22.22.3 && corepack yarn verify && corepack yarn check:private-consumer && corepack yarn pack:local && corepack yarn publish:check --tag v0.3.0 --skip-registry && git diff --check",
+    "result": "passed"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "stageId": "DS-4",
+  "status": "implemented",
+  "implementedAt": "2026-08-07T17:54:04-03:00",
+  "actor": "/root/ds4_implementer",
+  "summary": "Added ControlValueAccessor support to Angular select, checkbox, radio group, and switch controls while preserving their existing input/output APIs and native accessibility semantics.",
+  "commit": "a4d7307255280f0e2e1e1f7b336d4da525de8a4e",
+  "branch": "feat/angular-reactive-forms",
+  "repository": "/private/tmp/design-system-ds4",
+  "evidence": [
+    { "path": "/private/tmp/design-system-ds4/packages/angular/templates/select.ts", "description": "Select CVA, form-disabled composition, blur/touched handling, and non-emitting writeValue." },
+    { "path": "/private/tmp/design-system-ds4/packages/angular/templates/checkbox.ts", "description": "Checkbox CVA with strict boolean normalization and native input interaction." },
+    { "path": "/private/tmp/design-system-ds4/packages/angular/templates/radio-group.ts", "description": "Radio group CVA preserving required name, fieldset disabled state, invalid semantics, and reset to no selection." },
+    { "path": "/private/tmp/design-system-ds4/packages/angular/templates/switch.ts", "description": "Switch CVA preserving button role, keyboard-native click behavior, aria-checked, and disabled interaction guard." },
+    { "path": "/private/tmp/design-system-ds4/packages/angular/stories/select.stories.ts", "description": "Reactive Forms Storybook examples added for all four controls." },
+    { "path": "/private/tmp/design-system-ds4/packages/angular/README.md", "description": "Consumer documentation for formControl/formControlName and disabled-state coexistence." }
+  ],
+  "criteria": {
+    "publicApiPreserved": "passed",
+    "controlValueAccessor": "passed",
+    "disabledAndTouched": "passed",
+    "reactiveFormStories": "passed",
+    "angularBuild": "passed"
+  },
+  "validation": {
+    "command": "corepack yarn install && corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check && corepack yarn build && corepack yarn check && git diff --check",
+    "result": "passed",
+    "details": "Angular package TestBed suite passed (5 tests) alongside 33 CLI tests; package and repository build/check passed; git diff check passed. Angular emits its standard warning about combining a disabled input binding with Reactive Forms in the test hosts."
+  },
+  "limitations": [
+    "No push, pull request, release, tag, package publication, or ClickManager application change was performed."
+  ]
+}

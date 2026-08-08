@@ -1,0 +1,25 @@
+{
+  "stageId": "DS-2",
+  "cycle": 3,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/ds2_reviewer",
+  "reviewedAt": "2026-08-07T00:30:00-03:00",
+  "commit": "45bb36c8911390559390731fddd33734fa0d98b7",
+  "summary": "DS2-R2 is resolved: the root pnpm importer now supplies an exact version before package entries/package.json, and the tested malformed YAML forms produce lockfile_unreadable. The implementation still silently accepts arbitrary non-lockfile content for yarn.lock and pnpm-lock.yaml, contrary to the required invalid-or-unparseable-lockfile diagnostic. This is the third rejected review cycle, so DS-2 is blocked for a human decision under the program rule.",
+  "findings": [
+    {
+      "id": "DS2-R3",
+      "priority": "P1",
+      "title": "Do not silently treat arbitrary non-lockfile content as a valid lockfile",
+      "path": "packages/angular/src/compatibility.mjs",
+      "detail": "yamlLikeIsMalformed only catches a few syntax patterns. A yarn.lock or pnpm-lock.yaml containing arbitrary non-lockfile text returns no lockfile_unreadable check and falls back to package.json. Validate the expected lockfile structure (or use a parser) so unparseable content always produces lockfile_unreadable before fallback, with regression fixtures for both managers."
+    }
+  ],
+  "evidence": [
+    { "command": "corepack yarn workspace @code2youlabs/angular build && corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check", "result": "passed (33 tests)" },
+    { "command": "pnpm v9 root importer fixture through inspectAngularCompatibility", "result": "passed: exact 4.3.0 resolved from lockfile" },
+    { "command": "arbitrary yarn.lock and pnpm-lock.yaml fixtures through inspectAngularCompatibility", "result": "failed as expected: no lockfile_unreadable check and fallback to package_json" },
+    { "command": "corepack yarn verify", "result": "Angular and earlier package checks passed; React test could not open its sandbox-restricted local IPC socket (EPERM), unrelated to the DS-2 changes." }
+  ]
+}

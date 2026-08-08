@@ -1,0 +1,15 @@
+{
+  "stageId": "DS-4",
+  "cycle": 1,
+  "implementer": "/root/ds4_implementer",
+  "commit": "481b5bdccaa52a03b9813316640e08f845bf1915",
+  "summary": "Resolved DS4-R1 and DS4-R2 by adding Forms to the generated dependency plan and compiling/running a real Angular TestBed CVA suite.",
+  "resolutions": [
+    { "finding": "DS4-R1", "description": "The Angular CLI dependency plan now installs @angular/forms at ^22.0.0, or preserves a consumer-declared dependency/devDependency range; a CLI fixture verifies the latter." },
+    { "finding": "DS4-R2", "description": "Added Angular compiler-backed TestBed tests for Reactive Forms, formControlName, template-driven forms, values, reset, touched, invalid inputs, disabled composition, callbacks/output non-emission on writes, radio names/options, and switch interaction." }
+  ],
+  "validation": {
+    "command": "corepack yarn install && corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check && corepack yarn build && corepack yarn check && git diff --check",
+    "result": "passed"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "states": [
+    "pending",
+    "planning",
+    "ready",
+    "implementing",
+    "reviewing",
+    "correcting",
+    "approved",
+    "complete",
+    "blocked"
+  ],
+  "transitions": {
+    "pending": ["planning", "blocked"],
+    "planning": ["ready", "blocked"],
+    "ready": ["implementing", "blocked"],
+    "implementing": ["reviewing", "blocked"],
+    "reviewing": ["correcting", "approved"],
+    "correcting": ["reviewing", "blocked"],
+    "approved": ["complete"],
+    "complete": [],
+    "blocked": ["planning"]
+  },
+  "requiredArtifacts": {
+    "pending": [],
+    "planning": ["brief.md"],
+    "ready": ["brief.md", "plan.md"],
+    "implementing": ["brief.md", "plan.md"],
+    "reviewing": ["brief.md", "plan.md", "implementation.json"],
+    "correcting": ["brief.md", "plan.md", "implementation.json"],
+    "approved": ["brief.md", "plan.md", "implementation.json"],
+    "complete": ["brief.md", "plan.md", "implementation.json"],
+    "blocked": ["brief.md", "plan.md", "implementation.json"]
+  }
+}

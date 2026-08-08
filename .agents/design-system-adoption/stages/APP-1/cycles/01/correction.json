@@ -1,0 +1,14 @@
+{
+  "stageId": "APP-1",
+  "cycle": 1,
+  "implementer": "/root/app1_implementer",
+  "summary": "Made the tracked .npmrc explicitly non-secret with registry interpolation, aligned .npmrc.example and documentation, and corrected validation evidence to distinguish npm ci success from the unrelated global PnP build blocker.",
+  "resolutions": [
+    { "findingId": "APP1-R1", "status": "resolved", "evidence": ".npmrc retains legacy-peer-deps and contains only registry configuration plus ${NODE_AUTH_TOKEN}; no literal token is present." },
+    { "findingId": "APP1-R2", "status": "resolved", "evidence": "implementation.json now records npm ci as the passing validation and documents npm run build blocked by /Users/kovi/.pnp.js." }
+  ],
+  "validation": {
+    "command": "npm ci && git diff --check && credential scan for tracked/configuration files",
+    "result": "passed"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "stageId": "DS-4",
+  "cycle": 2,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/ds4_reviewer",
+  "reviewedAt": "2026-08-07T18:25:00-03:00",
+  "commit": "481b5bdccaa52a03b9813316640e08f845bf1915",
+  "summary": "DS4-R1/R2 substantially improved the delivery: init now plans @angular/forms and a real compiled TestBed suite runs successfully. Two correctness gaps remain: the compatibility preflight can preserve a Forms range from a different Angular major, and the suite does not exercise formControlName for select, checkbox, and radio group or an attempted change from a disabled radio option.",
+  "findings": [
+    {
+      "id": "DS4-R3",
+      "priority": "P1",
+      "title": "Validate @angular/forms against the supported Angular major before preserving it",
+      "path": "packages/angular/src/compatibility.mjs",
+      "detail": "The init plan preserves any declared @angular/forms range, but the preflight names and Angular-major comparison omit it. A workspace with @angular/core 22 and @angular/forms 21 therefore passes and keeps Forms 21, yielding incompatible Angular framework packages. Include @angular/forms in the compatibility checks and Angular-major consistency validation, and add fixtures proving a mismatched declared Forms range blocks rather than being preserved."
+    },
+    {
+      "id": "DS4-R4",
+      "priority": "P1",
+      "title": "Complete per-control FormControlName and disabled-option interaction coverage",
+      "path": "packages/angular/test/forms.test.ts",
+      "detail": "The planned TestBed contract calls for [formControl] and formControlName coverage for each control. The new suite uses formControlName only for switch; select, checkbox, and radio group are tested only with [formControl]. It also labels the radio test as ignoring a disabled option but only asserts its disabled DOM property. Add formControlName hosts/interactions for the remaining three controls and dispatch an attempted change on the disabled radio, asserting neither the FormControl nor valueChange changes."
+    }
+  ],
+  "evidence": [
+    { "command": "corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check && git diff --check 6e2aecb 481b5bd", "result": "passed; 32 CLI tests and 4 compiled TestBed tests" },
+    { "path": "packages/angular/src/cli.mjs", "description": "The generated dependency plan now adds @angular/forms, preserving an existing declared range." },
+    { "path": "packages/angular/src/compatibility.mjs", "description": "@angular/forms is absent from both the checked package names and the Angular-major consistency set." },
+    { "path": "packages/angular/test/forms.test.ts", "description": "Only NamedSwitchHost uses formControlName; the radio disabled-option assertion does not attempt an interaction." }
+  ]
+}

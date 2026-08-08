@@ -1,0 +1,30 @@
+{
+  "stageId": "DS-6",
+  "cycle": 1,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/ds6_reviewer",
+  "reviewedAt": "2026-08-08T10:34:00Z",
+  "summary": "The Angular 22 workspace, Material/SCSS ordering, local DS components, CVA implementation, axe scan, documentation and immutable-CI integration are in place. The acceptance-test contract is incomplete and the documented theme persistence is not implemented.",
+  "findings": [
+    {
+      "id": "DS6-R1",
+      "priority": "P1",
+      "status": "open",
+      "summary": "Add automated interaction coverage for the required Material coexistence and keyboard/dialog flows.",
+      "evidence": "apps/angular-example/src/app/app.component.spec.ts has six tests, but none opens/selects a mat-select option, triggers the simulated test and verifies MatDialog open/close with focus restoration, or drives the switch through Space/Enter and verifies focus. The DS-6 plan explicitly requires these behaviors to be covered."
+    },
+    {
+      "id": "DS6-R2",
+      "priority": "P2",
+      "status": "open",
+      "summary": "Persist the clear/dark preference in browser storage with a safe non-browser fallback, then cover it.",
+      "evidence": "AppComponent.toggleTheme() only updates the signal and document class. It neither reads nor writes browser storage, despite the DS-6 plan requiring browser-only persistence with safe SSR/test fallback."
+    }
+  ],
+  "evidence": [
+    { "command": "git show --check 130457e; static review of package.json, angular.json, app component, generated UI, styles, README and CI", "result": "passed: Angular 22/Material/SCSS/Tailwind/PostCSS, Reactive Forms/CVA, public DS style imports, no credential, and CI workspace integration verified" },
+    { "command": "PATH=/opt/homebrew/Cellar/node/26.0.0/bin:$PATH corepack yarn workspace @code2youlabs/angular-example check", "result": "passed: TypeScript lint and 6 Vitest/TestBed tests, including axe-core, passed" },
+    { "command": "PATH=/opt/homebrew/Cellar/node/26.0.0/bin:$PATH corepack yarn workspace @code2youlabs/angular-example build", "result": "not reproducible in reviewer environment: esbuild deadlocked after test execution; implementer evidence records a successful production build and full verify on the same commit" }
+  ]
+}

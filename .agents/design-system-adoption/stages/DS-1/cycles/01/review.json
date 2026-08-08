@@ -1,0 +1,16 @@
+{
+  "stageId": "DS-1",
+  "cycle": 1,
+  "outcome": "approved",
+  "verdict": "approved",
+  "reviewer": "/root/ds1_reviewer",
+  "reviewedAt": "2026-08-06T22:18:00-03:00",
+  "summary": "Approved. The consumer guide, external Angular fixture, credential-scoped workflows, BuildKit Dockerfile, static invariants, and streaming image inspector satisfy DS-1. The protected workflow remains the appropriate place for authenticated installation and Docker-layer verification.",
+  "findings": [],
+  "evidence": [
+    { "path": "/private/tmp/design-system-ds1", "description": "Reviewed commit b9e36125f2d674a8dc3f48d3f4e05b876ae35475 on feat/private-consumer-docs against the approved DS-1 plan." },
+    { "path": "/private/tmp/design-system-ds1/scripts/check-private-consumer-fixture.mjs", "description": "Static fixture checker and yarn check:private-consumer passed; diff --check reported no whitespace errors." },
+    { "path": "/private/tmp/design-system-ds1/scripts/inspect-docker-image.mjs", "description": "Independent streaming tests confirmed a credential-bearing stream exits 1 without printing the token, a clean stream exits 0, and an absent token exits 2." },
+    { "path": "/private/tmp/design-system-ds1/.github/workflows/verify-private-consumer.yml", "description": "Manual protected workflow scopes the repository secret per step, uses BuildKit --secret, and inspects both saved image data and docker history." }
+  ]
+}

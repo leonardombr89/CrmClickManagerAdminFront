@@ -1,0 +1,23 @@
+{
+  "stageId": "DS-2",
+  "cycle": 1,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/ds2_reviewer",
+  "reviewedAt": "2026-08-06T23:25:00-03:00",
+  "commit": "25af615f8c990349021b8f731cd3eceba80b20d0",
+  "summary": "The compatibility policy, local-first preflight ordering, read-only doctor behavior, built-package tests, and package checks are sound. Approval is withheld because the implementation does not parse actual quoted Yarn Berry entries (and has the same limitation for quoted pnpm package keys), so it violates the required resolved-version precedence and lockfile coverage.",
+  "findings": [
+    {
+      "id": "DS2-R1",
+      "priority": "P1",
+      "title": "Parse real Yarn Berry and pnpm lockfile entries before falling back to package.json",
+      "path": "packages/angular/src/compatibility.mjs",
+      "detail": "lockVersions matches unquoted package keys only. Yarn Berry writes keys such as \"@angular/core@npm:^22.0.0\": and pnpm v9 commonly quotes scoped package keys. A fixture with a quoted Yarn Berry tailwind entry at 4.3.0 was reported as package_json (^3.0.0), not lockfile. This can reject a compatible resolved consumer or report the wrong source, contrary to the DS-2 contract. Support quoted Classic/Berry and pnpm importer/package entries, detect unreadable YAML/lock syntax as lockfile_unreadable, and add exact fixtures covering these shapes."
+    }
+  ],
+  "evidence": [
+    { "path": "stages/DS-2/implementation.json", "description": "Recorded 28-test suite, package checks and repository verification that passed before the quoted-lock regression was found." },
+    { "path": "packages/angular/src/compatibility.mjs", "description": "The reviewed resolver lacked quoted Yarn Berry and pnpm key handling, confirmed by a quoted Berry fixture falling back to package_json." }
+  ]
+}

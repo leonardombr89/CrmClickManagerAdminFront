@@ -1,0 +1,14 @@
+{
+  "stageId": "DS-5",
+  "cycle": 2,
+  "implementer": "/root/ds5_implementer",
+  "summary": "Revalidated add destinations after acquiring the project lock, preventing concurrent plans for the same component from both succeeding.",
+  "commit": "29edd9b96683d4e06b8b5f7a4909e2ceb50e7b49",
+  "resolutions": [
+    { "findingId": "DS5-R3", "status": "resolved", "description": "add checks each destination again while holding the exclusive project lock and returns the existing actionable overwrite guidance to the losing concurrent operation." }
+  ],
+  "validation": {
+    "command": "node packages/angular/build.mjs && node --test packages/angular/test/cli.test.mjs && node scripts/check-angular-templates.mjs packages/angular/templates && node packages/angular/verify.mjs && git diff --check",
+    "result": "passed"
+  }
+}

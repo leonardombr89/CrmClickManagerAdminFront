@@ -1,0 +1,17 @@
+{
+  "stageId": "DS-0",
+  "status": "implemented",
+  "implementedAt": "2026-08-06T12:40:00-03:00",
+  "actor": "/root/stage0_implementer_retry",
+  "summary": "Created the dependency-aware, implementation-agnostic orchestration control and validator.",
+  "evidence": [
+    { "path": "../../program.json", "description": "Program stage graph" },
+    { "path": "../../schema.json", "description": "States and transitions" },
+    { "path": "../../events.jsonl", "description": "Append-only transition history" },
+    { "path": "../../scripts/validate-state.mjs", "description": "Dependency-free validation" }
+  ],
+  "validation": {
+    "command": "node .agents/design-system-adoption/scripts/validate-state.mjs",
+    "result": "passed"
+  }
+}

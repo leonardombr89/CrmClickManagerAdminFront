@@ -1,0 +1,34 @@
+{
+  "stageId": "DS-5",
+  "cycle": 3,
+  "kind": "post_approval_ci_fix",
+  "implementedAt": "2026-08-07T21:20:00-03:00",
+  "implementer": "/root/ds5_implementer",
+  "summary": "Corrected a CI-only test path resolution failure without changing the upgrade behavior approved in cycle 3.",
+  "commits": [
+    "0b9aa2d8da00752792980bd5485861e14afe727e",
+    "8f3d6c2"
+  ],
+  "resolutions": [
+    {
+      "findingId": "CI-DS5-1",
+      "status": "resolved",
+      "description": "The test fixture now resolves the packaged Angular template from import.meta.url, so it works whether the package test runs from the repository root or packages/angular."
+    },
+    {
+      "findingId": "CI-DS5-2",
+      "status": "resolved",
+      "description": "Regenerated the React CLI distribution during full verification so its published artifact matches the shared CLI source."
+    }
+  ],
+  "validation": {
+    "command": "corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check && corepack yarn verify && git diff --check",
+    "result": "passed",
+    "details": "Full workspace verification required execution outside the sandbox because tsx creates a temporary IPC socket; it passed after approval."
+  },
+  "delivery": {
+    "branch": "feat/angular-safe-template-upgrades",
+    "pushed": true,
+    "pullRequest": 19
+  }
+}

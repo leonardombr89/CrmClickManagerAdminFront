@@ -1,0 +1,19 @@
+{
+  "stageId": "DS-2",
+  "cycle": 2,
+  "implementer": "/root/ds2_implementer",
+  "correctedAt": "2026-08-07T00:10:00-03:00",
+  "commit": "45bb36c8911390559390731fddd33734fa0d98b7",
+  "summary": "Resolved DS2-R2 by reading exact root-importer package versions in pnpm lockfiles and emitting lockfile_unreadable for malformed Yarn or pnpm YAML-like lockfiles.",
+  "resolutions": [
+    {
+      "findingId": "DS2-R2",
+      "result": "The pnpm importer now has lockfile precedence over package entries and package.json; malformed Yarn/pnpm syntax produces an explicit diagnostic while retaining the declared value only as a fallback value."
+    }
+  ],
+  "validation": {
+    "command": "corepack yarn workspace @code2youlabs/angular build && corepack yarn workspace @code2youlabs/angular test && corepack yarn workspace @code2youlabs/angular check",
+    "result": "passed",
+    "details": "33 Angular tests passed, including root importer precedence and malformed package-lock, Yarn and pnpm lockfile diagnostics."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "stageId": "DS-5",
+  "status": "implemented",
+  "implementedAt": "2026-08-07T19:30:00-03:00",
+  "actor": "/root/ds5_implementer",
+  "summary": "Enabled safe local upgrade and diff workflows for Angular TypeScript templates, with versioned snapshots, hashes, conflict candidates and deterministic barrels.",
+  "commit": "8f3d6c2",
+  "branch": "feat/angular-safe-template-upgrades",
+  "repository": "/private/tmp/design-system-ds5",
+  "evidence": [
+    { "path": "/private/tmp/design-system-ds5/packages/react/src/cli.mjs", "description": "Shared framework-configured upgrade dispatcher, metadata snapshots, diff/skip/merge/overwrite behavior and Angular path resolution." },
+    { "path": "/private/tmp/design-system-ds5/packages/angular/test/cli.test.mjs", "description": "Regression coverage for diff, clean merge, conflicts, legacy metadata, concurrent additions and custom UI paths." },
+    { "path": "/private/tmp/design-system-ds5/scripts/check-angular-templates.mjs", "description": "Standalone Angular import and duplicate-selector validation for distributable templates." },
+    { "path": "/private/tmp/design-system-ds5/packages/angular/README.md", "description": "Documents local-only upgrade strategies, candidates and legacy installation behavior." }
+  ],
+  "validation": {
+    "command": "node packages/angular/build.mjs && node --test packages/angular/test/cli.test.mjs && node scripts/check-angular-templates.mjs packages/angular/templates && node packages/angular/verify.mjs && git diff --check",
+    "result": "passed",
+    "details": "35 Angular CLI tests, template validation, package verification and the full workspace verification passed with dependencies installed. The initial CI failure was corrected by resolving the temporary template fixture from the test module URL rather than process.cwd()."
+  },
+  "limitations": [
+    "No push, pull request, release, tag, package publication or ClickManager application change was performed.",
+    "The textual merge intentionally does not attempt semantic TypeScript conflict resolution."
+  ]
+}

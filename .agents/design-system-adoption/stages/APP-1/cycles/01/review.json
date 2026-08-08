@@ -1,0 +1,17 @@
+{
+  "stageId": "APP-1",
+  "cycle": 1,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/app1_reviewer",
+  "reviewedAt": "2026-08-08T16:05:01Z",
+  "summary": "The existing tracked .npmrc was not represented in the evidence, and the implementation incorrectly recorded the Angular build as passed despite the global Yarn PnP environment failure.",
+  "findings": [
+    { "id": "APP1-R1", "priority": "high", "status": "resolved", "summary": "Keep the existing .npmrc only with non-secret settings and NODE_AUTH_TOKEN interpolation, and document its tracked safe state." },
+    { "id": "APP1-R2", "priority": "medium", "status": "resolved", "summary": "Correct validation evidence to report npm ci success and the pre-existing global .pnp.js build blocker." }
+  ],
+  "evidence": [
+    { "command": "Review .npmrc, .npmrc.example, docs/private-package-consumption.md, .dockerignore and package lock immutability.", "result": "changes requested for evidence accuracy and tracked configuration handling." },
+    { "command": "npm run build", "result": "blocked by unrelated global /Users/kovi/.pnp.js; npm ci itself passed." }
+  ]
+}

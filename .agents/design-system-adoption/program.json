@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "program": "design-system-adoption",
+  "stages": [
+    {
+      "id": "DS-0",
+      "title": "Create orchestration control",
+      "issue": null,
+      "state": "complete",
+      "reviewCycle": 3,
+      "dependencies": [],
+      "roles": {
+        "planner": "/root/stage0_planner",
+        "implementer": "/root/stage0_implementer_retry",
+        "reviewer": "/root/stage0_reviewer"
+      }
+    },
+    {
+      "id": "DS-1",
+      "title": "Private package consumption",
+      "issue": 12,
+      "state": "complete",
+      "reviewCycle": 1,
+      "dependencies": ["DS-0"],
+      "roles": {
+        "planner": "/root/ds1_planner",
+        "implementer": "/root/ds1_implementer",
+        "reviewer": "/root/ds1_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-1/brief.md",
+        "plan": "stages/DS-1/plan.md",
+        "implementation": "stages/DS-1/implementation.json"
+      }
+    },
+    {
+      "id": "DS-2",
+      "title": "Angular and Node compatibility",
+      "issue": 10,
+      "state": "complete",
+      "reviewCycle": 4,
+      "maxReviewCycles": 4,
+      "dependencies": ["DS-1"],
+      "roles": {
+        "planner": "/root/ds2_exception_planner",
+        "implementer": "/root/ds2_implementer",
+        "reviewer": "/root"
+      },
+      "artifacts": {
+        "brief": "stages/DS-2/brief.md",
+        "plan": "stages/DS-2/plan.md",
+        "implementation": "stages/DS-2/implementation.json"
+      }
+    },
+    {
+      "id": "DS-3",
+      "title": "Tailwind and PostCSS integration",
+      "issue": 14,
+      "state": "complete",
+      "reviewCycle": 2,
+      "dependencies": ["DS-2"],
+      "roles": {
+        "planner": "/root/ds3_planner",
+        "implementer": "/root/ds3_implementer",
+        "reviewer": "/root/ds3_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-3/brief.md",
+        "plan": "stages/DS-3/plan.md",
+        "implementation": "stages/DS-3/implementation.json"
+      }
+    },
+    {
+      "id": "DS-4",
+      "title": "Reactive Forms support",
+      "issue": 13,
+      "state": "complete",
+      "reviewCycle": 3,
+      "dependencies": ["DS-3"],
+      "roles": {
+        "planner": "/root/ds4_planner",
+        "implementer": "/root/ds4_implementer",
+        "reviewer": "/root/ds4_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-4/brief.md",
+        "plan": "stages/DS-4/plan.md",
+        "implementation": "stages/DS-4/implementation.json"
+      }
+    },
+    {
+      "id": "DS-5",
+      "title": "Angular upgrade and diff assistance",
+      "issue": 5,
+      "state": "complete",
+      "reviewCycle": 3,
+      "dependencies": ["DS-3", "DS-4"],
+      "roles": {
+        "planner": "/root/ds5_planner",
+        "implementer": "/root/ds5_implementer",
+        "reviewer": "/root/ds5_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-5/brief.md",
+        "plan": "stages/DS-5/plan.md",
+        "implementation": "stages/DS-5/implementation.json"
+      }
+    },
+    {
+      "id": "DS-6",
+      "title": "Angular 22 incremental migration example",
+      "issue": 11,
+      "state": "complete",
+      "reviewCycle": 2,
+      "dependencies": ["DS-1", "DS-2", "DS-3", "DS-4", "DS-5"],
+      "roles": {
+        "planner": "/root/ds6_planner",
+        "implementer": "/root/ds6_implementer",
+        "reviewer": "/root/ds6_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-6/brief.md",
+        "plan": "stages/DS-6/plan.md",
+        "implementation": "stages/DS-6/implementation.json"
+      }
+    },
+    {
+      "id": "DS-7",
+      "title": "Publish stable Design System release",
+      "issue": null,
+      "state": "complete",
+      "dependencies": ["DS-6"],
+      "reviewCycle": 2,
+      "roles": {
+        "planner": "/root/ds7_planner",
+        "implementer": "/root/ds7_implementer",
+        "reviewer": "/root/ds7_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/DS-7/brief.md",
+        "plan": "stages/DS-7/plan.md",
+        "implementation": "stages/DS-7/implementation.json"
+      }
+    },
+    {
+      "id": "APP-1",
+      "title": "Configure package authentication",
+      "issue": null,
+      "state": "complete",
+      "reviewCycle": 2,
+      "dependencies": ["DS-7"],
+      "roles": {
+        "planner": "/root/app1_planner",
+        "implementer": "/root/app1_implementer",
+        "reviewer": "/root/app1_reviewer"
+      },
+      "artifacts": {
+        "brief": "stages/APP-1/brief.md",
+        "plan": "stages/APP-1/plan.md",
+        "implementation": "stages/APP-1/implementation.json"
+      }
+    },
+    { "id": "APP-2", "title": "Upgrade application to Angular 20", "issue": null, "state": "pending", "dependencies": ["APP-1"] },
+    { "id": "APP-3", "title": "Upgrade application to Angular 21", "issue": null, "state": "pending", "dependencies": ["APP-2"] },
+    { "id": "APP-4", "title": "Upgrade application to Angular 22", "issue": null, "state": "pending", "dependencies": ["APP-3"] },
+    { "id": "APP-5", "title": "Install Design System foundations", "issue": null, "state": "pending", "dependencies": ["APP-4"] },
+    { "id": "APP-6", "title": "Migrate pilot screen", "issue": null, "state": "pending", "dependencies": ["APP-5"] },
+    { "id": "APP-7", "title": "Migrate shared inputs, buttons, and cards", "issue": null, "state": "pending", "dependencies": ["APP-6"] },
+    { "id": "APP-8", "title": "Migrate form controls and dialogs", "issue": null, "state": "pending", "dependencies": ["APP-7"] },
+    { "id": "APP-9", "title": "Consolidate Material cleanup and documentation", "issue": null, "state": "pending", "dependencies": ["APP-8"] }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "stageId": "DS-1",
+  "status": "implemented",
+  "implementedAt": "2026-08-06T22:10:45-03:00",
+  "actor": "/root/ds1_implementer",
+  "summary": "Implemented secure private-package consumption guidance, an external Angular fixture, static invariants, and protected BuildKit verification without consumer credentials in source or image configuration.",
+  "commit": "b9e36125f2d674a8dc3f48d3f4e05b876ae35475",
+  "branch": "feat/private-consumer-docs",
+  "repository": "/private/tmp/design-system-ds1",
+  "evidence": [
+    { "path": "/private/tmp/design-system-ds1/docs/CONSUMING-PRIVATE-PACKAGES.md", "description": "Single guide for local, Actions, Docker, diagnostic, rotation, and revocation flows." },
+    { "path": "/private/tmp/design-system-ds1/examples/private-angular-consumer", "description": "Angular 22 consumer fixture outside workspaces, with parameterized .npmrc and a BuildKit-only Dockerfile." },
+    { "path": "/private/tmp/design-system-ds1/.github/workflows/private-consumer-fixture.yml", "description": "Credential-free static fixture verification in ordinary CI." },
+    { "path": "/private/tmp/design-system-ds1/.github/workflows/verify-private-consumer.yml", "description": "Manual protected verification that scopes the repository secret to installation and image-inspection steps." },
+    { "path": "/private/tmp/design-system-ds1/scripts/inspect-docker-image.mjs", "description": "Streaming inspection that reports leakage without printing the credential." }
+  ],
+  "criteria": {
+    "parameterizedNpmrc": "passed",
+    "secretOnlyDockerBuild": "passed",
+    "credentialFreeStaticCi": "passed",
+    "protectedInstallAndImageInspection": "passed"
+  },
+  "validation": {
+    "command": "corepack yarn check:private-consumer && corepack yarn verify; inspector positive and negative stream tests",
+    "result": "passed",
+    "details": "Static fixture validation, full repository verification, and safe/leak detector tests passed. Direct fixture Angular compilation was not run locally because Node v24.9.0 is below Angular 22's supported v24.15.0 minimum; the protected workflow uses Node 22.22.3 and installs the published private package."
+  }
+}

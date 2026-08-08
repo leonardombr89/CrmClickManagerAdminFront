@@ -1,0 +1,31 @@
+{
+  "stageId": "DS-5",
+  "cycle": 1,
+  "outcome": "changes_requested",
+  "verdict": "changes_requested",
+  "reviewer": "/root/ds5_reviewer",
+  "reviewedAt": "2026-08-07T20:05:25-03:00",
+  "summary": "The basic Angular upgrade flows pass, but the implementation does not provide the required atomic concurrency guarantee and directs `add` to a different directory than the metadata when a custom Angular UI path is configured.",
+  "findings": [
+    {
+      "id": "DS5-R1",
+      "priority": "P1",
+      "status": "open",
+      "summary": "Concurrent add/upgrade operations silently lose component snapshot metadata; implement a project-scoped lock or atomic read-modify-write protocol and add concurrent regression coverage.",
+      "evidence": "Two concurrent `company-angular add` calls for button and input both return success, but the resulting company-components.json retains only button while index.ts exports both. This violates the planned no-lost-metadata/no-interleaved-writes contract."
+    },
+    {
+      "id": "DS5-R2",
+      "priority": "P1",
+      "status": "open",
+      "summary": "Make Angular add use the resolved UI path from company-components.json or --ui-dir consistently for validation, writes, barrel generation, and metadata.",
+      "evidence": "After `init --ui-dir src/custom-ui`, `add button` writes src/app/ui/button.ts but records src/custom-ui in metadata. A later upgrade follows metadata and reports the component missing."
+    }
+  ],
+  "evidence": [
+    { "command": "git diff --check 3296f3e^ 3296f3e && node --test packages/angular/test/cli.test.mjs && node scripts/check-templates.mjs packages/angular/templates && node scripts/check-angular-templates.mjs packages/angular/templates && node packages/angular/verify.mjs && node packages/angular/build.mjs", "result": "passed: 33 tests plus template, package and build checks" },
+    { "command": "corepack yarn workspace @code2youlabs/angular test", "result": "not run: isolated clone has no Yarn node_modules state; dependency installation is outside this stage's scope" },
+    { "command": "concurrent add reproduction", "result": "failed contract: concurrent button/input additions returned success but lost input snapshot metadata" },
+    { "command": "custom UI-path reproduction", "result": "failed contract: init stored src/custom-ui but add wrote src/app/ui" }
+  ]
+}
