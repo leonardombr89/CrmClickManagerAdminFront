@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   OnInit
@@ -35,7 +35,6 @@ import { extrairMensagemErro } from 'src/app/utils/mensagem.util';
   selector: 'app-form-acabamento',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -44,7 +43,7 @@ import { extrairMensagemErro } from 'src/app/utils/mensagem.util';
     InputTextoRestritoComponent,
     CardHeaderComponent,
     VariacoesAcabamentoComponent
-  ],
+],
   templateUrl: './form-acabamento.component.html',
   styleUrl: './form-acabamento.component.scss'
 })

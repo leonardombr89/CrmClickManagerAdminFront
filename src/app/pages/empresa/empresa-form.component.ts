@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,7 +33,6 @@ import { InputCepComponent } from 'src/app/components/inputs/input-cep/input-cep
   standalone: true,
   templateUrl: './empresa-form.component.html',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
@@ -51,7 +50,7 @@ import { InputCepComponent } from 'src/app/components/inputs/input-cep/input-cep
     InputTelefoneComponent,
     InputDocumentoComponent,
     InputCepComponent
-  ],
+],
   providers: [provideNgxMask()]
 })
 export class EmpresaFormComponent implements OnInit {

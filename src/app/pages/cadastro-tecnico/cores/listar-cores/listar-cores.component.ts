@@ -3,7 +3,7 @@ import { Cor } from 'src/app/models/cor.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CommonModule } from '@angular/common';
+
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
@@ -21,7 +21,6 @@ import { CardHeaderComponent } from "src/app/components/card-header/card-header.
   selector: 'app-listar-cores',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatPaginatorModule,

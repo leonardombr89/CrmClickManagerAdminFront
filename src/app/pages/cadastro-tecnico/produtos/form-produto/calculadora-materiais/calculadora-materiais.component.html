@@ -3,7 +3,9 @@
     <mat-icon>calculate</mat-icon>
     <div>
       <h3>Calculadora de Materiais</h3>
-      <p *ngIf="produtoId">Produto #{{ produtoId }}</p>
+      @if (produtoId) {
+        <p>Produto #{{ produtoId }}</p>
+      }
     </div>
   </div>
 </section>

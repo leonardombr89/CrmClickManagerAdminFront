@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,7 +16,6 @@ import { MaterialModule } from 'src/app/material.module';
   selector: 'app-folha-config',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MaterialModule,
     CardHeaderComponent,
@@ -24,7 +23,7 @@ import { MaterialModule } from 'src/app/material.module';
     InputOptionsComponent,
     InputNumericoComponent,
     TemPermissaoDirective
-  ],
+],
   templateUrl: './folha-config.component.html',
   styleUrl: './folha-config.component.scss'
 })

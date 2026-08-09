@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -21,7 +21,7 @@ import { SiteHomeSectionService } from '../../services/site-home-section.service
 @Component({
   selector: 'app-form-home-section',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, MaterialModule, TemPermissaoDirective],
+  imports: [ReactiveFormsModule, RouterModule, MaterialModule, TemPermissaoDirective],
   templateUrl: './form-home-section.component.html',
   styleUrl: './form-home-section.component.scss'
 })

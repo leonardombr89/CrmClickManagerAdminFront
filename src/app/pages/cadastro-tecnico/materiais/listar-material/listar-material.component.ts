@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -21,7 +21,6 @@ import { InputPesquisaComponent } from 'src/app/components/inputs/input-pesquisa
   selector: 'app-listar-material',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatPaginatorModule,
     MatTableModule,

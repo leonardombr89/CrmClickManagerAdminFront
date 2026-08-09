@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,7 @@ import { SiteHomeSectionService } from '../../services/site-home-section.service
 @Component({
   selector: 'app-listar-home-sections',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, TemPermissaoDirective],
+  imports: [RouterModule, MaterialModule, TemPermissaoDirective],
   templateUrl: './listar-home-sections.component.html',
   styleUrl: './listar-home-sections.component.scss'
 })

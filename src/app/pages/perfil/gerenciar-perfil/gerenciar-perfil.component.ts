@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -28,7 +28,6 @@ import { PerfilRequest } from 'src/app/models/perfil/perfil-request.model';
   templateUrl: './gerenciar-perfil.component.html',
   styleUrls: ['./gerenciar-perfil.component.scss'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatSidenavModule,

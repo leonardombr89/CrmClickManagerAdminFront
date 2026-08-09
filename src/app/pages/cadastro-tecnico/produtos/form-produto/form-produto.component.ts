@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
@@ -49,7 +49,6 @@ const CALCULADORA_MATERIAIS_PERMISSAO = 'CONFIG_CALCULADORAS';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
@@ -66,7 +65,7 @@ const CALCULADORA_MATERIAIS_PERMISSAO = 'CONFIG_CALCULADORAS';
     PoliticaRevendaComponent,
     CalculadoraMateriaisComponent,
     CardHeaderComponent
-  ],
+],
   templateUrl: './form-produto.component.html',
   styleUrls: ['./form-produto.component.scss'],
 })

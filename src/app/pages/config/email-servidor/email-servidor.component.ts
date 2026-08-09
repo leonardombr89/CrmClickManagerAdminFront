@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
@@ -17,14 +17,13 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-email-servidor',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MaterialModule,
     CardHeaderComponent,
     InputTextoRestritoComponent,
     InputEmailComponent,
     InputNumericoComponent
-  ],
+],
   templateUrl: './email-servidor.component.html',
   styleUrls: ['./email-servidor.component.scss']
 })

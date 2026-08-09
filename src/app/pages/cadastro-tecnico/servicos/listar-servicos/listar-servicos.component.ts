@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -22,7 +22,6 @@ import { Preco } from 'src/app/models/preco/preco-response.model';
   selector: 'app-listar-servicos',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatPaginatorModule,
     MatTableModule,

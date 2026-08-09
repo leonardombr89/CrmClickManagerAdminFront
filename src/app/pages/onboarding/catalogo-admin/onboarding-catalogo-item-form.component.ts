@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -29,7 +29,7 @@ interface ItemFormModel {
 @Component({
   selector: 'app-onboarding-catalogo-item-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
+  imports: [FormsModule, RouterModule, DesignSystemIconsModule, MaterialModule],
   templateUrl: './onboarding-catalogo-item-form.component.html',
   styleUrl: './onboarding-catalogo-item-form.component.scss'
 })

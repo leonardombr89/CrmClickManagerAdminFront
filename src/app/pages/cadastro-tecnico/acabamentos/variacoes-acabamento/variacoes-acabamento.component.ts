@@ -14,7 +14,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
@@ -53,7 +53,6 @@ export interface AcabamentoVariacaoForm {
   selector: 'app-variacoes-acabamento',
   templateUrl: './variacoes-acabamento.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -70,7 +69,7 @@ export interface AcabamentoVariacaoForm {
     AutoCompleteComponent,
     PrecoSelectorComponent,
     NomeDePipe
-  ],
+],
 })
 export class VariacoesAcabamentoComponent {
 

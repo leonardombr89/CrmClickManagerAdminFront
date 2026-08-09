@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -20,7 +20,6 @@ import { Perfil } from 'src/app/models/perfil.model';
   templateUrl: './form-usuario.component.html',
   styleUrls: ['./form-usuario.component.scss'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterModule,
     MatCardModule,
@@ -30,7 +29,7 @@ import { Perfil } from 'src/app/models/perfil.model';
     MatButtonModule,
     MatSlideToggleModule,
     CardHeaderComponent
-  ]
+]
 })
 export class FormUsuarioComponent implements OnInit {
   form!: FormGroup;
