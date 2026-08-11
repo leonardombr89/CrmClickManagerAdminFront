@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { finalize, forkJoin } from 'rxjs';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';

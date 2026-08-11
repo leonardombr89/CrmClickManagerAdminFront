@@ -15,7 +15,7 @@ import { FormaPagamento } from 'src/app/utils/forma-pagamento.enum';
 import { InputMoedaComponent } from "../../../components/inputs/input-moeda/input-moeda.component";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputOptionsComponent } from "../../../components/inputs/input-options/input-options.component";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { PagamentoRequest } from 'src/app/models/pagamento/pagamento-request.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAdicionarProdutoComponent } from '../dialog-adicionar-produto/dialog-adicionar-produto.component';

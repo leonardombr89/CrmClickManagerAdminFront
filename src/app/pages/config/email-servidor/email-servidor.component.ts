@@ -8,7 +8,7 @@ import { InputTextoRestritoComponent } from 'src/app/components/inputs/input-tex
 import { InputEmailComponent } from 'src/app/components/inputs/input-email/input-custom.component';
 import { InputNumericoComponent } from 'src/app/components/inputs/input-numerico/input-numerico.component';
 import { EmailServidorConfig, EmailServidorService, EmailServidorTesteRequest } from './email-servidor.service';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailServidorTesteDialogComponent } from './email-servidor-teste-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { TemPermissaoDirective } from 'src/app/diretivas/tem-permissao.directive';
 import { InputPesquisaComponent } from 'src/app/components/inputs/input-pesquisa/input-pesquisa.component';
 import { MatButtonModule } from '@angular/material/button';

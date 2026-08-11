@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MaterialModule } from 'src/app/material.module';
 import { AdminEmpresaResumo } from '../empresas/models/admin-empresa.model';

@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { CardHeaderComponent } from 'src/app/components/card-header/card-header.component';
 import { UsuarioService } from '../services/usuario.service';
 import { PerfilService } from '../services/perfil.service';

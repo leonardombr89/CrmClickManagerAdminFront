@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { InputTelefoneComponent } from 'src/app/components/inputs/input-telefone/input-telefone.component';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 
 export interface DialogFolhaWhatsappData {
   funcionarioNome: string;

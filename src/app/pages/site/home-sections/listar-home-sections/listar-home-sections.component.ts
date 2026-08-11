@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { finalize } from 'rxjs/operators';
 import { MaterialModule } from 'src/app/material.module';
 import { TemPermissaoDirective } from 'src/app/diretivas/tem-permissao.directive';
