@@ -1,0 +1,6 @@
+{
+  "framework": "angular",
+  "project": "clickmanager-admin",
+  "ui": "src/app/ui",
+  "styles": "src/styles/company.css"
+}

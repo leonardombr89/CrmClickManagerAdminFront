@@ -47,7 +47,12 @@
     "rxjs": "~7.5.0",
     "sass": "^1.57.1",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.0",
+    "@code2youlabs/styles": "^0.3.0",
+    "@code2youlabs/tokens": "^0.3.0",
+    "@spartan-ng/brain": "^1.3.0",
+    "clsx": "^2.1.1",
+    "tw-animate-css": "^1.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.1.3",
@@ -62,6 +67,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "postcss": "^8.0.0"
   }
 }
