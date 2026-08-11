@@ -21,8 +21,6 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { ToastrModule } from 'ngx-toastr';
-import { provideToastr } from 'ngx-toastr';
 
 // icons
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
@@ -76,7 +74,6 @@ export const appConfig: ApplicationConfig = {
       multi: true
     },
     provideAnimationsAsync(), // required animations providers
-    provideToastr(), // Toastr providers
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHighlightOptions({
       coreLibraryLoader: () => import('highlight.js/lib/core'),
@@ -106,7 +103,6 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     importProvidersFrom(
       FormsModule,
-      ToastrModule.forRoot(),
       ReactiveFormsModule,
       MaterialModule,
       NgxPermissionsModule.forRoot(),

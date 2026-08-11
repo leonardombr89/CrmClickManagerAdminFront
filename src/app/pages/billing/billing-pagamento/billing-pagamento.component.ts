@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { BillingStateService } from 'src/app/pages/billing/services/billing-state.service';
 import { BillingService } from 'src/app/pages/billing/services/billing.service';
 import { PlanoPublico } from 'src/app/types/plano-publico.type';

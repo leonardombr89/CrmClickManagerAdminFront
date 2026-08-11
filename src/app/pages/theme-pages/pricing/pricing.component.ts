@@ -5,7 +5,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { BillingService } from 'src/app/pages/billing/services/billing.service';
 import { PlanoPublico } from 'src/app/types/plano-publico.type';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { Router } from '@angular/router';
 import { CurrencyPipe, NgIf, NgFor } from '@angular/common';
 

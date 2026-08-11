@@ -25,7 +25,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { InputTextareaComponent } from "../../../components/inputs/input-textarea/input-textarea.component";
 import { FormaPagamento } from 'src/app/utils/forma-pagamento.enum';
 import { InputOptionsComponent } from "../../../components/inputs/input-options/input-options.component";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { InputDataComponent } from "../../../components/inputs/input-data/input-data.component";
 import { SectionCardComponent } from "../../../components/section-card/section-card.component";
 import {

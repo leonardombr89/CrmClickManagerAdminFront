@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';

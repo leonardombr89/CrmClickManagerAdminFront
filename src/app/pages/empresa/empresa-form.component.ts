@@ -12,7 +12,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ImagemUtil } from 'src/app/utils/imagem-util';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { ValidadorUtil } from 'src/app/utils/validador-util';
 import { EnderecoViaCep } from 'src/app/models/endereco/endereco.viacep.model';
 import { CepUtilService } from 'src/app/utils/cep-util.service';

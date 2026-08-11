@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 
 import { SharedComponentsModule } from 'src/app/components/shared-components.module';
 import { ProdutoService } from '../../services/produto.service';

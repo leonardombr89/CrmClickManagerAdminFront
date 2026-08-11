@@ -3,7 +3,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, signal } from '@ang
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';

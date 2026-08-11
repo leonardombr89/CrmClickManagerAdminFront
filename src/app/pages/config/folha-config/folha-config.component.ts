@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { CardHeaderComponent } from 'src/app/components/card-header/card-header.component';
 import { SectionCardComponent } from 'src/app/components/section-card/section-card.component';
 import { InputOptionsComponent } from 'src/app/components/inputs/input-options/input-options.component';

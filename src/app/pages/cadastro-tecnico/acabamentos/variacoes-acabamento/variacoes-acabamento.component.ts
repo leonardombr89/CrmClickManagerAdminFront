@@ -28,7 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 
 import { AutoCompleteComponent } from 'src/app/components/inputs/auto-complete/auto-complete.component';
 import { PrecoSelectorComponent } from 'src/app/components/preco/preco-selector.component';

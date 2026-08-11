@@ -12,7 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DesignSystemIconsModule } from 'src/app/shared/design-system-icons.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'src/app/services/toastr.service';
 import { AccountSettingService } from './account-setting.service';
 import { ActivatedRoute } from '@angular/router';
 import { ImagemUtil } from 'src/app/utils/imagem-util';
