@@ -1,16 +1,15 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-
+import { DsFieldComponent } from 'src/app/ui/field';
+import { DsInputDirective } from 'src/app/ui/input';
 
 @Component({
   selector: 'app-input-texto-restrito',
   standalone: true,
   templateUrl: './input-texto-restrito.component.html',
   imports: [
-    MatFormFieldModule,
-    MatInputModule,
+    DsFieldComponent,
+    DsInputDirective,
     ReactiveFormsModule
 ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +21,8 @@ export class InputTextoRestritoComponent implements OnInit {
   @Input() maxlength: number = 200;
   @Input() bloquearNumeros: boolean = false;
 
+  readonly inputId: string = `input-texto-restrito-${Math.random().toString(36).slice(2, 9)}`;
+
   ngOnInit(): void {
     if (!this.control) {
       throw new Error('O FormControl é obrigatório para <app-input-texto-restrito>');
@@ -32,12 +33,16 @@ export class InputTextoRestritoComponent implements OnInit {
     this.control.markAsTouched();
   }
 
+  get errorTexto(): string {
+    return this.control.invalid && this.control.touched ? this.errorMessage() : '';
+  }
+
   errorMessage(): string {
     if (this.control.hasError('required')) {
       return 'Campo obrigatório';
     }
     if (this.control.hasError('maxlength')) {
-      return "Máximo de ${this.control.getError('maxlength')?.requiredLength} caracteres";
+      return `Máximo de ${this.control.getError('maxlength')?.requiredLength} caracteres`;
     }
     return 'Valor inválido';
   }
@@ -62,5 +67,4 @@ export class InputTextoRestritoComponent implements OnInit {
       this.control.setValue(semNumeros);
     }
   }
-
 }
