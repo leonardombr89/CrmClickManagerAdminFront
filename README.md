@@ -4,6 +4,13 @@ Painel de administração global do ecossistema ClickManager. É uma aplicação
 Angular independente do ERP dos clientes e consome as rotas administrativas do
 `clickmanager-backend`.
 
+## Documentação do ecossistema
+
+A documentação geral da arquitetura, infraestrutura, ambiente local e operação
+do ClickManager está em:
+
+https://github.com/Code2YouLabs/clickmanager-docs
+
 ## Requisitos
 
 - Node.js 20 ou superior;
