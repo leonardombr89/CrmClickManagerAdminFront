@@ -50,7 +50,7 @@ Acesse `http://localhost:8081`. O Nginx do container possui fallback para
 ## Produção
 
 - domínio: `https://admin.clickmanager.com.br`;
-- imagem: `ghcr.io/leonardombr89/clickmanager-admin:latest`;
+- imagem: `ghcr.io/code2youlabs/clickmanager-admin:latest`;
 - serviço no compose da VPS: `admin`;
 - build: `.github/workflows/build-admin.yml`;
 - deploy: `.github/workflows/deploy-admin.yml`.

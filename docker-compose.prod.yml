@@ -13,7 +13,7 @@ services:
       - clickmanager-network
 
   backend:
-    image: ghcr.io/leonardombr89/clickmanager-backend:latest
+    image: ghcr.io/code2youlabs/clickmanager-backend:latest
     container_name: clickmanager-backend
     restart: always
     depends_on:
@@ -30,7 +30,7 @@ services:
       - clickmanager-network
 
   admin:
-    image: ghcr.io/leonardombr89/clickmanager-admin:latest
+    image: ghcr.io/code2youlabs/clickmanager-admin:latest
     container_name: clickmanager-admin
     restart: always
     depends_on:
