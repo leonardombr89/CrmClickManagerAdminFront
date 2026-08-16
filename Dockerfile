@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Stage 1: build Angular
-FROM node:20-alpine AS build
+FROM node:22.22.3-alpine AS build
 
 WORKDIR /app
 
