@@ -5,8 +5,8 @@ FROM node:22.22.3-alpine AS build
 
 WORKDIR /app
 
-# copiar package.json e package-lock.json
-COPY package*.json ./
+# copiar package.json, lockfile e .npmrc (registro privado @code2youlabs)
+COPY package*.json .npmrc ./
 
 # instalar dependências (usando lockfile) com o token do GitHub Packages
 # fornecido somente no build (BuildKit secret), sem entrar na imagem
