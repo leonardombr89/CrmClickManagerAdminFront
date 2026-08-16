@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # Stage 1: build Angular
 FROM node:20-alpine AS build
 
@@ -6,8 +8,10 @@ WORKDIR /app
 # copiar package.json e package-lock.json
 COPY package*.json ./
 
-# instalar dependências (usando lockfile)
-RUN npm ci --legacy-peer-deps
+# instalar dependências (usando lockfile) com o token do GitHub Packages
+# fornecido somente no build (BuildKit secret), sem entrar na imagem
+RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
+    npm ci --legacy-peer-deps
 
 # copiar o resto do código
 COPY . .
