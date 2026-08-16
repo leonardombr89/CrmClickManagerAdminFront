@@ -26,20 +26,33 @@ Quando uma dependência privada for adicionada, o workflow deve fornecer
 ```yaml
 - name: Install dependencies
   env:
-    NODE_AUTH_TOKEN: ${{ secrets.CODE2YOULABS_PACKAGES_TOKEN }}
+    NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
   run: npm ci
 ```
 
-O secret não deve ser usado como `ARG`, `ENV`, parâmetro de build ou variável
-disponível nos passos de build e deploy.
+O secret `NODE_AUTH_TOKEN` está configurado no repositório
+(`Settings → Secrets and variables → Actions`). Ele não deve ser usado como
+`ARG`, `ENV`, parâmetro de build ou variável disponível nos passos de build e
+deploy.
 
 ## Docker
 
-O Dockerfile atual não instala pacotes privados. Quando isso mudar, use um
-secret BuildKit no passo de instalação, por exemplo:
+O `Dockerfile` instala os pacotes privados com um secret BuildKit, usando o
+mesmo secret `NODE_AUTH_TOKEN` do repositório:
 
 ```dockerfile
-RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN npm ci
+# syntax=docker/dockerfile:1
+RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
+    npm ci --legacy-peer-deps
+```
+
+O token é passado pelo passo `docker/build-push-action` com
+`secrets: node_auth_token=${{ secrets.NODE_AUTH_TOKEN }}`. Localmente, o build
+equivalente e:
+
+```bash
+NODE_AUTH_TOKEN='<token com read:packages>' \
+docker build --secret id=node_auth_token,env=NODE_AUTH_TOKEN .
 ```
 
 Não use `ARG NODE_AUTH_TOKEN`, `ENV NODE_AUTH_TOKEN` ou copie `.npmrc` para a
