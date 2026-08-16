@@ -13,7 +13,7 @@ https://github.com/Code2YouLabs/clickmanager-docs
 
 ## Requisitos
 
-- Node.js 20 ou superior;
+- Node.js 22.22.3 ou superior;
 - npm;
 - backend disponível em `http://localhost:8080` para uso local;
 - Docker, somente para execução em container.

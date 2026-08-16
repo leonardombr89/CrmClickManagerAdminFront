@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.22.3
           registry-url: https://npm.pkg.github.com
 
       - name: Install dependencies
